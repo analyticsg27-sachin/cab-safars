@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { BP } from "@/lib/basepath";
+import { APP_URL } from "@/lib/basepath";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -13,7 +13,7 @@ const navLinks = [
   { label: "Features", href: "#features" },
   { label: "Premium", href: "#premium" },
   { label: "FAQ", href: "#faq" },
-  { label: "App Preview", href: `${BP}/app/`, external: true },
+  { label: "App Preview", href: `${APP_URL}/app/`, external: true },
 ];
 
 export default function Navbar() {
@@ -78,7 +78,7 @@ export default function Navbar() {
 
         {/* Desktop CTAs — right */}
         <div className="hidden md:flex items-center gap-2 shrink-0">
-          <a href={`${BP}/app/login/`}>
+          <a href={`${APP_URL}/app/login/`}>
             <Button
               variant="outline"
               size="sm"
@@ -142,7 +142,7 @@ export default function Navbar() {
           ))}
 
           <div className="flex gap-2 mt-4 pt-4 border-t border-[#243042]">
-            <a href={`${BP}/app/login/`} className="flex-1">
+            <a href={`${APP_URL}/app/login/`} className="flex-1">
               <Button
                 variant="outline"
                 size="sm"

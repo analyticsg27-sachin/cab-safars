@@ -1,6 +1,6 @@
 import { Check, Star, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { BP } from "@/lib/basepath";
+import { APP_URL } from "@/lib/basepath";
 
 const vendorFeatures = [
   "Post unlimited trips",
@@ -115,7 +115,7 @@ export default function PremiumSection() {
 
               {/* CTA */}
               <div className="flex flex-col sm:flex-row items-center gap-4">
-                <a href={`${BP}/app/`}>
+                <a href={`${APP_URL}/app/`}>
                   <Button variant="primary" size="xl" className="w-full sm:w-auto px-12">
                     Get Started — ₹199/month
                   </Button>
