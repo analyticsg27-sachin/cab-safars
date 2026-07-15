@@ -2,6 +2,7 @@
 
 import { ArrowRight, Truck, Users, Route, Star, MapPin, Clock, TrendingUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { BP } from "@/lib/basepath";
 
 const pillars = [
   { label: "Post Trips Instantly", icon: Truck, color: "#F5A623" },
@@ -107,7 +108,7 @@ export default function HeroSection() {
 
             {/* CTAs */}
             <div className="flex flex-wrap gap-3 mb-14">
-              <a href="/app">
+              <a href={`${BP}/app/`}>
                 <Button
                   variant="primary"
                   size="xl"
@@ -124,7 +125,7 @@ export default function HeroSection() {
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
                 </Button>
               </a>
-              <a href="/app">
+              <a href={`${BP}/app/`}>
                 <Button
                   variant="secondary"
                   size="xl"

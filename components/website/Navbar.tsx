@@ -13,7 +13,7 @@ const navLinks = [
   { label: "Features", href: "#features" },
   { label: "Premium", href: "#premium" },
   { label: "FAQ", href: "#faq" },
-  { label: "App Preview", href: "/app", external: true },
+  { label: "App Preview", href: `${BP}/app/`, external: true },
 ];
 
 export default function Navbar() {
