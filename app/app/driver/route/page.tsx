@@ -9,6 +9,7 @@ import {
 import AppShell from '@/components/app/AppShell';
 import AppHeader from '@/components/app/AppHeader';
 import BottomNav from '@/components/app/BottomNav';
+import LocationAutocomplete, { LocationValue } from '@/components/app/LocationAutocomplete';
 
 // â”€â”€â”€ Demo config â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 const IS_PREMIUM_DRIVER = true;
@@ -180,48 +181,24 @@ export default function SmartRoutePage() {
             {/* Form */}
             <div className="space-y-3">
               {/* From City */}
-              <div>
-                <label className="text-xs font-medium mb-1.5 block" style={{ color: '#8B949E' }}>From City</label>
-                <div className="relative">
-                  <MapPin size={15} className="absolute left-3 top-1/2 -translate-y-1/2" style={{ color: '#8B949E' }} />
-                  <input
-                    type="text"
-                    placeholder="e.g. Ahmedabad"
-                    value={form.fromCity}
-                    onChange={(e) => setForm((f) => ({ ...f, fromCity: e.target.value }))}
-                    className="w-full pl-9 pr-4 py-3 rounded-xl text-sm"
-                    style={{
-                      backgroundColor: '#21262D',
-                      border: `1px solid ${errors.fromCity ? '#EF4444' : '#30363D'}`,
-                      color: '#F0F6FC',
-                      outline: 'none',
-                    }}
-                  />
-                </div>
-                {errors.fromCity && <p className="text-xs mt-1" style={{ color: '#EF4444' }}>{errors.fromCity}</p>}
-              </div>
+              <LocationAutocomplete
+                label="From City"
+                value={form.fromCity}
+                onChange={(loc: LocationValue) => setForm((f) => ({ ...f, fromCity: loc.city }))}
+                placeholder="e.g. Ahmedabad"
+                pinColor="#8B949E"
+                error={errors.fromCity}
+              />
 
               {/* To City */}
-              <div>
-                <label className="text-xs font-medium mb-1.5 block" style={{ color: '#8B949E' }}>To City</label>
-                <div className="relative">
-                  <MapPin size={15} className="absolute left-3 top-1/2 -translate-y-1/2" style={{ color: '#F5A623' }} />
-                  <input
-                    type="text"
-                    placeholder="e.g. Vadodara"
-                    value={form.toCity}
-                    onChange={(e) => setForm((f) => ({ ...f, toCity: e.target.value }))}
-                    className="w-full pl-9 pr-4 py-3 rounded-xl text-sm"
-                    style={{
-                      backgroundColor: '#21262D',
-                      border: `1px solid ${errors.toCity ? '#EF4444' : '#30363D'}`,
-                      color: '#F0F6FC',
-                      outline: 'none',
-                    }}
-                  />
-                </div>
-                {errors.toCity && <p className="text-xs mt-1" style={{ color: '#EF4444' }}>{errors.toCity}</p>}
-              </div>
+              <LocationAutocomplete
+                label="To City"
+                value={form.toCity}
+                onChange={(loc: LocationValue) => setForm((f) => ({ ...f, toCity: loc.city }))}
+                placeholder="e.g. Vadodara"
+                pinColor="#F5A623"
+                error={errors.toCity}
+              />
 
               {/* Date + Time row */}
               <div className="grid grid-cols-2 gap-3">
