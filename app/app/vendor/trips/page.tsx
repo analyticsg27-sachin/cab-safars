@@ -7,6 +7,7 @@ import {
 } from 'lucide-react';
 import type { AppTrip } from '@/lib/app-types';
 import { useAppState } from '@/lib/app-state';
+import AppShell from '@/components/app/AppShell';
 import BottomNav from '@/components/app/BottomNav';
 import TripsService from '@/lib/services/trips.service';
 import type { Trip } from '@/lib/services/trips.service';
@@ -206,7 +207,8 @@ export default function VendorTripsPage() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col" style={{ background: '#0D1117' }}>
+    <AppShell>
+    <div className="flex flex-col flex-1" style={{ background: '#0D1117' }}>
       <header className="sticky top-0 z-30" style={{ background: '#0D1117', borderBottom: '1px solid #30363D' }}>
         <div className="flex items-center justify-between px-4 py-3">
           <h1 className="text-lg font-bold text-[#F0F6FC]">My Trips</h1>
@@ -285,5 +287,6 @@ export default function VendorTripsPage() {
       <BottomNav role="vendor" activeTab="trips" onTabChange={handleTab}
         unreadNotifications={state.unreadNotifications} />
     </div>
+    </AppShell>
   );
 }
