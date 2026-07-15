@@ -87,7 +87,7 @@ export default function Navbar() {
               Sign In
             </Button>
           </a>
-          <a href={`${BP}/app/register/`}>
+          <a href={`${APP_URL}/app/register/`}>
             <Button
               size="sm"
               className="bg-gradient-to-r from-[#F5A623] to-[#E8920F] text-[#0B1220] font-semibold hover:from-[#FFB84D] hover:to-[#F5A623] shadow-md shadow-[#F5A623]/20 transition-all"
@@ -151,7 +151,7 @@ export default function Navbar() {
                 Sign In
               </Button>
             </a>
-            <a href={`${BP}/app/register/`} className="flex-1">
+            <a href={`${APP_URL}/app/register/`} className="flex-1">
               <Button
                 size="sm"
                 className="w-full bg-gradient-to-r from-[#F5A623] to-[#E8920F] text-[#0B1220] font-semibold hover:from-[#FFB84D] hover:to-[#F5A623] shadow-md shadow-[#F5A623]/20"
