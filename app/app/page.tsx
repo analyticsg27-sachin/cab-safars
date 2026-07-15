@@ -3,6 +3,7 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAppState } from '@/lib/app-state';
+import { asset } from '@/lib/basepath';
 import { demoUsers, vendorFreeTrips, vendorPremiumTrips, availableTripsForDriver, demoNotifications } from '@/lib/demo-users';
 import AppShell from '@/components/app/AppShell';
 
@@ -176,7 +177,7 @@ export default function WelcomePage() {
         <div className="flex flex-col items-center justify-end pt-10 pb-5 px-6">
           {/* Logo */}
           <div className="mb-1 flex items-center justify-center">
-            <img src="/cabsafars/logo.png" alt="CAB SAFARS" className="h-20 w-auto object-contain" />
+            <img src={asset('/logo.png')} alt="CAB SAFARS" className="h-20 w-auto object-contain" />
           </div>
 
           {/* Tagline */}

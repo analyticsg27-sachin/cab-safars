@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { Eye, EyeOff, Lock, User } from 'lucide-react';
 import AdminService from '@/lib/services/admin.service';
 import { getAdminToken } from '@/lib/services/admin-api-client';
+import { asset } from '@/lib/basepath';
 
 export default function AdminLoginPage() {
   const router = useRouter();
@@ -70,7 +71,7 @@ export default function AdminLoginPage() {
             <div className="flex flex-col items-center mb-8">
               <div className="mb-5">
                 <img
-                  src="/cabsafars/logo.png"
+                  src={asset('/logo.png')}
                   alt="CAB SAFARS"
                   className="h-12 w-auto object-contain mx-auto"
                   onError={(e) => {

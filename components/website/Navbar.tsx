@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { BP } from "@/lib/basepath";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -77,7 +78,7 @@ export default function Navbar() {
 
         {/* Desktop CTAs — right */}
         <div className="hidden md:flex items-center gap-2 shrink-0">
-          <a href="/cabsafars/app/login">
+          <a href={`${BP}/app/login/`}>
             <Button
               variant="outline"
               size="sm"
@@ -86,7 +87,7 @@ export default function Navbar() {
               Sign In
             </Button>
           </a>
-          <a href="/cabsafars/app/register">
+          <a href={`${BP}/app/register/`}>
             <Button
               size="sm"
               className="bg-gradient-to-r from-[#F5A623] to-[#E8920F] text-[#0B1220] font-semibold hover:from-[#FFB84D] hover:to-[#F5A623] shadow-md shadow-[#F5A623]/20 transition-all"
@@ -141,7 +142,7 @@ export default function Navbar() {
           ))}
 
           <div className="flex gap-2 mt-4 pt-4 border-t border-[#243042]">
-            <a href="/cabsafars/app/login" className="flex-1">
+            <a href={`${BP}/app/login/`} className="flex-1">
               <Button
                 variant="outline"
                 size="sm"
@@ -150,7 +151,7 @@ export default function Navbar() {
                 Sign In
               </Button>
             </a>
-            <a href="/cabsafars/app/register" className="flex-1">
+            <a href={`${BP}/app/register/`} className="flex-1">
               <Button
                 size="sm"
                 className="w-full bg-gradient-to-r from-[#F5A623] to-[#E8920F] text-[#0B1220] font-semibold hover:from-[#FFB84D] hover:to-[#F5A623] shadow-md shadow-[#F5A623]/20"

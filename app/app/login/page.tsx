@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Eye, EyeOff, ArrowLeft, X } from 'lucide-react';
+import { asset } from '@/lib/basepath';
 import { useAppState } from '@/lib/app-state';
 import { IS_API_MODE } from '@/lib/services';
 import AuthService from '@/lib/services/auth.service';
@@ -136,7 +137,7 @@ export default function LoginPage() {
         {/* Logo */}
         <div className="px-6 pt-4 pb-2 flex flex-col items-center">
           <img
-            src="/cabsafars/logo.png"
+            src={asset('/logo.png')}
             alt="CAB SAFARS"
             className="h-14 w-auto object-contain mx-auto mb-6"
           />

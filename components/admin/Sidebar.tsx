@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { asset } from "@/lib/basepath";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
@@ -65,7 +66,7 @@ export default function Sidebar() {
         {!collapsed ? (
           <div>
             <img
-              src="/cabsafars/logo.png"
+              src={asset('/logo.png')}
               alt="CAB SAFARS"
               className="h-10 w-auto object-contain"
               onError={(e) => {

@@ -25,7 +25,7 @@ export const metadata: Metadata = {
     title: "CAB SAFARS",
     description: "India's premium vendor-driver transport marketplace",
   },
-  manifest: "/manifest.json",
+  manifest: `${process.env.NEXT_PUBLIC_BASE_PATH ?? ''}/manifest.json`,
   appleWebApp: {
     capable: true,
     statusBarStyle: "black-translucent",
@@ -49,7 +49,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${inter.variable} h-full`}>
       <head>
-        <link rel="apple-touch-icon" href="/icons/icon-192.png" />
+        <link rel="apple-touch-icon" href={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ''}/icons/icon-192.png`} />
       </head>
       <body className="min-h-full antialiased bg-[#0D1117] text-[#F0F6FC]">
         {children}

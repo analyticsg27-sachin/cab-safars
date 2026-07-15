@@ -1,5 +1,7 @@
 'use client';
 
+import { asset } from '@/lib/basepath';
+
 interface AppShellProps {
   children: React.ReactNode;
 }
@@ -13,7 +15,7 @@ export default function AppShell({ children }: AppShellProps) {
       {/* Desktop label */}
       <div className="hidden md:flex items-center gap-3 mb-3">
         <img
-          src="/cabsafars/logo.png"
+          src={asset('/logo.png')}
           alt="CAB SAFARS"
           className="h-7 w-auto object-contain"
           style={{ filter: 'brightness(0) invert(1)' }}

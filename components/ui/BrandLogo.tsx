@@ -1,4 +1,5 @@
 import { Truck } from 'lucide-react';
+import { asset } from '@/lib/basepath';
 
 type BrandLogoVariant = 'full' | 'icon' | 'wordmark';
 type BrandLogoSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
@@ -31,7 +32,7 @@ export function BrandLogo({
       <div className={`inline-flex flex-col items-center gap-1 ${className}`}>
         <div className={`${s.img} overflow-hidden rounded-lg`}>
           <img
-            src="/cabsafars/logo.png"
+            src={asset('/logo.png')}
             alt="CAB SAFARS"
             className="h-full w-auto object-contain"
           />
