@@ -131,7 +131,7 @@ export default function VendorPostPage() {
         contactsCount: 0,
         contactedDrivers: [],
         createdAt: new Date().toISOString(),
-        expiryHours: form.expiryHours,
+
       };
       dispatch({ type: 'ADD_TRIP', payload: newTrip });
       setLoading(false);
