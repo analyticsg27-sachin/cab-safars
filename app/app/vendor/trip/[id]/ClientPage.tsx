@@ -1,13 +1,30 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import {
-  ArrowLeft, MapPin, Calendar, Clock, Truck, Package, Weight, IndianRupee,
-  FileText, Users, Phone, MessageCircle, Crown, X, ChevronRight, Hash,
+  ArrowLeft, Calendar, Clock, Truck, Package, Weight, IndianRupee,
+  FileText, Users, Phone, MessageCircle, Crown, X, ChevronRight, Hash, Lock,
 } from 'lucide-react';
 import type { AppTrip, ContactedDriver } from '@/lib/app-types';
 import { useAppState } from '@/lib/app-state';
+
+const DEMO_CONTACTS: Record<string, ContactedDriver[]> = {
+  'tr-v003-001': [
+    { driverId: 'd010', driverName: 'Vijay Kumar', driverPhone: '+91 94260 78901', vehicleType: 'Truck 14ft', city: 'Vadodara', isPremium: false, contactMethod: 'call', contactedAt: '2026-07-11T09:00:00Z' },
+    { driverId: 'd011', driverName: 'Sunil Mehta', driverPhone: '+91 98765 43210', vehicleType: 'Truck 14ft', city: 'Surat', isPremium: true, contactMethod: 'whatsapp', contactedAt: '2026-07-12T14:30:00Z' },
+  ],
+  'tr-v003-002': [
+    { driverId: 'd012', driverName: 'Ravi Joshi', driverPhone: '+91 91234 56789', vehicleType: 'Mini Truck', city: 'Vadodara', isPremium: false, contactMethod: 'call', contactedAt: '2026-07-09T08:00:00Z' },
+    { driverId: 'd013', driverName: 'Dinesh Patel', driverPhone: '+91 87654 32109', vehicleType: 'Mini Truck', city: 'Anand', isPremium: false, contactMethod: 'call', contactedAt: '2026-07-09T10:00:00Z' },
+    { driverId: 'd014', driverName: 'Ketan Shah', driverPhone: '+91 99012 34567', vehicleType: 'Mini Truck', city: 'Surat', isPremium: true, contactMethod: 'whatsapp', contactedAt: '2026-07-10T07:30:00Z' },
+    { driverId: 'd015', driverName: 'Ashok Trivedi', driverPhone: '+91 76543 21098', vehicleType: 'Tempo', city: 'Vadodara', isPremium: false, contactMethod: 'call', contactedAt: '2026-07-10T11:00:00Z' },
+    { driverId: 'd016', driverName: 'Mahesh Rao', driverPhone: '+91 93456 78901', vehicleType: 'Mini Truck', city: 'Bharuch', isPremium: false, contactMethod: 'call', contactedAt: '2026-07-11T06:00:00Z' },
+  ],
+  'tr-v003-003': [
+    { driverId: 'd017', driverName: 'Prakash Bhatt', driverPhone: '+91 88901 23456', vehicleType: 'Tempo', city: 'Rajkot', isPremium: false, contactMethod: 'call', contactedAt: '2026-07-13T10:00:00Z' },
+  ],
+};
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 function formatDate(d: string) {
@@ -124,9 +141,11 @@ export default function VendorTripDetailPage() {
   const router = useRouter();
   const params = useParams();
   const tripId = params?.id as string;
-  const { state } = useAppState();
+  const { state, dispatch } = useAppState();
+  const [closing, setClosing] = useState(false);
 
   const trip = state.trips.find((t: AppTrip) => t.id === tripId);
+  const isPremium = state.currentUser?.isPremium ?? false;
 
   if (!trip) {
     return (
@@ -252,9 +271,9 @@ export default function VendorTripDetailPage() {
           </div>
         )}
 
-        {/* Contacted drivers */}
+        {/* Contacted Drivers */}
         <div className="rounded-2xl p-4" style={{ background: '#161B22', border: '1px solid #30363D' }}>
-          <div className="flex items-center justify-between mb-2">
+          <div className="flex items-center justify-between mb-3">
             <h3 className="text-base font-semibold text-[#F0F6FC]">Contacted Drivers</h3>
             <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full"
               style={{ background: 'rgba(245,166,35,0.1)', border: '1px solid rgba(245,166,35,0.2)' }}>
@@ -263,41 +282,99 @@ export default function VendorTripDetailPage() {
             </div>
           </div>
 
-          {trip.contactedDrivers.length === 0 ? (
-            <div className="flex flex-col items-center gap-3 py-8 text-center">
-              <div className="w-12 h-12 rounded-full flex items-center justify-center"
-                style={{ background: 'rgba(139,148,158,0.1)' }}>
-                <Users size={22} color="#8B949E" />
-              </div>
+          {(() => {
+            const contacts: ContactedDriver[] = trip.contactedDrivers.length
+              ? trip.contactedDrivers
+              : (DEMO_CONTACTS[tripId] ?? []);
+
+            if (trip.contactsCount === 0) {
+              return (
+                <div className="flex flex-col items-center gap-3 py-8 text-center">
+                  <div className="w-12 h-12 rounded-full flex items-center justify-center"
+                    style={{ background: 'rgba(139,148,158,0.1)' }}>
+                    <Users size={22} color="#8B949E" />
+                  </div>
+                  <p className="text-sm font-medium text-[#F0F6FC]">
+                    {trip.status === 'open' ? 'No drivers yet' : 'No contact records'}
+                  </p>
+                  <p className="text-xs text-[#8B949E] leading-relaxed">
+                    {trip.status === 'open'
+                      ? 'Drivers matching your route will appear here once they contact you'
+                      : 'No drivers were recorded for this trip'}
+                  </p>
+                </div>
+              );
+            }
+
+            if (!isPremium) {
+              return (
+                <div>
+                  {contacts.slice(0, trip.contactsCount).map((d) => (
+                    <div key={d.driverId} className="flex items-center gap-3 py-3" style={{ borderBottom: '1px solid #1C2128' }}>
+                      <div className="w-11 h-11 rounded-full flex items-center justify-center shrink-0 text-sm font-bold"
+                        style={{ background: '#21262D', color: '#8B949E' }}>
+                        {initials(d.driverName)}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-semibold text-[#F0F6FC]">{d.driverName}</p>
+                        <p className="text-xs text-[#8B949E]">{d.city} · {d.vehicleType}</p>
+                        <p className="text-xs mt-0.5 blur-sm select-none" style={{ color: '#8B949E' }}>+91 XXXXX XXXXX</p>
+                      </div>
+                      <Lock size={14} color="#F5A623" />
+                    </div>
+                  ))}
+                  <button
+                    onClick={() => router.push('/app/premium')}
+                    className="w-full flex items-center justify-between mt-3 p-4 rounded-2xl transition-all active:scale-95"
+                    style={{ background: 'linear-gradient(135deg,rgba(245,166,35,0.1),rgba(245,166,35,0.05))', border: '1px solid rgba(245,166,35,0.3)' }}>
+                    <div className="flex items-center gap-3">
+                      <div className="w-9 h-9 rounded-xl flex items-center justify-center"
+                        style={{ backgroundColor: 'rgba(245,166,35,0.15)' }}>
+                        <Crown size={18} color="#F5A623" />
+                      </div>
+                      <div className="text-left">
+                        <p className="text-sm font-bold" style={{ color: '#F5A623' }}>Unlock All Contacts</p>
+                        <p className="text-xs text-[#8B949E]">Upgrade to Premium — ₹199/month</p>
+                      </div>
+                    </div>
+                    <ChevronRight size={16} color="#F5A623" />
+                  </button>
+                </div>
+              );
+            }
+
+            return (
               <div>
-                <p className="text-sm font-medium text-[#F0F6FC]">
-                  {trip.status === 'open' ? 'No drivers yet' : 'No contact records'}
-                </p>
-                <p className="text-xs text-[#8B949E] mt-1 leading-relaxed">
-                  {trip.status === 'open'
-                    ? 'Drivers matching your route will appear here once they contact you'
-                    : 'No drivers were recorded for this trip'}
-                </p>
+                {contacts.map(d => <DriverCard key={d.driverId} driver={d} />)}
               </div>
-            </div>
-          ) : (
-            <div>
-              {trip.contactedDrivers.map(d => (
-                <DriverCard key={d.driverId} driver={d} />
-              ))}
-            </div>
-          )}
+            );
+          })()}
         </div>
 
-        {/* Close Trip CTA */}
-        {trip.status === 'open' && (
+        {/* Close / Reopen Trip */}
+        {trip.status === 'open' ? (
           <button
-            onClick={() => router.push(`/app/vendor/close/${trip.id}`)}
+            onClick={() => {
+              setClosing(true);
+              dispatch({ type: 'CLOSE_TRIP', payload: { tripId: trip.id, closureType: 'outside_driver' } });
+              setTimeout(() => { setClosing(false); router.back(); }, 600);
+            }}
+            disabled={closing}
             className="w-full h-14 rounded-xl font-semibold text-base flex items-center justify-center gap-2 active:scale-[0.98] transition-transform"
-            style={{ background: '#161B22', border: '1px solid #30363D', color: '#F0F6FC' }}
+            style={{ background: closing ? '#0D1117' : '#161B22', border: '1px solid rgba(239,68,68,0.4)', color: '#EF4444' }}
           >
-            Mark as Closed
-            <ChevronRight size={18} color="#8B949E" />
+            {closing ? 'Closing…' : 'Mark as Closed'}
+          </button>
+        ) : (
+          <button
+            onClick={() => {
+              dispatch({ type: 'UPDATE_TRIP', payload: { ...trip, status: 'open', closureType: undefined, closedDriverId: undefined } });
+              router.back();
+            }}
+            className="w-full h-14 rounded-xl font-semibold text-base flex items-center justify-center gap-2 active:scale-[0.98] transition-transform"
+            style={{ background: 'rgba(34,197,94,0.08)', border: '1px solid rgba(34,197,94,0.3)', color: '#22C55E' }}
+          >
+            Reopen This Trip
           </button>
         )}
       </main>
