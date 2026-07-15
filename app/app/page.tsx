@@ -147,6 +147,7 @@ export default function WelcomePage() {
   }, [state.isAuthenticated, state.currentUser, router]);
 
   function loginAs(key: keyof typeof demoUsers) {
+    dispatch({ type: 'LOGOUT' }); // clear any stale localStorage state
     const user = demoUsers[key];
     const trips =
       key === 'vendorFree'

@@ -7,23 +7,7 @@ import {
 } from 'lucide-react';
 import AppShell from '@/components/app/AppShell';
 import AppHeader from '@/components/app/AppHeader';
-
-// â”€â”€â”€ Demo data â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-const DEMO_USER = {
-  name: 'Harshad Bhatt',
-  role: 'driver' as 'driver' | 'vendor',
-  isPremium: true,
-  city: 'Ahmedabad',
-  state: 'Gujarat',
-  memberSince: 'Jan 2025',
-  premiumExpiry: 'Aug 20, 2026',
-  // Driver stats
-  tripsApplied: 12,
-  tripsCompleted: 8,
-  // Vendor stats
-  tripsPosted: 0,
-  totalContacts: 0,
-};
+import { useAppState } from '@/lib/app-state';
 
 const DEMO_PAYMENTS = [
   { date: 'Jun 20, 2026', amount: 'â‚¹199.00', txnId: 'CS74628193' },
@@ -85,7 +69,22 @@ function MenuSection({ title, children }: { title: string; children: React.React
 // â”€â”€â”€ Page â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 export default function ProfilePage() {
   const router = useRouter();
-  const user = DEMO_USER;
+  const { state, dispatch } = useAppState();
+  const currentUser = state.currentUser;
+
+  const user = {
+    name: currentUser?.name ?? 'Guest',
+    role: (currentUser?.role ?? 'driver') as 'driver' | 'vendor',
+    isPremium: currentUser?.isPremium ?? false,
+    city: currentUser?.city ?? '—',
+    state: 'India',
+    memberSince: 'Jan 2025',
+    premiumExpiry: currentUser?.premiumExpiry ?? '',
+    tripsApplied: state.trips.filter(t => t.status === 'open').length,
+    tripsCompleted: state.trips.filter(t => t.status === 'closed').length,
+    tripsPosted: state.trips.length,
+    totalContacts: state.trips.reduce((s, t) => s + t.contactsCount, 0),
+  };
   const isDriver = user.role === 'driver';
 
   const initials = user.name
@@ -201,7 +200,7 @@ export default function ProfilePage() {
             labelColor="#EF4444"
             iconColor="#EF4444"
             isLast
-            onClick={() => router.push('/app')}
+            onClick={() => { dispatch({ type: 'LOGOUT' }); router.replace('/app/'); }}
           />
         </MenuSection>
 
