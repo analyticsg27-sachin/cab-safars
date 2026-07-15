@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import {
@@ -133,7 +133,7 @@ export default function SettingsPage() {
         <div className="space-y-4">
           <Field label="Premium Price">
             <div className="flex items-center gap-2">
-              <span className="text-sm text-[#8B949E]">₹</span>
+              <span className="text-sm text-[#8B949E]">â‚¹</span>
               <TextInput value="199" disabled />
             </div>
           </Field>
@@ -196,9 +196,9 @@ export default function SettingsPage() {
         <div className="grid sm:grid-cols-2 gap-3">
           {[
             { label: "Platform Version", value: "v1.0.0 (Phase 1)" },
-            { label: "Build Date", value: "2025-07-13" },
-            { label: "Current Phase", value: "Phase 1 — Frontend Demo" },
-            { label: "Next Phase", value: "Phase 2 — Backend Integration" },
+            { label: "Build Date", value: "2026-07-13" },
+            { label: "Current Phase", value: "Phase 1 â€” Frontend Demo" },
+            { label: "Next Phase", value: "Phase 2 â€” Backend Integration" },
           ].map(item => (
             <div key={item.label} className="bg-[#21262D] rounded-lg p-3">
               <p className="text-xs text-[#8B949E]">{item.label}</p>

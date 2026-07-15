@@ -1,9 +1,9 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Privacy Policy — Cab Safars",
+  title: "Privacy Policy â€” Cab Safars",
   description: "Privacy Policy for the Cab Safars platform.",
 };
 
@@ -12,48 +12,48 @@ const sections = [
     title: "1. Information We Collect",
     content: `We collect information you provide directly when you register for a Cab Safars account, including:
 
-• Full name, mobile number, and email address
-• Profile information (city, vehicle details for drivers, company name for vendors)
-• Documents required for account verification
-• Trip posting details (pickup/destination locations, dates, vehicle requirements)
-• Payment information processed securely through our payment gateway (Razorpay)
-• Device information and usage data to improve our services`,
+â€¢ Full name, mobile number, and email address
+â€¢ Profile information (city, vehicle details for drivers, company name for vendors)
+â€¢ Documents required for account verification
+â€¢ Trip posting details (pickup/destination locations, dates, vehicle requirements)
+â€¢ Payment information processed securely through our payment gateway (Razorpay)
+â€¢ Device information and usage data to improve our services`,
   },
   {
     title: "2. How We Use Your Information",
     content: `We use the information we collect to:
 
-• Create and manage your Cab Safars account
-• Facilitate connections between vendors and drivers
-• Process subscription payments and manage Premium memberships
-• Send notifications about trips, contacts, account status, and platform updates
-• Verify user identities and prevent fraud
-• Improve our platform and develop new features
-• Comply with legal obligations`,
+â€¢ Create and manage your Cab Safars account
+â€¢ Facilitate connections between vendors and drivers
+â€¢ Process subscription payments and manage Premium memberships
+â€¢ Send notifications about trips, contacts, account status, and platform updates
+â€¢ Verify user identities and prevent fraud
+â€¢ Improve our platform and develop new features
+â€¢ Comply with legal obligations`,
   },
   {
     title: "3. Information Sharing",
     content: `We share your information only as described below:
 
-• Vendor contact information (phone number) is shared with Premium drivers when they choose to contact a vendor through the platform. This contact action is logged.
-• We do not sell your personal information to third parties.
-• We share data with service providers who assist in operating our platform (payment processing, push notifications).
-• We may disclose information when required by law or to protect the rights, property, or safety of our users.`,
+â€¢ Vendor contact information (phone number) is shared with Premium drivers when they choose to contact a vendor through the platform. This contact action is logged.
+â€¢ We do not sell your personal information to third parties.
+â€¢ We share data with service providers who assist in operating our platform (payment processing, push notifications).
+â€¢ We may disclose information when required by law or to protect the rights, property, or safety of our users.`,
   },
   {
     title: "4. Premium Subscription & Payments",
     content: `Premium subscriptions are processed through Razorpay, a PCI-DSS compliant payment gateway. Cab Safars does not store your full card details.
 
-Your subscription auto-renews monthly at ₹199 unless you cancel. You will receive an expiry reminder before renewal. You may cancel your subscription at any time through the app or by contacting support.`,
+Your subscription auto-renews monthly at â‚¹199 unless you cancel. You will receive an expiry reminder before renewal. You may cancel your subscription at any time through the app or by contacting support.`,
   },
   {
     title: "5. Data Security",
     content: `We implement industry-standard security measures to protect your information, including:
 
-• HTTPS encryption for all data transmission
-• Secure password hashing (we never store plain-text passwords)
-• Regular security audits
-• Access controls limiting who can view user data
+â€¢ HTTPS encryption for all data transmission
+â€¢ Secure password hashing (we never store plain-text passwords)
+â€¢ Regular security audits
+â€¢ Access controls limiting who can view user data
 
 No system is completely secure. We encourage you to use a strong password and keep your account credentials confidential.`,
   },
@@ -71,11 +71,11 @@ Trip records and contact activity logs may be retained in anonymised form for an
     title: "8. Your Rights",
     content: `You have the right to:
 
-• Access the personal information we hold about you
-• Correct inaccurate information
-• Request deletion of your account and data
-• Opt out of marketing communications
-• Lodge a complaint with relevant data protection authorities
+â€¢ Access the personal information we hold about you
+â€¢ Correct inaccurate information
+â€¢ Request deletion of your account and data
+â€¢ Opt out of marketing communications
+â€¢ Lodge a complaint with relevant data protection authorities
 
 To exercise these rights, contact us at privacy@cabsafars.com`,
   },
@@ -118,7 +118,7 @@ export default function PrivacyPage() {
           </div>
           <h1 className="text-3xl sm:text-4xl font-bold text-[#F0F6FC] mb-3">Privacy Policy</h1>
           <p className="text-[#8B949E]">
-            Effective Date: July 13, 2025 &nbsp;·&nbsp; Last Updated: July 13, 2025
+            Effective Date: July 13, 2026 &nbsp;Â·&nbsp; Last Updated: July 13, 2026
           </p>
           <p className="text-[#8B949E] mt-4 text-sm leading-relaxed">
             This Privacy Policy describes how Cab Safars ("we," "our," or "us") collects, uses, and shares information
@@ -153,7 +153,7 @@ export default function PrivacyPage() {
 
         <div className="mt-8 pt-8 border-t border-[#30363D] text-center">
           <p className="text-xs text-[#8B949E]">
-            © 2025 Cab Safars. All rights reserved. &nbsp;·&nbsp;
+            Â© 2026 Cab Safars. All rights reserved. &nbsp;Â·&nbsp;
             <Link href="/terms" className="hover:text-[#F0F6FC] transition-colors">Terms of Service</Link>
           </p>
         </div>

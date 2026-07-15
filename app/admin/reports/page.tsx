@@ -10,43 +10,43 @@ import { TrendingUp, Users, MapPin, Star, Calendar } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const revenueData = [
-  { month: "Feb", revenue: 23800 },
-  { month: "Mar", revenue: 29800 },
-  { month: "Apr", revenue: 33400 },
-  { month: "May", revenue: 37200 },
-  { month: "Jun", revenue: 35800 },
-  { month: "Jul", revenue: 39800 },
+  { month: "Feb", revenue: 2000 },
+  { month: "Mar", revenue: 4400 },
+  { month: "Apr", revenue: 7200 },
+  { month: "May", revenue: 9800 },
+  { month: "Jun", revenue: 12200 },
+  { month: "Jul", revenue: 14900 },
 ];
 
 const userGrowthData = [
-  { month: "Feb", vendors: 580, drivers: 470 },
-  { month: "Mar", vendors: 610, drivers: 495 },
-  { month: "Apr", vendors: 630, drivers: 510 },
-  { month: "May", vendors: 648, drivers: 530 },
-  { month: "Jun", vendors: 660, drivers: 548 },
-  { month: "Jul", vendors: 678, drivers: 567 },
+  { month: "Feb", vendors: 8, drivers: 19 },
+  { month: "Mar", vendors: 16, drivers: 38 },
+  { month: "Apr", vendors: 27, drivers: 64 },
+  { month: "May", vendors: 41, drivers: 98 },
+  { month: "Jun", vendors: 58, drivers: 152 },
+  { month: "Jul", vendors: 78, drivers: 214 },
 ];
 
 const tripData = [
-  { month: "Feb", closed: 22, open: 7 },
-  { month: "Mar", closed: 31, open: 9 },
-  { month: "Apr", closed: 28, open: 8 },
-  { month: "May", closed: 35, open: 10 },
-  { month: "Jun", closed: 26, open: 6 },
-  { month: "Jul", closed: 14, open: 7 },
+  { month: "Feb", closed: 8, open: 6 },
+  { month: "Mar", closed: 12, open: 10 },
+  { month: "Apr", closed: 16, open: 11 },
+  { month: "May", closed: 20, open: 16 },
+  { month: "Jun", closed: 25, open: 15 },
+  { month: "Jul", closed: 30, open: 13 },
 ];
 
 const topRoutes = [
-  { route: "Ahmedabad → Mumbai", trips: 47, contactRate: "82%", closedRate: "68%" },
-  { route: "Surat → Ahmedabad", trips: 38, contactRate: "76%", closedRate: "61%" },
-  { route: "Ahmedabad → Baroda", trips: 34, contactRate: "71%", closedRate: "58%" },
-  { route: "Mumbai → Pune", trips: 28, contactRate: "85%", closedRate: "72%" },
-  { route: "Rajkot → Ahmedabad", trips: 22, contactRate: "68%", closedRate: "54%" },
+  { route: "Ahmedabad → Mumbai", trips: 12, contactRate: "75%", closedRate: "62%" },
+  { route: "Surat → Ahmedabad", trips: 9, contactRate: "68%", closedRate: "55%" },
+  { route: "Vadodara → Mumbai", trips: 7, contactRate: "72%", closedRate: "58%" },
+  { route: "Rajkot → Ahmedabad", trips: 6, contactRate: "80%", closedRate: "67%" },
+  { route: "Ahmedabad → Jaipur", trips: 5, contactRate: "60%", closedRate: "48%" },
 ];
 
 const pieData = [
-  { name: "Premium", value: 145 },
-  { name: "Free", value: 1100 },
+  { name: "Premium", value: 47 },
+  { name: "Free", value: 245 },
 ];
 const PIE_COLORS = ["#F5A623", "#21262D"];
 
@@ -94,12 +94,12 @@ export default function ReportsPage() {
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
             <p className="text-xs text-[#8B949E] mb-1 flex items-center gap-1.5"><TrendingUp className="w-3.5 h-3.5" />Revenue Overview</p>
-            <p className="text-3xl font-bold text-[#F0F6FC]">₹1,99,800</p>
-            <p className="text-sm text-[#8B949E] mt-0.5">This Month: <span className="text-[#22C55E] font-semibold">₹39,800</span></p>
+            <p className="text-3xl font-bold text-[#F0F6FC]">₹50,500</p>
+            <p className="text-sm text-[#8B949E] mt-0.5">This Month: <span className="text-[#22C55E] font-semibold">₹14,900</span></p>
           </div>
           <div className="text-right">
             <p className="text-xs text-[#8B949E]">Total Transactions</p>
-            <p className="text-xl font-bold text-[#F0F6FC]">1,003</p>
+            <p className="text-xl font-bold text-[#F0F6FC]">254</p>
           </div>
         </div>
         <ResponsiveContainer width="100%" height={220}>
@@ -124,8 +124,8 @@ export default function ReportsPage() {
         <div className="flex items-center justify-between">
           <p className="text-xs text-[#8B949E] flex items-center gap-1.5"><Users className="w-3.5 h-3.5" />User Growth</p>
           <div className="flex gap-4 text-sm">
-            <span className="text-[#F0F6FC] font-bold">678 <span className="text-xs font-normal text-[#F5A623]">Vendors</span></span>
-            <span className="text-[#F0F6FC] font-bold">567 <span className="text-xs font-normal text-[#2D6BE4]">Drivers</span></span>
+            <span className="text-[#F0F6FC] font-bold">78 <span className="text-xs font-normal text-[#F5A623]">Vendors</span></span>
+            <span className="text-[#F0F6FC] font-bold">214 <span className="text-xs font-normal text-[#2D6BE4]">Drivers</span></span>
           </div>
         </div>
         <ResponsiveContainer width="100%" height={220}>
@@ -147,10 +147,10 @@ export default function ReportsPage() {
           <p className="text-xs text-[#8B949E] flex items-center gap-1.5"><MapPin className="w-3.5 h-3.5" />Trip Analytics</p>
           <div className="flex gap-3 flex-wrap">
             {[
-              { label: "Total", value: 234, color: "text-[#F0F6FC]" },
-              { label: "Open", value: 47, color: "text-[#F5A623]" },
-              { label: "Closed", value: 156, color: "text-[#22C55E]" },
-              { label: "Cancelled", value: 31, color: "text-[#EF4444]" },
+              { label: "Total", value: 111, color: "text-[#F0F6FC]" },
+              { label: "Open", value: 43, color: "text-[#F5A623]" },
+              { label: "Closed", value: 61, color: "text-[#22C55E]" },
+              { label: "Cancelled", value: 7, color: "text-[#EF4444]" },
             ].map(s => (
               <div key={s.label} className="text-center">
                 <p className={cn("text-lg font-bold", s.color)}>{s.value}</p>
@@ -207,9 +207,9 @@ export default function ReportsPage() {
         <p className="text-xs text-[#8B949E] flex items-center gap-1.5"><Star className="w-3.5 h-3.5" />Subscription Metrics</p>
         <div className="grid sm:grid-cols-3 gap-4 mb-2">
           {[
-            { label: "Active Premium", value: "145" },
-            { label: "Monthly Conversion", value: "21.4%" },
-            { label: "Avg. Renewal Rate", value: "78%" },
+            { label: "Active Premium", value: "47" },
+            { label: "Monthly Conversion", value: "16.2%" },
+            { label: "Avg. Renewal Rate", value: "71%" },
           ].map(m => (
             <div key={m.label} className="bg-[#21262D] rounded-lg p-3 text-center">
               <p className="text-xl font-bold text-[#F5A623]">{m.value}</p>
@@ -234,7 +234,7 @@ export default function ReportsPage() {
                 <div className="w-3 h-3 rounded-full" style={{ backgroundColor: PIE_COLORS[i] }} />
                 <span className="text-sm text-[#F0F6FC]">{d.name}</span>
                 <span className="text-sm font-bold text-[#F0F6FC]">{d.value}</span>
-                <span className="text-xs text-[#8B949E]">({((d.value / (145 + 1100)) * 100).toFixed(1)}%)</span>
+                <span className="text-xs text-[#8B949E]">({((d.value / (47 + 245)) * 100).toFixed(1)}%)</span>
               </div>
             ))}
           </div>

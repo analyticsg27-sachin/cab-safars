@@ -36,8 +36,8 @@ export default function SmartRouteSection() {
                 },
                 {
                   icon: TrendingUp,
-                  title: "Earn 40% More",
-                  desc: "Drivers using smart matching earn significantly more monthly.",
+                  title: "Reduce Empty Returns",
+                  desc: "Drivers using smart matching find more billable trips per route.",
                   color: "#2D6BE4",
                 },
               ].map(({ icon: Icon, title, desc, color }) => (

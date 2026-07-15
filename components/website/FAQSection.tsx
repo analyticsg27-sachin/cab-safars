@@ -35,7 +35,7 @@ const faqs = [
   },
   {
     q: "Is CAB SAFARS available across India?",
-    a: "Currently live across Gujarat, Maharashtra, Rajasthan, Delhi-NCR, Karnataka, Tamil Nadu, and Telangana. We're expanding to all major states by end of 2024.",
+    a: "We launched with a focus on Gujarat and Maharashtra and are actively expanding across India. Vendors and drivers from all states are welcome to register.",
   },
 ];
 

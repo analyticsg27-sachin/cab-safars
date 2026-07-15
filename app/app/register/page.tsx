@@ -2,8 +2,10 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { ArrowLeft, Eye, EyeOff } from 'lucide-react';
+import { ArrowLeft, Eye, EyeOff, X } from 'lucide-react';
 import { useAppState } from '@/lib/app-state';
+import { IS_API_MODE } from '@/lib/services';
+import AuthService from '@/lib/services/auth.service';
 import type { AppUser } from '@/lib/app-types';
 import AppShell from '@/components/app/AppShell';
 
@@ -31,6 +33,23 @@ const CITIES = [
   'Chennai',
 ];
 
+const STATES: Record<string, string> = {
+  Ahmedabad: 'Gujarat', Surat: 'Gujarat', Vadodara: 'Gujarat', Rajkot: 'Gujarat', Gandhinagar: 'Gujarat',
+  Mumbai: 'Maharashtra', Pune: 'Maharashtra', Nashik: 'Maharashtra',
+  Jaipur: 'Rajasthan', Jodhpur: 'Rajasthan',
+  Delhi: 'Delhi', Noida: 'UP', Gurugram: 'Haryana',
+  Hyderabad: 'Telangana',
+  Bangalore: 'Karnataka',
+  Chennai: 'Tamil Nadu',
+};
+
+const inputStyle = {
+  backgroundColor: '#1A2332',
+  border: '1px solid #243042',
+  color: '#F1F5F9',
+  caretColor: '#F5A623',
+} as React.CSSProperties;
+
 function InputField({
   label, type = 'text', value, onChange, placeholder, required = true,
 }: {
@@ -39,18 +58,15 @@ function InputField({
 }) {
   return (
     <div>
-      <label className="block text-xs font-semibold mb-1.5" style={{ color: '#8B949E' }}>
+      <label className="block text-xs font-semibold mb-1.5" style={{ color: '#94A3B8' }}>
         {label} {required && <span style={{ color: '#EF4444' }}>*</span>}
       </label>
       <input
-        type={type}
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        placeholder={placeholder}
-        className="w-full px-4 py-3 rounded-xl text-sm outline-none transition-all"
-        style={{ backgroundColor: '#21262D', border: '1px solid #30363D', color: '#F0F6FC' }}
-        onFocus={(e) => (e.target.style.borderColor = '#F5A623')}
-        onBlur={(e) => (e.target.style.borderColor = '#30363D')}
+        type={type} value={value} onChange={(e) => onChange(e.target.value)} placeholder={placeholder}
+        className="w-full px-4 py-3.5 rounded-xl text-sm outline-none transition-all"
+        style={inputStyle}
+        onFocus={(e) => { e.target.style.borderColor = '#F5A623'; e.target.style.boxShadow = '0 0 0 3px rgba(245,166,35,0.1)'; }}
+        onBlur={(e) => { e.target.style.borderColor = '#243042'; e.target.style.boxShadow = 'none'; }}
       />
     </div>
   );
@@ -59,21 +75,19 @@ function InputField({
 function SelectField({
   label, value, onChange, options, placeholder,
 }: {
-  label: string; value: string; onChange: (v: string) => void;
-  options: string[]; placeholder?: string;
+  label: string; value: string; onChange: (v: string) => void; options: string[]; placeholder?: string;
 }) {
   return (
     <div>
-      <label className="block text-xs font-semibold mb-1.5" style={{ color: '#8B949E' }}>
+      <label className="block text-xs font-semibold mb-1.5" style={{ color: '#94A3B8' }}>
         {label} <span style={{ color: '#EF4444' }}>*</span>
       </label>
       <select
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        className="w-full px-4 py-3 rounded-xl text-sm outline-none transition-all appearance-none"
-        style={{ backgroundColor: '#21262D', border: '1px solid #30363D', color: value ? '#F0F6FC' : '#8B949E' }}
-        onFocus={(e) => (e.target.style.borderColor = '#F5A623')}
-        onBlur={(e) => (e.target.style.borderColor = '#30363D')}
+        value={value} onChange={(e) => onChange(e.target.value)}
+        className="w-full px-4 py-3.5 rounded-xl text-sm outline-none transition-all appearance-none"
+        style={{ ...inputStyle, color: value ? '#F1F5F9' : '#6B7280' }}
+        onFocus={(e) => { e.target.style.borderColor = '#F5A623'; e.target.style.boxShadow = '0 0 0 3px rgba(245,166,35,0.1)'; }}
+        onBlur={(e) => { e.target.style.borderColor = '#243042'; e.target.style.boxShadow = 'none'; }}
       >
         {placeholder && <option value="">{placeholder}</option>}
         {options.map((o) => <option key={o} value={o}>{o}</option>)}
@@ -104,7 +118,6 @@ export default function RegisterPage() {
   function validate(): string | null {
     if (!name.trim()) return 'Full name is required.';
     if (!phone.trim()) return 'Mobile number is required.';
-    if (!email.trim()) return 'Email is required.';
     if (!city) return 'City is required.';
     if (role === 'driver' && !vehicleType) return 'Vehicle type is required.';
     if (!password) return 'Password is required.';
@@ -113,98 +126,212 @@ export default function RegisterPage() {
     return null;
   }
 
-  function handleRegister(e: React.FormEvent) {
+  async function handleRegister(e: React.FormEvent) {
     e.preventDefault();
     const err = validate();
     if (err) { setError(err); return; }
     setError('');
     setLoading(true);
-    setTimeout(() => {
-      const newUser: AppUser = {
-        id: `user-${Date.now()}`,
-        name: name.trim(),
-        phone: phone.trim(),
-        email: email.trim(),
-        role,
-        status: 'pending',
-        isPremium: false,
-        city,
-        ...(role === 'vendor' && companyName ? { companyName: companyName.trim() } : {}),
-        ...(role === 'driver' ? { vehicleType } : {}),
-      };
-      dispatch({ type: 'SET_USER', payload: { user: newUser, trips: [], notifications: [] } });
-      router.push('/app/pending');
-    }, 700);
+
+    if (IS_API_MODE) {
+      try {
+        await AuthService.register({
+          role,
+          name: name.trim(),
+          phone: phone.trim(),
+          password,
+          city,
+          state: STATES[city] ?? city,
+          email: email.trim() || undefined,
+          company_name: role === 'vendor' && companyName ? companyName.trim() : undefined,
+          vehicle_type: role === 'driver' ? vehicleType : undefined,
+          vehicle_number: role === 'driver' && vehicleNumber ? vehicleNumber.trim() : undefined,
+        });
+        const newUser: AppUser = {
+          id: `pending-${Date.now()}`,
+          name: name.trim(),
+          phone: phone.trim(),
+          email: email.trim(),
+          role,
+          status: 'pending',
+          isPremium: false,
+          city,
+          ...(role === 'vendor' && companyName ? { companyName: companyName.trim() } : {}),
+          ...(role === 'driver' ? { vehicleType } : {}),
+        };
+        dispatch({ type: 'SET_USER', payload: { user: newUser, trips: [], notifications: [] } });
+        router.push('/app/pending');
+      } catch (err: unknown) {
+        const msg = err instanceof Error ? err.message : 'Registration failed';
+        setError(msg);
+        setLoading(false);
+      }
+    } else {
+      setTimeout(() => {
+        const newUser: AppUser = {
+          id: `user-${Date.now()}`,
+          name: name.trim(), phone: phone.trim(), email: email.trim(), role,
+          status: 'pending', isPremium: false, city,
+          ...(role === 'vendor' && companyName ? { companyName: companyName.trim() } : {}),
+          ...(role === 'driver' ? { vehicleType } : {}),
+        };
+        dispatch({ type: 'SET_USER', payload: { user: newUser, trips: [], notifications: [] } });
+        router.push('/app/pending');
+      }, 700);
+    }
   }
 
   return (
     <AppShell>
-      <div className="flex flex-col flex-1 overflow-y-auto" style={{ backgroundColor: '#0D1117' }}>
-        {/* Header */}
-        <div className="flex items-center gap-3 px-4 pt-12 pb-6">
+      <div
+        className="flex flex-col flex-1 overflow-y-auto"
+        style={{
+          backgroundColor: '#0B1220',
+          backgroundImage: 'radial-gradient(ellipse at 50% 0%, rgba(245,166,35,0.08) 0%, transparent 60%)',
+          minHeight: '100%',
+        }}
+      >
+        {/* Back button */}
+        <div className="px-4 pt-12 pb-2">
           <button
             onClick={() => router.push('/app')}
-            className="flex items-center justify-center w-9 h-9 rounded-full"
-            style={{ backgroundColor: '#161B22', color: '#F0F6FC' }}
+            className="flex items-center justify-center w-10 h-10 rounded-2xl transition-all active:scale-90"
+            style={{ backgroundColor: '#111827', border: '1px solid #243042', color: '#94A3B8' }}
           >
             <ArrowLeft size={18} />
           </button>
-          <div>
-            <h1 className="text-xl font-bold" style={{ color: '#F0F6FC' }}>Create Account</h1>
-            <p className="text-xs" style={{ color: '#8B949E' }}>Join the Cab Safars network</p>
-          </div>
         </div>
 
-        <div className="flex flex-col px-6 pb-10">
-          {/* Role toggle */}
-          <div
-            className="flex rounded-xl p-1 mb-6"
-            style={{ backgroundColor: '#161B22' }}
-          >
-            {(['vendor', 'driver'] as Role[]).map((r) => (
-              <button
-                key={r}
-                onClick={() => setRole(r)}
-                className="flex-1 py-2.5 rounded-lg text-sm font-semibold capitalize transition-all"
-                style={
-                  role === r
-                    ? { backgroundColor: '#F5A623', color: '#0D1117' }
-                    : { backgroundColor: 'transparent', color: '#8B949E' }
-                }
-              >
-                {r}
+        {/* Logo + heading */}
+        <div className="px-6 pt-4 pb-2 flex flex-col items-center">
+          <img
+            src="/cabsafars/logo.png"
+            alt="CAB SAFARS"
+            className="h-14 w-auto object-contain mx-auto mb-6"
+          />
+          <h1 className="text-2xl font-bold text-white mb-1">Create Account</h1>
+          <p className="text-sm" style={{ color: '#94A3B8' }}>Join the Cab Safars network</p>
+        </div>
+
+        {/* Card */}
+        <div
+          className="mx-4 mt-6 mb-4 rounded-3xl p-6 shadow-2xl"
+          style={{ backgroundColor: '#111827', border: '1px solid #243042' }}
+        >
+          {/* Error banner */}
+          {error && (
+            <div
+              className="flex items-center gap-3 rounded-2xl px-4 py-3 mb-5"
+              style={{ backgroundColor: 'rgba(239,68,68,0.12)', border: '1px solid rgba(239,68,68,0.3)' }}
+            >
+              <X size={16} style={{ color: '#EF4444', flexShrink: 0 }} />
+              <p className="text-sm flex-1" style={{ color: '#FCA5A5' }}>{error}</p>
+              <button onClick={() => setError('')} style={{ color: '#EF4444' }}>
+                <X size={14} />
               </button>
-            ))}
+            </div>
+          )}
+
+          {/* Role chip toggle */}
+          <div className="mb-6">
+            <label className="block text-xs font-semibold mb-2" style={{ color: '#94A3B8' }}>
+              I am a <span style={{ color: '#EF4444' }}>*</span>
+            </label>
+            <div className="flex gap-2">
+              {(['vendor', 'driver'] as Role[]).map((r) => (
+                <button
+                  key={r}
+                  type="button"
+                  onClick={() => setRole(r)}
+                  className="flex-1 rounded-xl px-4 py-2.5 text-sm font-semibold transition-all"
+                  style={
+                    role === r
+                      ? { backgroundColor: '#F5A623', color: '#000000' }
+                      : { backgroundColor: 'transparent', border: '1px solid #243042', color: '#94A3B8' }
+                  }
+                >
+                  {r === 'vendor' ? 'Trip Provider' : 'Driver'}
+                </button>
+              ))}
+            </div>
           </div>
 
           <form onSubmit={handleRegister} className="flex flex-col gap-4">
             <InputField label="Full Name" value={name} onChange={setName} placeholder="Your full name" />
 
             {role === 'vendor' && (
-              <InputField label="Company Name" value={companyName} onChange={setCompanyName}
-                placeholder="e.g. Patel Travels (optional)" required={false} />
+              <InputField
+                label="Company Name"
+                value={companyName}
+                onChange={setCompanyName}
+                placeholder="e.g. Patel Travels (optional)"
+                required={false}
+              />
             )}
 
             {role === 'driver' && (
               <>
-                <SelectField label="Vehicle Type" value={vehicleType} onChange={setVehicleType}
-                  options={VEHICLE_TYPES} placeholder="Select vehicle type" />
-                <InputField label="Vehicle Number" value={vehicleNumber} onChange={setVehicleNumber}
-                  placeholder="GJ01 AB 1234" />
+                <SelectField
+                  label="Vehicle Type"
+                  value={vehicleType}
+                  onChange={setVehicleType}
+                  options={VEHICLE_TYPES}
+                  placeholder="Select vehicle type"
+                />
+                <InputField
+                  label="Vehicle Number"
+                  value={vehicleNumber}
+                  onChange={setVehicleNumber}
+                  placeholder="GJ01 AB 1234"
+                />
               </>
             )}
 
-            <InputField label="Mobile Number" type="tel" value={phone} onChange={setPhone}
-              placeholder="+91 98XXX XXXXX" />
-            <InputField label="Email Address" type="email" value={email} onChange={setEmail}
-              placeholder="you@example.com" />
+            {/* Phone with +91 prefix */}
+            <div>
+              <label className="block text-xs font-semibold mb-1.5" style={{ color: '#94A3B8' }}>
+                Mobile Number <span style={{ color: '#EF4444' }}>*</span>
+              </label>
+              <div className="flex gap-2">
+                <div
+                  className="flex items-center px-3 rounded-xl text-sm font-semibold flex-shrink-0"
+                  style={{ backgroundColor: '#1A2332', border: '1px solid #243042', color: '#94A3B8', minWidth: '68px' }}
+                >
+                  🇮🇳 +91
+                </div>
+                <input
+                  type="tel"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  placeholder="98XXX XXXXX"
+                  className="flex-1 px-4 py-3.5 rounded-xl text-sm outline-none transition-all"
+                  style={inputStyle}
+                  onFocus={(e) => { e.target.style.borderColor = '#F5A623'; e.target.style.boxShadow = '0 0 0 3px rgba(245,166,35,0.1)'; }}
+                  onBlur={(e) => { e.target.style.borderColor = '#243042'; e.target.style.boxShadow = 'none'; }}
+                />
+              </div>
+            </div>
 
-            <SelectField label="City" value={city} onChange={setCity}
-              options={CITIES} placeholder="Select your city" />
+            <InputField
+              label="Email Address"
+              type="email"
+              value={email}
+              onChange={setEmail}
+              placeholder="you@example.com"
+              required={false}
+            />
+
+            <SelectField
+              label="City"
+              value={city}
+              onChange={setCity}
+              options={CITIES}
+              placeholder="Select your city"
+            />
 
             {/* Password */}
             <div>
-              <label className="block text-xs font-semibold mb-1.5" style={{ color: '#8B949E' }}>
+              <label className="block text-xs font-semibold mb-1.5" style={{ color: '#94A3B8' }}>
                 Password <span style={{ color: '#EF4444' }}>*</span>
               </label>
               <div className="relative">
@@ -213,21 +340,25 @@ export default function RegisterPage() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="Min 6 characters"
-                  className="w-full px-4 py-3 pr-12 rounded-xl text-sm outline-none"
-                  style={{ backgroundColor: '#21262D', border: '1px solid #30363D', color: '#F0F6FC' }}
-                  onFocus={(e) => (e.target.style.borderColor = '#F5A623')}
-                  onBlur={(e) => (e.target.style.borderColor = '#30363D')}
+                  className="w-full px-4 py-3.5 pr-12 rounded-xl text-sm outline-none transition-all"
+                  style={inputStyle}
+                  onFocus={(e) => { e.target.style.borderColor = '#F5A623'; e.target.style.boxShadow = '0 0 0 3px rgba(245,166,35,0.1)'; }}
+                  onBlur={(e) => { e.target.style.borderColor = '#243042'; e.target.style.boxShadow = 'none'; }}
                 />
-                <button type="button" onClick={() => setShowPwd((v) => !v)}
-                  className="absolute right-4 top-1/2 -translate-y-1/2" style={{ color: '#8B949E' }}>
-                  {showPwd ? <EyeOff size={16} /> : <Eye size={16} />}
+                <button
+                  type="button"
+                  onClick={() => setShowPwd((v) => !v)}
+                  className="absolute right-4 top-1/2 -translate-y-1/2"
+                  style={{ color: '#94A3B8' }}
+                >
+                  {showPwd ? <EyeOff size={17} /> : <Eye size={17} />}
                 </button>
               </div>
             </div>
 
             {/* Confirm password */}
             <div>
-              <label className="block text-xs font-semibold mb-1.5" style={{ color: '#8B949E' }}>
+              <label className="block text-xs font-semibold mb-1.5" style={{ color: '#94A3B8' }}>
                 Confirm Password <span style={{ color: '#EF4444' }}>*</span>
               </label>
               <div className="relative">
@@ -236,43 +367,54 @@ export default function RegisterPage() {
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   placeholder="Re-enter password"
-                  className="w-full px-4 py-3 pr-12 rounded-xl text-sm outline-none"
-                  style={{ backgroundColor: '#21262D', border: '1px solid #30363D', color: '#F0F6FC' }}
-                  onFocus={(e) => (e.target.style.borderColor = '#F5A623')}
-                  onBlur={(e) => (e.target.style.borderColor = '#30363D')}
+                  className="w-full px-4 py-3.5 pr-12 rounded-xl text-sm outline-none transition-all"
+                  style={inputStyle}
+                  onFocus={(e) => { e.target.style.borderColor = '#F5A623'; e.target.style.boxShadow = '0 0 0 3px rgba(245,166,35,0.1)'; }}
+                  onBlur={(e) => { e.target.style.borderColor = '#243042'; e.target.style.boxShadow = 'none'; }}
                 />
-                <button type="button" onClick={() => setShowCpwd((v) => !v)}
-                  className="absolute right-4 top-1/2 -translate-y-1/2" style={{ color: '#8B949E' }}>
-                  {showCpwd ? <EyeOff size={16} /> : <Eye size={16} />}
+                <button
+                  type="button"
+                  onClick={() => setShowCpwd((v) => !v)}
+                  className="absolute right-4 top-1/2 -translate-y-1/2"
+                  style={{ color: '#94A3B8' }}
+                >
+                  {showCpwd ? <EyeOff size={17} /> : <Eye size={17} />}
                 </button>
               </div>
             </div>
 
-            {error && (
-              <p className="text-sm" style={{ color: '#EF4444' }}>{error}</p>
-            )}
-
+            {/* Submit */}
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3.5 rounded-xl text-base font-bold mt-2 transition-all active:scale-95 disabled:opacity-60"
-              style={{ background: 'linear-gradient(135deg, #F5A623, #D4891E)', color: '#0D1117' }}
+              className="w-full py-4 rounded-2xl text-base font-bold mt-1 transition-all active:scale-95 disabled:opacity-60 flex items-center justify-center gap-2"
+              style={{ background: 'linear-gradient(135deg, #F5A623 0%, #D4891E 100%)', color: '#000000' }}
             >
-              {loading ? 'Creating Account…' : 'Create Account'}
+              {loading ? (
+                <>
+                  <span
+                    className="inline-block w-4 h-4 rounded-full border-2 border-black/30 border-t-black animate-spin"
+                  />
+                  Please wait...
+                </>
+              ) : (
+                'Create Account'
+              )}
             </button>
           </form>
-
-          <p className="text-sm text-center mt-5" style={{ color: '#8B949E' }}>
-            Already have an account?{' '}
-            <button
-              onClick={() => router.push('/app/login')}
-              className="font-semibold"
-              style={{ color: '#F5A623' }}
-            >
-              Login
-            </button>
-          </p>
         </div>
+
+        {/* Bottom link */}
+        <p className="text-sm text-center py-4" style={{ color: '#94A3B8' }}>
+          Already have an account?{' '}
+          <button
+            onClick={() => router.push('/app/login')}
+            className="font-semibold"
+            style={{ color: '#F5A623' }}
+          >
+            Login
+          </button>
+        </p>
       </div>
     </AppShell>
   );

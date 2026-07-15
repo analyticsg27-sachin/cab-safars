@@ -114,9 +114,11 @@ export default function PremiumSection() {
 
               {/* CTA */}
               <div className="flex flex-col sm:flex-row items-center gap-4">
-                <Button variant="primary" size="xl" className="w-full sm:w-auto px-12">
-                  Get Premium — ₹199/month
-                </Button>
+                <a href="/app">
+                  <Button variant="primary" size="xl" className="w-full sm:w-auto px-12">
+                    Get Started — ₹199/month
+                  </Button>
+                </a>
                 <p className="text-xs text-[#8B949E] text-center">
                   Secure payment via Razorpay / PhonePe / GPay
                 </p>

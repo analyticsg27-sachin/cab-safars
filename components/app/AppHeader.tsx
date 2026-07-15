@@ -8,6 +8,7 @@ interface AppHeaderProps {
   onBack?: () => void;
   rightAction?: React.ReactNode;
   isPremium?: boolean;
+  subtitle?: string;
 }
 
 export default function AppHeader({
@@ -16,14 +17,19 @@ export default function AppHeader({
   onBack,
   rightAction,
   isPremium = false,
+  subtitle,
 }: AppHeaderProps) {
   return (
     <header
-      className="flex items-center px-4 shrink-0 z-10"
+      className="flex items-center px-4 shrink-0 z-20"
       style={{
-        height: '56px',
-        backgroundColor: '#161B22',
-        borderBottom: '1px solid #30363D',
+        height: subtitle ? '64px' : '56px',
+        backgroundColor: '#0B1220',
+        borderBottom: '1px solid #243042',
+        WebkitBackdropFilter: 'blur(12px)',
+        backdropFilter: 'blur(12px)',
+        position: 'sticky',
+        top: 0,
       }}
     >
       {/* Left */}
@@ -31,31 +37,28 @@ export default function AppHeader({
         {showBack && (
           <button
             onClick={onBack}
-            className="flex items-center justify-center w-9 h-9 rounded-full transition-colors"
-            style={{ color: '#F0F6FC' }}
-            onMouseEnter={(e) =>
-              (e.currentTarget.style.backgroundColor = '#21262D')
-            }
-            onMouseLeave={(e) =>
-              (e.currentTarget.style.backgroundColor = 'transparent')
-            }
+            className="flex items-center justify-center w-9 h-9 rounded-xl transition-all active:scale-95"
+            style={{ color: '#FFFFFF', backgroundColor: '#1A2332', border: '1px solid #243042' }}
             aria-label="Go back"
           >
-            <ArrowLeft size={20} />
+            <ArrowLeft size={18} />
           </button>
         )}
       </div>
 
       {/* Center */}
-      <div className="flex-1 flex items-center justify-center gap-2">
-        <span
-          className="text-base font-semibold truncate"
-          style={{ color: '#F0F6FC' }}
-        >
-          {title}
-        </span>
-        {isPremium && (
-          <Crown size={14} style={{ color: '#F5A623' }} />
+      <div className="flex-1 flex flex-col items-center justify-center gap-0.5">
+        <div className="flex items-center gap-1.5">
+          <span
+            className="text-base font-semibold truncate"
+            style={{ color: '#FFFFFF', letterSpacing: '-0.01em' }}
+          >
+            {title}
+          </span>
+          {isPremium && <Crown size={14} style={{ color: '#F5A623' }} />}
+        </div>
+        {subtitle && (
+          <span className="text-xs" style={{ color: '#94A3B8' }}>{subtitle}</span>
         )}
       </div>
 

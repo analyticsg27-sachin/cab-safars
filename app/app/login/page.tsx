@@ -2,15 +2,18 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Eye, EyeOff, ArrowLeft } from 'lucide-react';
+import { Eye, EyeOff, ArrowLeft, X } from 'lucide-react';
 import { useAppState } from '@/lib/app-state';
+import { IS_API_MODE } from '@/lib/services';
+import AuthService from '@/lib/services/auth.service';
+import { setTokens } from '@/lib/services/api-client';
 import { demoUsers, vendorFreeTrips, vendorPremiumTrips, availableTripsForDriver, demoNotifications } from '@/lib/demo-users';
+import type { AppUser } from '@/lib/app-types';
 import AppShell from '@/components/app/AppShell';
 
 type Role = 'vendor' | 'driver';
 
 function mockLogin(identifier: string, role: Role) {
-  // Match demo users by email, phone or name (case-insensitive)
   const needle = identifier.toLowerCase().trim();
   for (const user of Object.values(demoUsers)) {
     if (
@@ -22,7 +25,6 @@ function mockLogin(identifier: string, role: Role) {
       return user;
     }
   }
-  // Default: return first user matching role
   return Object.values(demoUsers).find((u) => u.role === role) ?? null;
 }
 
@@ -36,24 +38,68 @@ export default function LoginPage() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  function handleLogin(e: React.FormEvent) {
+  async function handleLogin(e: React.FormEvent) {
     e.preventDefault();
     if (!identifier.trim()) { setError('Please enter your mobile number or email.'); return; }
     if (!password.trim()) { setError('Please enter your password.'); return; }
     setError('');
     setLoading(true);
-    setTimeout(() => {
-      const user = mockLogin(identifier, role);
-      if (!user) { setError('No account found. Try demo access below.'); setLoading(false); return; }
-      const trips =
-        user.id === 'v003'
-          ? vendorFreeTrips
-          : user.id === 'v001'
-          ? vendorPremiumTrips
+
+    if (IS_API_MODE) {
+      try {
+        const res = await AuthService.login(identifier.trim(), password);
+        if (res.status === 'pending') {
+          const user: AppUser = {
+            id: res.user.uuid,
+            name: res.user.name,
+            phone: res.user.phone,
+            email: res.user.email ?? '',
+            role: res.user.role,
+            status: 'pending',
+            isPremium: false,
+            city: res.user.city,
+          };
+          dispatch({ type: 'SET_USER', payload: { user, trips: [], notifications: [] } });
+          router.push('/app/pending');
+          return;
+        }
+        if (res.user.status !== 'approved') {
+          setError('Your account is not approved yet.');
+          setLoading(false);
+          return;
+        }
+        const user: AppUser = {
+          id: res.user.uuid,
+          name: res.user.name,
+          phone: res.user.phone,
+          email: res.user.email ?? '',
+          role: res.user.role,
+          status: 'active',
+          isPremium: res.user.is_premium,
+          premiumExpiry: res.user.premium_expires_at ?? undefined,
+          city: res.user.city,
+          companyName: res.user.company_name,
+          vehicleType: res.user.vehicle_type,
+        };
+        dispatch({ type: 'SET_USER', payload: { user, trips: [], notifications: [] } });
+        router.push(user.role === 'vendor' ? '/app/vendor/home' : '/app/driver/home');
+      } catch (err: unknown) {
+        const msg = err instanceof Error ? err.message : 'Login failed';
+        setError(msg);
+        setLoading(false);
+      }
+    } else {
+      setTimeout(() => {
+        const user = mockLogin(identifier, role);
+        if (!user) { setError('No account found. Try demo access below.'); setLoading(false); return; }
+        const trips =
+          user.id === 'v003' ? vendorFreeTrips
+          : user.id === 'v001' ? vendorPremiumTrips
           : availableTripsForDriver;
-      dispatch({ type: 'SET_USER', payload: { user, trips, notifications: demoNotifications } });
-      router.push(user.role === 'vendor' ? '/app/vendor/home' : '/app/driver/home');
-    }, 600);
+        dispatch({ type: 'SET_USER', payload: { user, trips, notifications: demoNotifications } });
+        router.push(user.role === 'vendor' ? '/app/vendor/home' : '/app/driver/home');
+      }, 600);
+    }
   }
 
   function quickLogin(key: keyof typeof demoUsers) {
@@ -70,58 +116,77 @@ export default function LoginPage() {
     <AppShell>
       <div
         className="flex flex-col flex-1 overflow-y-auto"
-        style={{ backgroundColor: '#0D1117' }}
+        style={{
+          backgroundColor: '#0B1220',
+          backgroundImage: 'radial-gradient(ellipse at 50% 0%, rgba(245,166,35,0.08) 0%, transparent 60%)',
+          minHeight: '100%',
+        }}
       >
-        {/* Header */}
-        <div className="flex items-center gap-3 px-4 pt-12 pb-6">
+        {/* Back button */}
+        <div className="px-4 pt-12 pb-2">
           <button
             onClick={() => router.push('/app')}
-            className="flex items-center justify-center w-9 h-9 rounded-full"
-            style={{ backgroundColor: '#161B22', color: '#F0F6FC' }}
+            className="flex items-center justify-center w-10 h-10 rounded-2xl transition-all active:scale-90"
+            style={{ backgroundColor: '#111827', border: '1px solid #243042', color: '#94A3B8' }}
           >
             <ArrowLeft size={18} />
           </button>
         </div>
 
-        <div className="flex flex-col flex-1 px-6 pb-10">
-          <h1
-            className="text-2xl font-bold mb-1"
-            style={{ color: '#F0F6FC' }}
-          >
-            Welcome Back
-          </h1>
-          <p className="text-sm mb-7" style={{ color: '#8B949E' }}>
-            Sign in to your account
-          </p>
+        {/* Logo */}
+        <div className="px-6 pt-4 pb-2 flex flex-col items-center">
+          <img
+            src="/cabsafars/logo.png"
+            alt="CAB SAFARS"
+            className="h-14 w-auto object-contain mx-auto mb-6"
+          />
+          <h1 className="text-2xl font-bold text-white mb-1">Welcome Back</h1>
+          <p className="text-sm" style={{ color: '#94A3B8' }}>Sign in to continue your journey</p>
+        </div>
 
-          {/* Role toggle */}
-          <div
-            className="flex rounded-xl p-1 mb-6"
-            style={{ backgroundColor: '#161B22' }}
-          >
-            {(['vendor', 'driver'] as Role[]).map((r) => (
-              <button
-                key={r}
-                onClick={() => setRole(r)}
-                className="flex-1 py-2.5 rounded-lg text-sm font-semibold capitalize transition-all"
-                style={
-                  role === r
-                    ? { backgroundColor: '#F5A623', color: '#0D1117' }
-                    : { backgroundColor: 'transparent', color: '#8B949E' }
-                }
-              >
-                {r}
+        {/* Card */}
+        <div
+          className="mx-4 mt-6 mb-4 rounded-3xl p-6 shadow-2xl"
+          style={{ backgroundColor: '#111827', border: '1px solid #243042' }}
+        >
+          {/* Error banner */}
+          {error && (
+            <div
+              className="flex items-center gap-3 rounded-2xl px-4 py-3 mb-5"
+              style={{ backgroundColor: 'rgba(239,68,68,0.12)', border: '1px solid rgba(239,68,68,0.3)' }}
+            >
+              <X size={16} style={{ color: '#EF4444', flexShrink: 0 }} />
+              <p className="text-sm flex-1" style={{ color: '#FCA5A5' }}>{error}</p>
+              <button onClick={() => setError('')} style={{ color: '#EF4444' }}>
+                <X size={14} />
               </button>
-            ))}
-          </div>
+            </div>
+          )}
+
+          {/* Role toggle — mock mode only */}
+          {!IS_API_MODE && (
+            <div className="flex gap-2 mb-6">
+              {(['vendor', 'driver'] as Role[]).map((r) => (
+                <button
+                  key={r}
+                  onClick={() => setRole(r)}
+                  className="flex-1 rounded-xl px-4 py-2.5 text-sm font-semibold capitalize transition-all"
+                  style={
+                    role === r
+                      ? { backgroundColor: '#F5A623', color: '#000000' }
+                      : { backgroundColor: 'transparent', border: '1px solid #243042', color: '#94A3B8' }
+                  }
+                >
+                  {r === 'vendor' ? 'Trip Provider' : 'Driver'}
+                </button>
+              ))}
+            </div>
+          )}
 
           <form onSubmit={handleLogin} className="flex flex-col gap-4">
             {/* Identifier */}
             <div>
-              <label
-                className="block text-xs font-semibold mb-1.5"
-                style={{ color: '#8B949E' }}
-              >
+              <label className="block text-xs font-semibold mb-1.5" style={{ color: '#94A3B8' }}>
                 Mobile Number or Email
               </label>
               <input
@@ -131,21 +196,25 @@ export default function LoginPage() {
                 placeholder="+91 98XXX XXXXX"
                 className="w-full px-4 py-3.5 rounded-xl text-sm outline-none transition-all"
                 style={{
-                  backgroundColor: '#21262D',
-                  border: '1px solid #30363D',
-                  color: '#F0F6FC',
+                  backgroundColor: '#1A2332',
+                  border: '1px solid #243042',
+                  color: '#F1F5F9',
+                  caretColor: '#F5A623',
                 }}
-                onFocus={(e) => (e.target.style.borderColor = '#F5A623')}
-                onBlur={(e) => (e.target.style.borderColor = '#30363D')}
+                onFocus={(e) => {
+                  e.target.style.borderColor = '#F5A623';
+                  e.target.style.boxShadow = '0 0 0 3px rgba(245,166,35,0.1)';
+                }}
+                onBlur={(e) => {
+                  e.target.style.borderColor = '#243042';
+                  e.target.style.boxShadow = 'none';
+                }}
               />
             </div>
 
             {/* Password */}
             <div>
-              <label
-                className="block text-xs font-semibold mb-1.5"
-                style={{ color: '#8B949E' }}
-              >
+              <label className="block text-xs font-semibold mb-1.5" style={{ color: '#94A3B8' }}>
                 Password
               </label>
               <div className="relative">
@@ -153,65 +222,76 @@ export default function LoginPage() {
                   type={showPassword ? 'text' : 'password'}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  placeholder="Enter password"
+                  placeholder="Enter your password"
                   className="w-full px-4 py-3.5 pr-12 rounded-xl text-sm outline-none transition-all"
                   style={{
-                    backgroundColor: '#21262D',
-                    border: '1px solid #30363D',
-                    color: '#F0F6FC',
+                    backgroundColor: '#1A2332',
+                    border: '1px solid #243042',
+                    color: '#F1F5F9',
+                    caretColor: '#F5A623',
                   }}
-                  onFocus={(e) => (e.target.style.borderColor = '#F5A623')}
-                  onBlur={(e) => (e.target.style.borderColor = '#30363D')}
+                  onFocus={(e) => {
+                    e.target.style.borderColor = '#F5A623';
+                    e.target.style.boxShadow = '0 0 0 3px rgba(245,166,35,0.1)';
+                  }}
+                  onBlur={(e) => {
+                    e.target.style.borderColor = '#243042';
+                    e.target.style.boxShadow = 'none';
+                  }}
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword((v) => !v)}
-                  className="absolute right-4 top-1/2 -translate-y-1/2"
-                  style={{ color: '#8B949E' }}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 transition-colors"
+                  style={{ color: '#94A3B8' }}
                 >
-                  {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                  {showPassword ? <EyeOff size={17} /> : <Eye size={17} />}
                 </button>
               </div>
             </div>
 
-            {error && (
-              <p className="text-sm" style={{ color: '#EF4444' }}>
-                {error}
-              </p>
-            )}
-
+            {/* Submit */}
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3.5 rounded-xl text-base font-bold mt-2 transition-all active:scale-95 disabled:opacity-60"
-              style={{
-                background: 'linear-gradient(135deg, #F5A623, #D4891E)',
-                color: '#0D1117',
-              }}
+              className="w-full py-4 rounded-2xl text-base font-bold mt-1 transition-all active:scale-95 disabled:opacity-60 flex items-center justify-center gap-2"
+              style={{ background: 'linear-gradient(135deg, #F5A623 0%, #D4891E 100%)', color: '#000000' }}
             >
-              {loading ? 'Signing in…' : 'Login'}
+              {loading ? (
+                <>
+                  <span
+                    className="inline-block w-4 h-4 rounded-full border-2 border-black/30 border-t-black animate-spin"
+                  />
+                  Please wait...
+                </>
+              ) : (
+                'Sign In'
+              )}
             </button>
           </form>
+        </div>
 
-          <p className="text-sm text-center mt-5" style={{ color: '#8B949E' }}>
-            Don&apos;t have an account?{' '}
-            <button
-              onClick={() => router.push('/app/register')}
-              className="font-semibold"
-              style={{ color: '#F5A623' }}
-            >
-              Register
-            </button>
-          </p>
+        {/* Bottom link */}
+        <p className="text-sm text-center py-4" style={{ color: '#94A3B8' }}>
+          Don&apos;t have an account?{' '}
+          <button
+            onClick={() => router.push('/app/register')}
+            className="font-semibold underline-offset-2"
+            style={{ color: '#F5A623' }}
+          >
+            Register
+          </button>
+        </p>
 
-          {/* Demo shortcuts */}
+        {/* Demo shortcuts — mock mode only */}
+        {!IS_API_MODE && (
           <div
-            className="mt-8 rounded-2xl p-4"
-            style={{ backgroundColor: '#161B22', border: '1px solid #30363D' }}
+            className="mx-4 mb-8 rounded-2xl p-4"
+            style={{ backgroundColor: '#111827', border: '1px solid #243042' }}
           >
             <p
               className="text-[11px] font-semibold uppercase tracking-wider text-center mb-3"
-              style={{ color: '#8B949E' }}
+              style={{ color: '#94A3B8' }}
             >
               Quick Demo Access
             </p>
@@ -220,26 +300,22 @@ export default function LoginPage() {
                 [
                   { key: 'vendorFree', label: 'Vendor Free', color: '#F5A623' },
                   { key: 'vendorPremium', label: 'Vendor Premium ★', color: '#F5A623' },
-                  { key: 'driverFree', label: 'Driver Free', color: '#2D6BE4' },
-                  { key: 'driverPremium', label: 'Driver Premium ★', color: '#2D6BE4' },
+                  { key: 'driverFree', label: 'Driver Free', color: '#60A5FA' },
+                  { key: 'driverPremium', label: 'Driver Premium ★', color: '#60A5FA' },
                 ] as const
               ).map(({ key, label, color }) => (
                 <button
                   key={key}
                   onClick={() => quickLogin(key)}
                   className="py-2.5 px-3 rounded-xl text-xs font-semibold transition-all active:scale-95"
-                  style={{
-                    backgroundColor: '#21262D',
-                    border: `1px solid ${color}44`,
-                    color,
-                  }}
+                  style={{ backgroundColor: '#1A2332', border: `1px solid ${color}44`, color }}
                 >
                   {label}
                 </button>
               ))}
             </div>
           </div>
-        </div>
+        )}
       </div>
     </AppShell>
   );

@@ -36,10 +36,10 @@ export default function DownloadSection() {
                       <Star key={s} className="w-4 h-4 text-[#F5A623] fill-[#F5A623]" />
                     ))}
                   </div>
-                  <span className="text-sm text-[#8B949E]">4.8 / 5 rating</span>
+                  <span className="text-sm text-[#8B949E]">Launching on Android</span>
                 </div>
                 <span className="text-[#30363D]">|</span>
-                <span className="text-sm text-[#8B949E]">10,000+ downloads projected</span>
+                <span className="text-sm text-[#8B949E]">Register interest below</span>
               </div>
 
               <div className="flex flex-wrap gap-3">

@@ -1,48 +1,103 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
-import { Truck, Users, MapPin, Plus, Crown, ChevronRight } from 'lucide-react';
+import {
+  Truck, Users, MapPin, Plus, ChevronRight, RefreshCw, RotateCcw,
+} from 'lucide-react';
 import type { AppTrip } from '@/lib/app-types';
-import { getVendorTrips } from '@/lib/vendor-trips';
+import { useAppState } from '@/lib/app-state';
+import BottomNav from '@/components/app/BottomNav';
+import TripsService from '@/lib/services/trips.service';
+import type { Trip } from '@/lib/services/trips.service';
 
-// ─── Helpers ──────────────────────────────────────────────────────────────────
+const IS_API_MODE = process.env.NEXT_PUBLIC_DATA_MODE === 'api';
+
 function formatDate(d: string) {
   return new Date(d).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
 }
 
-// ─── Components ───────────────────────────────────────────────────────────────
-
-function StatusBadge({ status }: { status: AppTrip['status'] }) {
-  if (status === 'open') return (
-    <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium"
-      style={{ background: 'rgba(34,197,94,0.15)', color: '#22C55E', border: '1px solid rgba(34,197,94,0.2)' }}>
-      <span className="w-1.5 h-1.5 rounded-full bg-[#22C55E]" />
-      Open
-    </span>
-  );
+function StatusBadge({ status }: { status?: string }) {
+  const isActive = status === 'active' || status === 'open';
   return (
     <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium"
-      style={{ background: 'rgba(139,148,158,0.15)', color: '#8B949E', border: '1px solid rgba(139,148,158,0.2)' }}>
-      Closed
+      style={{
+        background: isActive ? 'rgba(34,197,94,0.15)' : 'rgba(139,148,158,0.15)',
+        color: isActive ? '#22C55E' : '#8B949E',
+        border: isActive ? '1px solid rgba(34,197,94,0.2)' : '1px solid rgba(139,148,158,0.2)',
+      }}>
+      {isActive && <span className="w-1.5 h-1.5 rounded-full bg-[#22C55E]" />}
+      {isActive ? 'Active' : (status ? status.charAt(0).toUpperCase() + status.slice(1) : 'Unknown')}
     </span>
   );
 }
 
-function TripCard({ trip, onClick }: { trip: AppTrip; onClick: () => void }) {
-  return (
-    <button
-      onClick={onClick}
-      className="w-full text-left rounded-2xl border active:scale-[0.98] transition-transform overflow-hidden"
-      style={{ background: '#161B22', borderColor: '#30363D' }}
-    >
-      {/* Top accent stripe for open trips */}
-      {trip.status === 'open' && (
-        <div className="h-0.5 w-full" style={{ background: 'linear-gradient(90deg,#F5A623,transparent)' }} />
-      )}
+function ApiTripCard({ trip, onRepost }: { trip: Trip; onRepost: (id: string) => void }) {
+  const router = useRouter();
+  const fare = trip.expected_fare ? Number(trip.expected_fare) : null;
+  const isClosed = trip.status !== 'active';
 
+  return (
+    <div className="rounded-2xl border overflow-hidden" style={{ background: '#161B22', borderColor: '#30363D' }}>
+      {!isClosed && <div className="h-0.5 w-full" style={{ background: 'linear-gradient(90deg,#F5A623,transparent)' }} />}
       <div className="p-4 flex flex-col gap-3">
-        {/* Route row */}
+        <div className="flex items-start justify-between gap-2">
+          <div className="flex items-center gap-2 min-w-0 flex-1">
+            <div className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
+              style={{ background: !isClosed ? 'rgba(245,166,35,0.15)' : 'rgba(139,148,158,0.1)' }}>
+              <MapPin size={16} color={!isClosed ? '#F5A623' : '#8B949E'} />
+            </div>
+            <span className="text-base font-semibold text-[#F0F6FC] truncate">
+              {trip.from_city} → {trip.to_city}
+            </span>
+          </div>
+          <StatusBadge status={trip.status} />
+        </div>
+
+        <div className="flex items-center gap-3 text-sm text-[#8B949E] ml-10">
+          <span>{formatDate(trip.trip_date)}</span>
+          <span className="w-1 h-1 rounded-full bg-[#30363D]" />
+          <span className="truncate">{trip.vehicle_type}</span>
+          {trip.load_type && (<><span className="w-1 h-1 rounded-full bg-[#30363D]" /><span className="truncate">{trip.load_type}</span></>)}
+        </div>
+
+        <div className="flex items-center justify-between ml-10">
+          <div className="flex items-center gap-1.5 text-sm text-[#8B949E]">
+            <Users size={14} />
+            <span>{trip.contacts_count ?? 0} contacted</span>
+          </div>
+          <div className="flex items-center gap-2">
+            {fare && <span className="text-sm font-semibold text-[#F5A623]">₹{fare.toLocaleString('en-IN')}</span>}
+          </div>
+        </div>
+
+        <div className="flex gap-2 ml-10">
+          <button
+            onClick={() => router.push(`/app/vendor/trip/${trip.id}`)}
+            className="flex items-center gap-1 text-xs font-semibold px-3 py-1.5 rounded-lg"
+            style={{ background: '#21262D', color: '#F0F6FC', border: '1px solid #30363D' }}>
+            View <ChevronRight size={11} />
+          </button>
+          {isClosed && (
+            <button
+              onClick={() => onRepost(trip.id)}
+              className="flex items-center gap-1 text-xs font-semibold px-3 py-1.5 rounded-lg"
+              style={{ background: 'rgba(245,166,35,0.15)', color: '#F5A623', border: '1px solid rgba(245,166,35,0.3)' }}>
+              <RotateCcw size={11} /> Repost
+            </button>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function LocalTripCard({ trip, onClick }: { trip: AppTrip; onClick: () => void }) {
+  return (
+    <button onClick={onClick} className="w-full text-left rounded-2xl border active:scale-[0.98] transition-transform overflow-hidden"
+      style={{ background: '#161B22', borderColor: '#30363D' }}>
+      {trip.status === 'open' && <div className="h-0.5 w-full" style={{ background: 'linear-gradient(90deg,#F5A623,transparent)' }} />}
+      <div className="p-4 flex flex-col gap-3">
         <div className="flex items-start justify-between gap-2">
           <div className="flex items-center gap-2 min-w-0 flex-1">
             <div className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
@@ -55,46 +110,17 @@ function TripCard({ trip, onClick }: { trip: AppTrip; onClick: () => void }) {
           </div>
           <StatusBadge status={trip.status} />
         </div>
-
-        {/* Meta row */}
         <div className="flex items-center gap-3 text-sm text-[#8B949E] ml-10">
           <span>{formatDate(trip.tripDate)}</span>
           <span className="w-1 h-1 rounded-full bg-[#30363D]" />
           <span className="truncate">{trip.vehicleType}</span>
-          {trip.loadType && (
-            <>
-              <span className="w-1 h-1 rounded-full bg-[#30363D]" />
-              <span className="truncate">{trip.loadType}</span>
-            </>
-          )}
         </div>
-
-        {/* Footer row */}
         <div className="flex items-center justify-between ml-10">
           <div className="flex items-center gap-1.5 text-sm text-[#8B949E]">
-            <Users size={14} />
-            <span>{trip.contactsCount} driver{trip.contactsCount !== 1 ? 's' : ''} contacted</span>
+            <Users size={14} /><span>{trip.contactsCount} contacted</span>
           </div>
-          <div className="flex items-center gap-2">
-            {trip.expectedFare && (
-              <span className="text-sm font-semibold text-[#F5A623]">
-                ₹{trip.expectedFare.toLocaleString('en-IN')}
-              </span>
-            )}
-            <ChevronRight size={16} color="#8B949E" />
-          </div>
+          {trip.expectedFare && <span className="text-sm font-semibold text-[#F5A623]">₹{trip.expectedFare.toLocaleString('en-IN')}</span>}
         </div>
-
-        {/* Closure info for closed trips */}
-        {trip.status === 'closed' && trip.closureType && (
-          <div className="ml-10 flex items-center gap-2 text-xs text-[#8B949E]"
-            style={{ borderTop: '1px solid #30363D', paddingTop: 10 }}>
-            {trip.closureType === 'app_driver'
-              ? <><Crown size={12} color="#22C55E" /><span style={{ color: '#22C55E' }}>Closed via App Driver</span></>
-              : <><span>Closed via Outside Driver</span></>
-            }
-          </div>
-        )}
       </div>
     </button>
   );
@@ -103,26 +129,18 @@ function TripCard({ trip, onClick }: { trip: AppTrip; onClick: () => void }) {
 function EmptyState({ tab, onPost }: { tab: string; onPost: () => void }) {
   return (
     <div className="flex flex-col items-center gap-4 py-16 px-6 text-center">
-      <div className="w-16 h-16 rounded-full flex items-center justify-center"
-        style={{ background: 'rgba(245,166,35,0.1)' }}>
+      <div className="w-16 h-16 rounded-full flex items-center justify-center" style={{ background: 'rgba(245,166,35,0.1)' }}>
         <Truck size={28} color="#F5A623" />
       </div>
       <div>
-        <p className="text-base font-semibold text-[#F0F6FC]">
-          {tab === 'open' ? 'No active trips' : 'No closed trips yet'}
-        </p>
+        <p className="text-base font-semibold text-[#F0F6FC]">{tab === 'active' ? 'No active trips' : 'No closed trips'}</p>
         <p className="text-sm text-[#8B949E] mt-1.5 leading-relaxed">
-          {tab === 'open'
-            ? 'Post a trip to start finding drivers for your route'
-            : 'Your closed trips will appear here once you mark them as done'}
+          {tab === 'active' ? 'Post a trip to start finding drivers' : 'Closed trips appear here — repost any time'}
         </p>
       </div>
-      {tab === 'open' && (
-        <button
-          onClick={onPost}
-          className="px-6 py-3 rounded-xl text-sm font-semibold mt-1"
-          style={{ background: '#F5A623', color: '#0D1117' }}
-        >
+      {tab === 'active' && (
+        <button onClick={onPost} className="px-6 py-3 rounded-xl text-sm font-semibold mt-1"
+          style={{ background: '#F5A623', color: '#0D1117' }}>
           Post New Trip
         </button>
       )}
@@ -130,123 +148,142 @@ function EmptyState({ tab, onPost }: { tab: string; onPost: () => void }) {
   );
 }
 
-// ─── Page ─────────────────────────────────────────────────────────────────────
 export default function VendorTripsPage() {
   const router = useRouter();
-  const [trips] = useState<AppTrip[]>(() => getVendorTrips());
-  const [activeTab, setActiveTab] = useState<'open' | 'closed'>('open');
+  const { state } = useAppState();
+  const [activeTab, setActiveTab] = useState<'active' | 'closed'>('active');
+  const [apiTrips, setApiTrips] = useState<Trip[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [reposting, setReposting] = useState<string | null>(null);
+  const [error, setError] = useState('');
 
-  const openTrips = trips.filter(t => t.status === 'open');
-  const closedTrips = trips.filter(t => t.status === 'closed');
-  const displayTrips = activeTab === 'open' ? openTrips : closedTrips;
+  const fetchTrips = useCallback(async () => {
+    if (!IS_API_MODE) return;
+    setLoading(true); setError('');
+    try {
+      const res = await TripsService.getMyTrips(1);
+      setApiTrips(res.data ?? []);
+    } catch (e: unknown) {
+      setError(e instanceof Error ? e.message : 'Failed to load trips');
+    } finally { setLoading(false); }
+  }, []);
+
+  useEffect(() => { fetchTrips(); }, [fetchTrips]);
+
+  async function handleRepost(tripId: string) {
+    setReposting(tripId);
+    try {
+      const tomorrow = new Date(); tomorrow.setDate(tomorrow.getDate() + 1);
+      const tripDate = tomorrow.toISOString().split('T')[0];
+      await TripsService.repostTrip(tripId, tripDate);
+      await fetchTrips();
+      setActiveTab('active');
+    } catch (e: unknown) {
+      alert(e instanceof Error ? e.message : 'Repost failed');
+    } finally { setReposting(null); }
+  }
+
+  // Split API trips
+  const activeApiTrips = apiTrips.filter(t => t.status === 'active');
+  const closedApiTrips = apiTrips.filter(t => t.status !== 'active');
+
+  // Local trips
+  const localTrips = state.trips as AppTrip[];
+  const openLocalTrips = localTrips.filter(t => t.status === 'open');
+  const closedLocalTrips = localTrips.filter(t => t.status === 'closed');
+
+  const displayApiTrips = activeTab === 'active' ? activeApiTrips : closedApiTrips;
+  const displayLocalTrips = activeTab === 'active' ? openLocalTrips : closedLocalTrips;
+  const activeCount = IS_API_MODE ? activeApiTrips.length : openLocalTrips.length;
+  const closedCount = IS_API_MODE ? closedApiTrips.length : closedLocalTrips.length;
+
+  function handleTab(tab: string) {
+    const paths: Record<string, string> = {
+      home: '/app/vendor/home', trips: '/app/vendor/trips',
+      post: '/app/vendor/post', find: '/app/vendor/find-trips', profile: '/app/profile',
+    };
+    if (paths[tab]) router.push(paths[tab]);
+  }
 
   return (
     <div className="min-h-screen flex flex-col" style={{ background: '#0D1117' }}>
-
-      {/* ── Header ──────────────────────────────────────────────────────────── */}
-      <header className="sticky top-0 z-30"
-        style={{ background: '#0D1117', borderBottom: '1px solid #30363D' }}>
+      <header className="sticky top-0 z-30" style={{ background: '#0D1117', borderBottom: '1px solid #30363D' }}>
         <div className="flex items-center justify-between px-4 py-3">
           <h1 className="text-lg font-bold text-[#F0F6FC]">My Trips</h1>
-          <button
-            onClick={() => router.push('/app/vendor/post')}
-            className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-sm font-semibold"
-            style={{ background: 'rgba(245,166,35,0.15)', color: '#F5A623', border: '1px solid rgba(245,166,35,0.2)' }}
-          >
-            <Plus size={16} />
-            Post Trip
-          </button>
+          <div className="flex items-center gap-2">
+            {IS_API_MODE && (
+              <button onClick={fetchTrips} className="w-9 h-9 flex items-center justify-center rounded-xl"
+                style={{ background: '#21262D', border: '1px solid #30363D' }}>
+                <RefreshCw size={14} className={loading ? 'animate-spin' : ''} style={{ color: '#8B949E' }} />
+              </button>
+            )}
+            <button onClick={() => router.push('/app/vendor/post')}
+              className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-sm font-semibold"
+              style={{ background: 'rgba(245,166,35,0.15)', color: '#F5A623', border: '1px solid rgba(245,166,35,0.2)' }}>
+              <Plus size={16} /> Post Trip
+            </button>
+          </div>
         </div>
-
-        {/* Tabs */}
-        <div className="flex px-4 pb-0 gap-1"
-          style={{ borderBottom: '1px solid #30363D' }}>
-          {(['open', 'closed'] as const).map(tab => (
-            <button
-              key={tab}
-              onClick={() => setActiveTab(tab)}
+        <div className="flex px-4 pb-0 gap-1" style={{ borderBottom: '1px solid #30363D' }}>
+          {(['active', 'closed'] as const).map(tab => (
+            <button key={tab} onClick={() => setActiveTab(tab)}
               className="relative flex items-center gap-2 px-4 py-3 text-sm font-semibold capitalize transition-colors"
-              style={{ color: activeTab === tab ? '#F5A623' : '#8B949E' }}
-            >
-              {tab === 'open' ? 'Open' : 'Closed'}
+              style={{ color: activeTab === tab ? '#F5A623' : '#8B949E' }}>
+              {tab === 'active' ? 'Active' : 'Closed'}
               <span className="inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 rounded-full text-xs font-bold"
-                style={{
-                  background: activeTab === tab ? 'rgba(245,166,35,0.2)' : 'rgba(139,148,158,0.15)',
-                  color: activeTab === tab ? '#F5A623' : '#8B949E',
-                }}>
-                {tab === 'open' ? openTrips.length : closedTrips.length}
+                style={{ background: activeTab === tab ? 'rgba(245,166,35,0.2)' : 'rgba(139,148,158,0.15)', color: activeTab === tab ? '#F5A623' : '#8B949E' }}>
+                {tab === 'active' ? activeCount : closedCount}
               </span>
-              {activeTab === tab && (
-                <span className="absolute bottom-0 left-0 right-0 h-0.5 rounded-t-full"
-                  style={{ background: '#F5A623' }} />
-              )}
+              {activeTab === tab && <span className="absolute bottom-0 left-0 right-0 h-0.5 rounded-t-full" style={{ background: '#F5A623' }} />}
             </button>
           ))}
         </div>
       </header>
 
-      {/* ── Trip list ───────────────────────────────────────────────────────── */}
       <main className="flex-1 overflow-y-auto px-4 pb-28 pt-4">
-        {displayTrips.length === 0 ? (
-          <EmptyState tab={activeTab} onPost={() => router.push('/app/vendor/post')} />
-        ) : (
-          <div className="flex flex-col gap-3">
-            {displayTrips.map(t => (
-              <TripCard
-                key={t.id}
-                trip={t}
-                onClick={() => router.push(`/app/vendor/trip/${t.id}`)}
-              />
-            ))}
+        {error && (
+          <div className="mb-4 p-3 rounded-xl text-xs text-center" style={{ background: 'rgba(239,68,68,0.1)', color: '#EF4444' }}>
+            {error} — <button onClick={fetchTrips} style={{ color: '#F5A623' }}>Retry</button>
           </div>
+        )}
+
+        {IS_API_MODE ? (
+          loading && apiTrips.length === 0 ? (
+            <div className="flex justify-center py-16">
+              <div className="w-8 h-8 border-2 border-[#F5A623] border-t-transparent rounded-full animate-spin" />
+            </div>
+          ) : displayApiTrips.length === 0 ? (
+            <EmptyState tab={activeTab} onPost={() => router.push('/app/vendor/post')} />
+          ) : (
+            <div className="flex flex-col gap-3">
+              {displayApiTrips.map(t => (
+                <ApiTripCard key={t.id} trip={t}
+                  onRepost={reposting ? () => {} : handleRepost} />
+              ))}
+            </div>
+          )
+        ) : (
+          displayLocalTrips.length === 0 ? (
+            <EmptyState tab={activeTab} onPost={() => router.push('/app/vendor/post')} />
+          ) : (
+            <div className="flex flex-col gap-3">
+              {displayLocalTrips.map(t => (
+                <LocalTripCard key={t.id} trip={t} onClick={() => router.push(`/app/vendor/trip/${t.id}`)} />
+              ))}
+            </div>
+          )
         )}
       </main>
 
-      {/* ── FAB ─────────────────────────────────────────────────────────────── */}
-      <button
-        onClick={() => router.push('/app/vendor/post')}
+      <button onClick={() => router.push('/app/vendor/post')}
         className="fixed right-5 bottom-20 w-14 h-14 rounded-2xl flex items-center justify-center shadow-lg z-40 active:scale-95 transition-transform"
         style={{ background: '#F5A623', boxShadow: '0 4px 20px rgba(245,166,35,0.4)' }}
-        aria-label="Post new trip"
-      >
+        aria-label="Post new trip">
         <Plus size={26} color="#0D1117" strokeWidth={2.5} />
       </button>
 
-      {/* ── Bottom Nav ──────────────────────────────────────────────────────── */}
-      <BottomNav active="trips" router={router} />
+      <BottomNav role="vendor" activeTab="trips" onTabChange={handleTab}
+        unreadNotifications={state.unreadNotifications} />
     </div>
-  );
-}
-
-// ─── Bottom Nav (inline) ──────────────────────────────────────────────────────
-function BottomNav({ active, router }: { active: string; router: ReturnType<typeof useRouter> }) {
-  const tabs = [
-    { id: 'home', label: 'Home', icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>, path: '/app/vendor/home' },
-    { id: 'trips', label: 'My Trips', icon: <Truck size={22} />, path: '/app/vendor/trips' },
-    { id: 'post', label: 'Post Trip', icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>, path: '/app/vendor/post' },
-    { id: 'profile', label: 'Profile', icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>, path: '/app/vendor/profile' },
-  ];
-  return (
-    <nav className="fixed bottom-0 left-0 right-0 z-30 flex items-center justify-around px-2"
-      style={{ background: '#161B22', borderTop: '1px solid #30363D', minHeight: 64, paddingBottom: 12, paddingTop: 8 }}>
-      {tabs.map(tab => {
-        const isActive = tab.id === active;
-        const isPost = tab.id === 'post';
-        if (isPost) return (
-          <button key={tab.id} onClick={() => router.push(tab.path)}
-            className="flex flex-col items-center justify-center w-14 h-14 rounded-2xl"
-            style={{ background: '#F5A623' }}>
-            <span style={{ color: '#0D1117' }}>{tab.icon}</span>
-          </button>
-        );
-        return (
-          <button key={tab.id} onClick={() => router.push(tab.path)}
-            className="flex flex-col items-center gap-1 py-1 min-w-[56px]">
-            <span style={{ color: isActive ? '#F5A623' : '#8B949E' }}>{tab.icon}</span>
-            <span className="text-[10px] font-medium" style={{ color: isActive ? '#F5A623' : '#8B949E' }}>{tab.label}</span>
-          </button>
-        );
-      })}
-    </nav>
   );
 }

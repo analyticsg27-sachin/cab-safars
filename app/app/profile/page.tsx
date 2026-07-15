@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useRouter } from 'next/navigation';
 import {
@@ -8,7 +8,7 @@ import {
 import AppShell from '@/components/app/AppShell';
 import AppHeader from '@/components/app/AppHeader';
 
-// ─── Demo data ────────────────────────────────────────────────────────────────
+// â”€â”€â”€ Demo data â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 const DEMO_USER = {
   name: 'Harshad Bhatt',
   role: 'driver' as 'driver' | 'vendor',
@@ -16,7 +16,7 @@ const DEMO_USER = {
   city: 'Ahmedabad',
   state: 'Gujarat',
   memberSince: 'Jan 2025',
-  premiumExpiry: 'Aug 20, 2025',
+  premiumExpiry: 'Aug 20, 2026',
   // Driver stats
   tripsApplied: 12,
   tripsCompleted: 8,
@@ -26,12 +26,12 @@ const DEMO_USER = {
 };
 
 const DEMO_PAYMENTS = [
-  { date: 'Jun 20, 2025', amount: '₹199.00', txnId: 'CS74628193' },
-  { date: 'May 20, 2025', amount: '₹199.00', txnId: 'CS61837462' },
-  { date: 'Apr 20, 2025', amount: '₹199.00', txnId: 'CS50293847' },
+  { date: 'Jun 20, 2026', amount: 'â‚¹199.00', txnId: 'CS74628193' },
+  { date: 'May 20, 2026', amount: 'â‚¹199.00', txnId: 'CS61837462' },
+  { date: 'Apr 20, 2026', amount: 'â‚¹199.00', txnId: 'CS50293847' },
 ];
 
-// ─── Menu Row ─────────────────────────────────────────────────────────────────
+// â”€â”€â”€ Menu Row â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function MenuRow({
   icon: Icon,
   label,
@@ -68,7 +68,7 @@ function MenuRow({
   );
 }
 
-// ─── Section card ─────────────────────────────────────────────────────────────
+// â”€â”€â”€ Section card â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function MenuSection({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <div className="mb-4">
@@ -82,7 +82,7 @@ function MenuSection({ title, children }: { title: string; children: React.React
   );
 }
 
-// ─── Page ─────────────────────────────────────────────────────────────────────
+// â”€â”€â”€ Page â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 export default function ProfilePage() {
   const router = useRouter();
   const user = DEMO_USER;
@@ -207,7 +207,7 @@ export default function ProfilePage() {
 
         {/* Version */}
         <p className="text-center text-xs mt-2" style={{ color: '#8B949E' }}>
-          Cab Safars v1.0.0 · Built with care
+          Cab Safars v1.0.0 Â· Built with care
         </p>
       </main>
     </AppShell>

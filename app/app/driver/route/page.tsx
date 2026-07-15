@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -10,42 +10,42 @@ import AppShell from '@/components/app/AppShell';
 import AppHeader from '@/components/app/AppHeader';
 import BottomNav from '@/components/app/BottomNav';
 
-// ─── Demo config ─────────────────────────────────────────────────────────────
+// â”€â”€â”€ Demo config â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 const IS_PREMIUM_DRIVER = true;
 
-// ─── Data ─────────────────────────────────────────────────────────────────────
+// â”€â”€â”€ Data â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 const AVAILABLE_TRIPS = [
   {
     id: 'TRP12563', vendorName: 'Rajesh Patel', vendorPhone: '+91 98250 11234',
     fromCity: 'Ahmedabad', toCity: 'Baroda',
-    vehicleType: '1.5 Ton', loadType: 'Open Body', tripDate: '2025-07-16', tripTime: '10:00 AM',
+    vehicleType: '1.5 Ton', loadType: 'Open Body', tripDate: '2026-07-16', tripTime: '10:00 AM',
     expectedFare: 8500, weightTons: 1.5, contactsCount: 5, isPremiumVendor: true,
-    createdAt: '2025-07-14T08:00:00Z',
+    createdAt: '2026-07-14T08:00:00Z',
   },
   {
     id: 'TRP12561', vendorName: 'Mohan Verma', vendorPhone: '+91 97140 33456',
     fromCity: 'Vadodara', toCity: 'Ahmedabad',
-    vehicleType: 'Mini Truck', loadType: 'Agricultural', tripDate: '2025-07-15', tripTime: '07:00 AM',
+    vehicleType: 'Mini Truck', loadType: 'Agricultural', tripDate: '2026-07-15', tripTime: '07:00 AM',
     expectedFare: 4500, weightTons: 2, contactsCount: 1, isPremiumVendor: false,
-    createdAt: '2025-07-13T09:00:00Z',
+    createdAt: '2026-07-13T09:00:00Z',
   },
   {
     id: 'TRP12559', vendorName: 'Ravi Sharma', vendorPhone: '+91 91580 77890',
     fromCity: 'Anand', toCity: 'Vadodara',
-    vehicleType: 'Mini Truck (Tata Ace)', loadType: 'Agricultural', tripDate: '2025-07-16', tripTime: '07:00 AM',
+    vehicleType: 'Mini Truck (Tata Ace)', loadType: 'Agricultural', tripDate: '2026-07-16', tripTime: '07:00 AM',
     expectedFare: 3500, weightTons: 2, contactsCount: 0, isPremiumVendor: false,
-    createdAt: '2025-07-15T10:00:00Z',
+    createdAt: '2026-07-15T10:00:00Z',
   },
   {
     id: 'TRP12556', vendorName: 'Meena Iyer', vendorPhone: '+91 90440 44567',
     fromCity: 'Ahmedabad', toCity: 'Surat',
-    vehicleType: 'Truck (Light)', loadType: 'Textile', tripDate: '2025-07-16', tripTime: '11:00 AM',
+    vehicleType: 'Truck (Light)', loadType: 'Textile', tripDate: '2026-07-16', tripTime: '11:00 AM',
     expectedFare: 6500, weightTons: 3, contactsCount: 4, isPremiumVendor: true,
-    createdAt: '2025-07-15T08:00:00Z',
+    createdAt: '2026-07-15T08:00:00Z',
   },
 ];
 
-// Trips that match Ahmedabad → Vadodara route
+// Trips that match Ahmedabad â†’ Vadodara route
 const MATCHED_TRIPS_WITH_REASON = [
   { tripId: 'TRP12563', reason: 'At Destination', reasonColor: '#22C55E', reasonBg: 'rgba(34,197,94,0.12)' },
   { tripId: 'TRP12559', reason: '12 km Nearby', reasonColor: '#2D6BE4', reasonBg: 'rgba(45,107,228,0.12)' },
@@ -64,7 +64,7 @@ interface ActiveRoute {
   expiry: string;
 }
 
-// ─── Matched trip card ────────────────────────────────────────────────────────
+// â”€â”€â”€ Matched trip card â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function MatchedTripCard({ tripId, reason, reasonColor, reasonBg }: (typeof MATCHED_TRIPS_WITH_REASON)[0]) {
   const router = useRouter();
   const trip = AVAILABLE_TRIPS.find((t) => t.id === tripId);
@@ -95,16 +95,16 @@ function MatchedTripCard({ tripId, reason, reasonColor, reasonBg }: (typeof MATC
       <div className="flex items-center gap-2 mb-1">
         <MapPin size={13} style={{ color: '#F5A623' }} />
         <span className="text-base font-bold" style={{ color: '#F0F6FC' }}>
-          {trip.fromCity} → {trip.toCity}
+          {trip.fromCity} â†’ {trip.toCity}
         </span>
       </div>
       <p className="text-xs mb-3 pl-5" style={{ color: '#8B949E' }}>
-        {trip.tripDate} · {trip.tripTime} · {trip.vehicleType}
+        {trip.tripDate} Â· {trip.tripTime} Â· {trip.vehicleType}
       </p>
 
       <div className="flex items-center justify-between">
         <span className="text-base font-bold" style={{ color: '#F5A623' }}>
-          ₹{trip.expectedFare.toLocaleString('en-IN')}
+          â‚¹{trip.expectedFare.toLocaleString('en-IN')}
         </span>
         {IS_PREMIUM_DRIVER ? (
           <button
@@ -128,7 +128,7 @@ function MatchedTripCard({ tripId, reason, reasonColor, reasonBg }: (typeof MATC
   );
 }
 
-// ─── Page ─────────────────────────────────────────────────────────────────────
+// â”€â”€â”€ Page â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 export default function SmartRoutePage() {
   const router = useRouter();
   const [activeRoute, setActiveRoute] = useState<ActiveRoute | null>(null);
@@ -158,7 +158,7 @@ export default function SmartRoutePage() {
 
       <main className="flex-1 overflow-y-auto pb-24">
         {!activeRoute ? (
-          /* ── State A: No active route ── */
+          /* â”€â”€ State A: No active route â”€â”€ */
           <div className="px-4 pt-6">
             {/* Illustration */}
             <div className="flex justify-center mb-6">
@@ -319,7 +319,7 @@ export default function SmartRoutePage() {
             </div>
           </div>
         ) : (
-          /* ── State B: Active route ── */
+          /* â”€â”€ State B: Active route â”€â”€ */
           <div className="px-4 pt-5">
             {/* Active route card */}
             <div
@@ -345,7 +345,7 @@ export default function SmartRoutePage() {
               <div className="flex items-center gap-2 mb-1">
                 <Navigation size={15} style={{ color: '#F5A623' }} />
                 <span className="text-xl font-bold" style={{ color: '#F0F6FC' }}>
-                  {activeRoute.fromCity} → {activeRoute.toCity}
+                  {activeRoute.fromCity} â†’ {activeRoute.toCity}
                 </span>
               </div>
 

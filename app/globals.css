@@ -3,13 +3,16 @@
 @theme {
   --color-brand-gold: #F5A623;
   --color-brand-gold-dark: #D4891E;
-  --color-dark-bg: #0D1117;
-  --color-card-bg: #161B22;
-  --color-elevated: #1C2128;
-  --color-input-bg: #21262D;
-  --color-border: #30363D;
-  --color-text-primary: #F0F6FC;
-  --color-text-secondary: #8B949E;
+  --color-brand-green: #16A34A;
+  --color-brand-green-light: #22C55E;
+  --color-dark-bg: #0B1220;
+  --color-card-bg: #111827;
+  --color-elevated: #1A2332;
+  --color-input-bg: #1E2A3A;
+  --color-border: #243042;
+  --color-border-subtle: #1E2A3A;
+  --color-text-primary: #FFFFFF;
+  --color-text-secondary: #94A3B8;
   --color-success: #22C55E;
   --color-warning: #F59E0B;
   --color-error: #EF4444;
@@ -36,8 +39,8 @@
   }
 
   body {
-    background-color: #0D1117;
-    color: #F0F6FC;
+    background-color: #0B1220;
+    color: #FFFFFF;
     font-family: "Inter", system-ui, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -50,11 +53,11 @@
   }
 
   ::-webkit-scrollbar-track {
-    background: #0D1117;
+    background: #0B1220;
   }
 
   ::-webkit-scrollbar-thumb {
-    background: #30363D;
+    background: #243042;
     border-radius: 3px;
   }
 
@@ -64,7 +67,7 @@
 
   * {
     scrollbar-width: thin;
-    scrollbar-color: #30363D #0D1117;
+    scrollbar-color: #243042 #0B1220;
   }
 }
 
@@ -141,5 +144,72 @@
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
+  }
+
+  /* Brand surface utilities */
+  .surface {
+    background: #111827;
+  }
+
+  .surface-elevated {
+    background: #1A2332;
+  }
+
+  .border-default {
+    border-color: #243042;
+  }
+
+  /* Shadow utilities */
+  .card-shadow {
+    box-shadow: 0 1px 3px rgba(0,0,0,0.4), 0 8px 24px rgba(0,0,0,0.2);
+  }
+
+  .btn-shadow {
+    box-shadow: 0 4px 14px rgba(245,166,35,0.4);
+  }
+
+  /* Gradient utilities */
+  .gradient-brand {
+    background: linear-gradient(135deg, #F5A623, #D4891E);
+  }
+
+  .gradient-green {
+    background: linear-gradient(135deg, #16A34A, #15803D);
+  }
+
+  /* Text color utilities */
+  .text-brand {
+    color: #F5A623;
+  }
+
+  .text-green {
+    color: #22C55E;
+  }
+
+  /* Skeleton / shimmer loading */
+  @keyframes shimmer {
+    0%   { background-position: -200% 0; }
+    100% { background-position:  200% 0; }
+  }
+
+  .animate-shimmer {
+    animation: shimmer 1.5s infinite;
+  }
+
+  .skeleton {
+    background: linear-gradient(90deg, #1A2332 25%, #243042 50%, #1A2332 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    border-radius: 6px;
+  }
+
+  /* Card hover state */
+  .card-hover {
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .card-hover:hover {
+    border-color: #F5A623;
+    box-shadow: 0 0 0 1px rgba(245,166,35,0.3), 0 8px 24px rgba(0,0,0,0.3);
   }
 }

@@ -32,8 +32,8 @@ const vendorBenefits = [
 const driverBenefits = [
   {
     icon: Map,
-    title: "Browse All Trips",
-    desc: "Access hundreds of verified trip listings across your preferred routes every day.",
+    title: "Browse Available Trips",
+    desc: "Access verified trip listings from vendors across your preferred routes.",
     color: "#F5A623",
   },
   {
@@ -50,8 +50,8 @@ const driverBenefits = [
   },
   {
     icon: TrendingUp,
-    title: "Earn More on Returns",
-    desc: "Fill your cab both ways. Smart return matching boosts your earnings by up to 40%.",
+    title: "Maximize Return Trips",
+    desc: "Fill your cab both ways. Smart return matching helps you reduce empty runs.",
     color: "#F5A623",
   },
 ];

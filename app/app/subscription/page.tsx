@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
@@ -26,9 +26,9 @@ const DRIVER_FEATURES = [
 ];
 
 const DEMO_PAYMENT_HISTORY = [
-  { date: 'Jun 20, 2025', amount: '₹199.00', txnId: 'CS74628193', status: 'PAID' },
-  { date: 'May 20, 2025', amount: '₹199.00', txnId: 'CS61837462', status: 'PAID' },
-  { date: 'Apr 20, 2025', amount: '₹199.00', txnId: 'CS50293847', status: 'PAID' },
+  { date: 'Jun 20, 2026', amount: 'â‚¹199.00', txnId: 'CS74628193', status: 'PAID' },
+  { date: 'May 20, 2026', amount: 'â‚¹199.00', txnId: 'CS61837462', status: 'PAID' },
+  { date: 'Apr 20, 2026', amount: 'â‚¹199.00', txnId: 'CS50293847', status: 'PAID' },
 ];
 
 function randomTxnId() {
@@ -41,7 +41,7 @@ function addDays(days: number) {
   return d.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
 }
 
-// ─── Spinner ─────────────────────────────────────────────────────────────────
+// â”€â”€â”€ Spinner â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function GoldSpinner() {
   return (
     <div className="flex flex-col items-center justify-center gap-6">
@@ -60,7 +60,7 @@ function GoldSpinner() {
   );
 }
 
-// ─── Success ─────────────────────────────────────────────────────────────────
+// â”€â”€â”€ Success â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function PaymentSuccess({ txnId, onContinue }: { txnId: string; onContinue: () => void }) {
   return (
     <div className="flex flex-col items-center justify-center gap-6 px-6 text-center">
@@ -93,7 +93,7 @@ function PaymentSuccess({ txnId, onContinue }: { txnId: string; onContinue: () =
         style={{ backgroundColor: '#161B22', borderColor: '#30363D' }}
       >
         {[
-          { label: 'Amount', value: '₹199.00' },
+          { label: 'Amount', value: 'â‚¹199.00' },
           { label: 'Plan', value: 'Premium Monthly' },
           { label: 'Valid till', value: addDays(30) },
           { label: 'Transaction ID', value: txnId },
@@ -122,7 +122,7 @@ function PaymentSuccess({ txnId, onContinue }: { txnId: string; onContinue: () =
   );
 }
 
-// ─── Failed ──────────────────────────────────────────────────────────────────
+// â”€â”€â”€ Failed â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function PaymentFailed({ onRetry, onContact }: { onRetry: () => void; onContact: () => void }) {
   return (
     <div className="flex flex-col items-center justify-center gap-6 px-6 text-center">
@@ -161,7 +161,7 @@ function PaymentFailed({ onRetry, onContact }: { onRetry: () => void; onContact:
   );
 }
 
-// ─── Page ─────────────────────────────────────────────────────────────────────
+// â”€â”€â”€ Page â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 export default function SubscriptionPage() {
   const router = useRouter();
   const [isPremium, setIsPremium] = useState(false);
@@ -189,7 +189,7 @@ export default function SubscriptionPage() {
 
   const features = isDriver ? DRIVER_FEATURES : VENDOR_FEATURES;
 
-  // ── Processing overlay ────────────────────────────────────────────────────
+  // â”€â”€ Processing overlay â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   if (paymentState === 'processing') {
     return (
       <AppShell>
@@ -203,7 +203,7 @@ export default function SubscriptionPage() {
     );
   }
 
-  // ── Success ───────────────────────────────────────────────────────────────
+  // â”€â”€ Success â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   if (paymentState === 'success') {
     return (
       <AppShell>
@@ -215,7 +215,7 @@ export default function SubscriptionPage() {
     );
   }
 
-  // ── Failed ────────────────────────────────────────────────────────────────
+  // â”€â”€ Failed â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   if (paymentState === 'failed') {
     return (
       <AppShell>
@@ -264,7 +264,7 @@ export default function SubscriptionPage() {
               <div className="flex items-center justify-between mb-4">
                 <span className="font-bold text-base" style={{ color: '#F0F6FC' }}>Premium Plan</span>
                 <div className="text-right">
-                  <span className="text-3xl font-bold" style={{ color: '#F5A623' }}>₹199</span>
+                  <span className="text-3xl font-bold" style={{ color: '#F5A623' }}>â‚¹199</span>
                   <span className="text-sm" style={{ color: '#8B949E' }}>/month</span>
                 </div>
               </div>
@@ -315,7 +315,7 @@ export default function SubscriptionPage() {
             </div>
           </>
         ) : (
-          /* ── Active Premium State ── */
+          /* â”€â”€ Active Premium State â”€â”€ */
           <>
             {/* Active badge */}
             <div className="flex flex-col items-center text-center mb-6">
@@ -346,7 +346,7 @@ export default function SubscriptionPage() {
               <p className="text-xs font-semibold uppercase tracking-wider mb-3" style={{ color: '#8B949E' }}>Current Plan</p>
               {[
                 { label: 'Plan', value: 'Premium Monthly' },
-                { label: 'Price', value: '₹199/month' },
+                { label: 'Price', value: 'â‚¹199/month' },
                 { label: 'Valid till', value: addDays(23) },
                 { label: 'Remaining', value: '23 days' },
               ].map(({ label, value }) => (

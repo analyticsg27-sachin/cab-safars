@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import {
@@ -8,10 +8,10 @@ import {
 import { cn } from "@/lib/utils";
 
 const systemNotifs = [
-  { id: "SN1", type: "approval", message: "Priya Mehta (Vendor) approved", sentTo: "v004", time: "2025-07-10T14:00:00Z", status: "sent" },
-  { id: "SN2", type: "payment", message: "Payment confirmed: Rajesh Patel ₹199", sentTo: "v001", time: "2025-07-01T10:30:00Z", status: "sent" },
-  { id: "SN3", type: "suspension", message: "Account suspended: Deepa Nair (Vendor)", sentTo: "v006", time: "2025-05-20T09:00:00Z", status: "sent" },
-  { id: "SN4", type: "expiry", message: "Premium expiry reminder sent to 12 users", sentTo: "all", time: "2025-07-08T08:00:00Z", status: "sent" },
+  { id: "SN1", type: "approval", message: "Priya Mehta (Vendor) approved", sentTo: "v004", time: "2026-07-10T14:00:00Z", status: "sent" },
+  { id: "SN2", type: "payment", message: "Payment confirmed: Rajesh Patel â‚¹199", sentTo: "v001", time: "2026-07-01T10:30:00Z", status: "sent" },
+  { id: "SN3", type: "suspension", message: "Account suspended: Deepa Nair (Vendor)", sentTo: "v006", time: "2026-05-20T09:00:00Z", status: "sent" },
+  { id: "SN4", type: "expiry", message: "Premium expiry reminder sent to 12 users", sentTo: "all", time: "2026-07-08T08:00:00Z", status: "sent" },
 ];
 
 const typeIconMap: Record<string, { icon: React.ElementType; color: string }> = {
@@ -29,7 +29,7 @@ const notifTypes = [
 ];
 
 const targetOptions = [
-  "All Users", "All Vendors", "All Drivers",
+  "All Users", "All Trip Providers", "All Drivers",
   "Premium Users", "Free Users", "Specific User (enter ID)",
 ];
 

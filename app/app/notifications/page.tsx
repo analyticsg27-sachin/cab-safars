@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -8,7 +8,7 @@ import {
 import AppShell from '@/components/app/AppShell';
 import AppHeader from '@/components/app/AppHeader';
 
-// ─── Types ────────────────────────────────────────────────────────────────────
+// â”€â”€â”€ Types â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 type NotifType =
   | 'trip_posted'
   | 'route_match'
@@ -27,18 +27,18 @@ interface Notification {
   createdAt: string;
 }
 
-// ─── Demo data ────────────────────────────────────────────────────────────────
+// â”€â”€â”€ Demo data â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 const INITIAL_NOTIFICATIONS: Notification[] = [
-  { id: 'n1', type: 'trip_posted', title: 'New Trip Available', body: 'New trip posted: Ahmedabad → Baroda on Jul 16', read: false, createdAt: '2025-07-15T10:30:00Z' },
-  { id: 'n2', type: 'route_match', title: 'Route Match Found', body: 'A trip matches your active route Ahmedabad → Vadodara', read: false, createdAt: '2025-07-15T09:15:00Z' },
-  { id: 'n3', type: 'account_approved', title: 'Account Approved ✓', body: 'Your account has been approved. Start exploring trips!', read: true, createdAt: '2025-07-10T14:00:00Z' },
-  { id: 'n4', type: 'premium_activated', title: 'Premium Activated', body: 'Your Premium subscription is active until Aug 20, 2025', read: true, createdAt: '2025-07-01T10:00:00Z' },
-  { id: 'n5', type: 'premium_expiring', title: 'Premium Expiring Soon', body: 'Your Premium subscription expires in 7 days. Renew now.', read: false, createdAt: '2025-07-13T08:00:00Z' },
-  { id: 'n6', type: 'driver_contacted', title: 'Driver Contacted Your Trip', body: 'Harshad Bhatt contacted your trip TRP12563 via WhatsApp', read: true, createdAt: '2025-07-14T11:30:00Z' },
-  { id: 'n7', type: 'trip_closed', title: 'Trip Closed', body: 'Your trip Surat → Mumbai has been closed successfully', read: true, createdAt: '2025-07-14T18:00:00Z' },
+  { id: 'n1', type: 'trip_posted', title: 'New Trip Available', body: 'New trip posted: Ahmedabad â†’ Baroda on Jul 16', read: false, createdAt: '2026-07-15T10:30:00Z' },
+  { id: 'n2', type: 'route_match', title: 'Route Match Found', body: 'A trip matches your active route Ahmedabad â†’ Vadodara', read: false, createdAt: '2026-07-15T09:15:00Z' },
+  { id: 'n3', type: 'account_approved', title: 'Account Approved âœ“', body: 'Your account has been approved. Start exploring trips!', read: true, createdAt: '2026-07-10T14:00:00Z' },
+  { id: 'n4', type: 'premium_activated', title: 'Premium Activated', body: 'Your Premium subscription is active until Aug 20, 2026', read: true, createdAt: '2026-07-01T10:00:00Z' },
+  { id: 'n5', type: 'premium_expiring', title: 'Premium Expiring Soon', body: 'Your Premium subscription expires in 7 days. Renew now.', read: false, createdAt: '2026-07-13T08:00:00Z' },
+  { id: 'n6', type: 'driver_contacted', title: 'Driver Contacted Your Trip', body: 'Harshad Bhatt contacted your trip TRP12563 via WhatsApp', read: true, createdAt: '2026-07-14T11:30:00Z' },
+  { id: 'n7', type: 'trip_closed', title: 'Trip Closed', body: 'Your trip Surat â†’ Mumbai has been closed successfully', read: true, createdAt: '2026-07-14T18:00:00Z' },
 ];
 
-// ─── Icon + color per type ────────────────────────────────────────────────────
+// â”€â”€â”€ Icon + color per type â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function getNotifStyle(type: NotifType): { icon: React.ElementType; iconColor: string; iconBg: string } {
   switch (type) {
     case 'trip_posted':
@@ -67,7 +67,7 @@ function timeAgo(dateStr: string) {
   return `${d}d ago`;
 }
 
-// ─── Notification Card ────────────────────────────────────────────────────────
+// â”€â”€â”€ Notification Card â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function NotifCard({
   notif,
   onMarkRead,
@@ -125,7 +125,7 @@ function NotifCard({
   );
 }
 
-// ─── Page ─────────────────────────────────────────────────────────────────────
+// â”€â”€â”€ Page â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 export default function NotificationsPage() {
   const router = useRouter();
   const [notifications, setNotifications] = useState<Notification[]>(INITIAL_NOTIFICATIONS);

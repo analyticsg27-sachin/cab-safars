@@ -1,187 +1,170 @@
 "use client";
 
-import { useState, useMemo } from "react";
-import { Search, ChevronLeft, ChevronRight, Phone } from "lucide-react";
+import { useState, useEffect, useCallback } from "react";
+import { Search, AlertCircle, RefreshCw, MapPin, XCircle } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { mockTrips } from "@/lib/mock-data";
+import AdminService from "@/lib/services/admin.service";
 import { formatDate, formatCurrency } from "@/lib/utils";
-import type { TripStatus } from "@/lib/types";
 
-const PAGE_SIZE = 10;
+interface ApiTrip {
+  id: string;
+  from_city: string;
+  to_city: string;
+  from_state: string;
+  to_state: string;
+  vehicle_type: string;
+  status: string;
+  vendor_name: string;
+  departure_date?: string;
+  expected_fare?: number;
+  created_at: string;
+}
 
-const statusFilters: Array<{ label: string; value: TripStatus | "all" }> = [
-  { label: "All", value: "all" },
-  { label: "Open", value: "open" },
-  { label: "Closed", value: "closed" },
-  { label: "Completed", value: "completed" },
-  { label: "Cancelled", value: "cancelled" },
-];
+const STATUS_FILTERS = ['all', 'active', 'closed', 'cancelled'];
 
 export default function TripsPage() {
-  const [search, setSearch] = useState("");
-  const [statusFilter, setStatusFilter] = useState<TripStatus | "all">("all");
+  const [trips, setTrips] = useState<ApiTrip[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+  const [search, setSearch] = useState('');
+  const [statusFilter, setStatusFilter] = useState('all');
   const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [total, setTotal] = useState(0);
+  const [toast, setToast] = useState('');
 
-  const filtered = useMemo(() => {
-    return mockTrips.filter((t) => {
-      const matchSearch =
-        t.fromCity.toLowerCase().includes(search.toLowerCase()) ||
-        t.toCity.toLowerCase().includes(search.toLowerCase()) ||
-        t.vendorName.toLowerCase().includes(search.toLowerCase()) ||
-        t.id.toLowerCase().includes(search.toLowerCase());
-      const matchStatus = statusFilter === "all" || t.status === statusFilter;
-      return matchSearch && matchStatus;
-    });
-  }, [search, statusFilter]);
+  function showToast(msg: string) { setToast(msg); setTimeout(() => setToast(''), 3000); }
 
-  const totalPages = Math.ceil(filtered.length / PAGE_SIZE);
-  const paginated = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
+  const fetchTrips = useCallback(async () => {
+    setLoading(true); setError('');
+    try {
+      const res = await AdminService.getTrips({
+        status: statusFilter === 'all' ? undefined : statusFilter,
+        search: search || undefined,
+        page,
+      });
+      const r = res as { data?: ApiTrip[]; pagination?: { total: number; total_pages: number } };
+      setTrips(r.data ?? []);
+      setTotal(r.pagination?.total ?? 0);
+      setTotalPages(r.pagination?.total_pages ?? 1);
+    } catch (e: unknown) {
+      setError(e instanceof Error ? e.message : 'Failed to load trips');
+    } finally { setLoading(false); }
+  }, [statusFilter, search, page]);
 
-  const statusCounts = useMemo(() => ({
-    all: mockTrips.length,
-    open: mockTrips.filter((t) => t.status === "open").length,
-    closed: mockTrips.filter((t) => t.status === "closed").length,
-    completed: mockTrips.filter((t) => t.status === "completed").length,
-    cancelled: mockTrips.filter((t) => t.status === "cancelled").length,
-  }), []);
+  useEffect(() => { fetchTrips(); }, [fetchTrips]);
+
+  async function cancelTrip(id: string) {
+    try {
+      await AdminService.cancelTrip(id);
+      showToast('Trip cancelled');
+      fetchTrips();
+    } catch (e: unknown) {
+      showToast(e instanceof Error ? e.message : 'Failed to cancel trip');
+    }
+  }
 
   return (
-    <div className="flex flex-col gap-6 max-w-[1400px]">
-      <div>
-        <h1 className="text-2xl font-bold text-[#F0F6FC]">Trips</h1>
-        <p className="text-sm text-[#8B949E] mt-0.5">{mockTrips.length} total trips</p>
+    <div className="flex flex-col gap-6 max-w-[1200px]">
+      {toast && (
+        <div className="fixed top-4 right-4 z-50 px-4 py-2.5 rounded-xl text-sm font-medium text-[#0D1117] bg-[#22C55E] shadow-lg">{toast}</div>
+      )}
+      <div className="flex items-start justify-between">
+        <div>
+          <h1 className="text-2xl font-bold text-[#F0F6FC]">Trips</h1>
+          <p className="text-sm text-[#8B949E] mt-0.5">All platform trips ({total} total)</p>
+        </div>
+        <button onClick={fetchTrips} className="p-2 rounded-lg text-[#8B949E] hover:text-[#F0F6FC] hover:bg-[#21262D]">
+          <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
+        </button>
       </div>
 
-      {/* Filters */}
-      <div className="flex flex-col sm:flex-row gap-3">
-        <Input
-          placeholder="Search by route, vendor, trip ID..."
-          value={search}
-          onChange={(e) => { setSearch(e.target.value); setPage(1); }}
-          leftIcon={<Search className="w-4 h-4" />}
-          className="sm:max-w-sm"
-        />
-        <div className="flex gap-1.5 flex-wrap">
-          {statusFilters.map((f) => (
-            <button
-              key={f.value}
-              onClick={() => { setStatusFilter(f.value); setPage(1); }}
-              className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors border ${
-                statusFilter === f.value
-                  ? "bg-[#F5A623]/10 text-[#F5A623] border-[#F5A623]/30"
-                  : "bg-[#21262D] text-[#8B949E] border-[#30363D] hover:border-[#8B949E]/40 hover:text-[#F0F6FC]"
-              }`}
-            >
-              {f.label}
-              <span className="ml-1.5 text-[#8B949E]">
-                ({statusCounts[f.value]})
-              </span>
+      <div className="flex flex-wrap gap-3">
+        <div className="flex-1 min-w-[200px] max-w-xs">
+          <Input placeholder="Search route, vendor…" value={search}
+            onChange={(e) => { setSearch(e.target.value); setPage(1); }}
+            leftIcon={<Search className="w-4 h-4" />} />
+        </div>
+        <div className="flex gap-1 flex-wrap">
+          {STATUS_FILTERS.map((s) => (
+            <button key={s} onClick={() => { setStatusFilter(s); setPage(1); }}
+              className={`px-3 py-1.5 rounded-lg text-xs font-medium capitalize transition-all ${
+                statusFilter === s ? 'bg-[#F5A623] text-[#0D1117]' : 'bg-[#21262D] text-[#8B949E] hover:text-[#F0F6FC]'
+              }`}>
+              {s}
             </button>
           ))}
         </div>
       </div>
 
-      {/* Table */}
-      <div className="bg-[#161B22] border border-[#30363D] rounded-xl overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="border-b border-[#30363D] bg-[#1C2128]/50">
-                {["Trip ID", "Route", "Vendor", "Vehicle", "Fare", "Status", "Contacts", "Date", "Premium"].map((h) => (
-                  <th key={h} className="px-4 py-3 text-left text-xs text-[#8B949E] font-medium whitespace-nowrap">
-                    {h}
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {paginated.length === 0 ? (
-                <tr>
-                  <td colSpan={9} className="px-4 py-12 text-center text-sm text-[#8B949E]">
-                    No trips found.
-                  </td>
+      {loading ? (
+        <div className="flex justify-center py-20">
+          <div className="w-8 h-8 border-2 border-[#F5A623] border-t-transparent rounded-full animate-spin" />
+        </div>
+      ) : error ? (
+        <div className="flex flex-col items-center gap-3 py-20">
+          <AlertCircle className="w-8 h-8 text-[#EF4444]" />
+          <p className="text-sm text-[#EF4444]">{error}</p>
+          <button onClick={fetchTrips} className="text-xs text-[#F5A623] underline">Retry</button>
+        </div>
+      ) : trips.length === 0 ? (
+        <div className="bg-[#161B22] border border-[#30363D] rounded-xl p-16 text-center">
+          <MapPin className="w-10 h-10 text-[#8B949E] mx-auto mb-3" />
+          <p className="text-[#8B949E] text-sm">No trips found</p>
+        </div>
+      ) : (
+        <div className="bg-[#161B22] border border-[#30363D] rounded-xl overflow-hidden">
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b border-[#30363D]">
+                  {["Route", "Vehicle", "Trip Provider", "Fare", "Status", "Date", "Actions"].map((h) => (
+                    <th key={h} className="px-4 py-3 text-left text-xs text-[#8B949E] font-medium whitespace-nowrap">{h}</th>
+                  ))}
                 </tr>
-              ) : (
-                paginated.map((trip) => (
-                  <tr
-                    key={trip.id}
-                    className="border-b border-[#30363D]/50 hover:bg-[#1C2128]/40 transition-colors"
-                  >
-                    <td className="px-4 py-3 text-xs text-[#8B949E] font-mono">{trip.id.toUpperCase()}</td>
-                    <td className="px-4 py-3">
-                      <p className="text-sm font-medium text-[#F0F6FC] whitespace-nowrap">
-                        {trip.fromCity} → {trip.toCity}
-                      </p>
-                      <p className="text-xs text-[#8B949E]">{trip.fromState}</p>
+              </thead>
+              <tbody>
+                {trips.map((t) => (
+                  <tr key={t.id} className="border-b border-[#30363D]/50 hover:bg-[#1C2128]/50">
+                    <td className="px-4 py-3 text-xs text-[#F0F6FC] whitespace-nowrap font-medium">
+                      {t.from_city} → {t.to_city}
+                    </td>
+                    <td className="px-4 py-3 text-xs text-[#8B949E]">{t.vehicle_type}</td>
+                    <td className="px-4 py-3 text-xs text-[#8B949E] whitespace-nowrap">{t.vendor_name}</td>
+                    <td className="px-4 py-3 text-xs text-[#8B949E]">
+                      {t.expected_fare ? formatCurrency(t.expected_fare) : '—'}
                     </td>
                     <td className="px-4 py-3">
-                      <p className="text-sm text-[#F0F6FC] whitespace-nowrap">{trip.vendorName}</p>
-                      <p className="text-xs text-[#8B949E]">{trip.vendorCity}</p>
-                    </td>
-                    <td className="px-4 py-3 text-xs text-[#8B949E] whitespace-nowrap">{trip.vehicleType}</td>
-                    <td className="px-4 py-3 text-sm font-semibold text-[#F0F6FC]">
-                      {formatCurrency(trip.estimatedFare)}
-                    </td>
-                    <td className="px-4 py-3">
-                      <Badge
-                        variant={trip.status as "open" | "closed" | "cancelled" | "completed"}
-                        dot
-                      >
-                        {trip.status}
-                      </Badge>
-                    </td>
-                    <td className="px-4 py-3">
-                      <span className="flex items-center gap-1 text-sm text-[#F0F6FC]">
-                        <Phone className="w-3.5 h-3.5 text-[#8B949E]" />
-                        {trip.contactsCount}
-                      </span>
+                      <Badge variant={t.status as 'open' | 'closed' | 'cancelled' | 'completed'} dot>{t.status}</Badge>
                     </td>
                     <td className="px-4 py-3 text-xs text-[#8B949E] whitespace-nowrap">
-                      {formatDate(trip.departureDate)}
+                      {formatDate(t.departure_date || t.created_at)}
                     </td>
                     <td className="px-4 py-3">
-                      {trip.isPremiumRequired ? (
-                        <Badge variant="premium">Premium</Badge>
-                      ) : (
-                        <span className="text-xs text-[#8B949E]">Free</span>
+                      {t.status === 'active' && (
+                        <Button variant="danger" size="xs" onClick={() => cancelTrip(t.id)}>
+                          <XCircle className="w-3 h-3" />
+                        </Button>
                       )}
                     </td>
                   </tr>
-                ))
-              )}
-            </tbody>
-          </table>
-        </div>
-
-        {totalPages > 1 && (
-          <div className="flex items-center justify-between px-4 py-3 border-t border-[#30363D]">
-            <p className="text-xs text-[#8B949E]">
-              Showing {(page - 1) * PAGE_SIZE + 1}–{Math.min(page * PAGE_SIZE, filtered.length)} of {filtered.length}
-            </p>
-            <div className="flex gap-1.5">
-              <Button variant="secondary" size="xs" disabled={page === 1} onClick={() => setPage(page - 1)}>
-                <ChevronLeft className="w-3.5 h-3.5" />
-              </Button>
-              {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
-                <button
-                  key={p}
-                  onClick={() => setPage(p)}
-                  className={`w-7 h-7 rounded-lg text-xs font-medium transition-colors ${
-                    p === page ? "bg-[#F5A623] text-[#0D1117]" : "bg-[#21262D] text-[#8B949E] hover:text-[#F0F6FC]"
-                  }`}
-                >
-                  {p}
-                </button>
-              ))}
-              <Button variant="secondary" size="xs" disabled={page === totalPages} onClick={() => setPage(page + 1)}>
-                <ChevronRight className="w-3.5 h-3.5" />
-              </Button>
-            </div>
+                ))}
+              </tbody>
+            </table>
           </div>
-        )}
-      </div>
+          {totalPages > 1 && (
+            <div className="flex items-center justify-between px-4 py-3 border-t border-[#30363D]">
+              <span className="text-xs text-[#8B949E]">Page {page} of {totalPages}</span>
+              <div className="flex gap-1">
+                <Button variant="secondary" size="xs" onClick={() => setPage((p) => Math.max(1, p - 1))} disabled={page === 1}>Prev</Button>
+                <Button variant="secondary" size="xs" onClick={() => setPage((p) => Math.min(totalPages, p + 1))} disabled={page === totalPages}>Next</Button>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 }

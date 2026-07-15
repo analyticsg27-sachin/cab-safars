@@ -1,9 +1,9 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Terms of Service — Cab Safars",
+  title: "Terms of Service â€” Cab Safars",
   description: "Terms and Conditions for using the Cab Safars platform.",
 };
 
@@ -18,11 +18,11 @@ Cab Safars is a transport marketplace that connects vendors who post trips with 
     title: "2. Eligibility & Registration",
     content: `To use Cab Safars, you must:
 
-• Be at least 18 years of age
-• Provide accurate and complete registration information
-• Have a valid Indian mobile number
-• For drivers: possess a valid driving licence and vehicle registration
-• Agree to submit to our account verification process
+â€¢ Be at least 18 years of age
+â€¢ Provide accurate and complete registration information
+â€¢ Have a valid Indian mobile number
+â€¢ For drivers: possess a valid driving licence and vehicle registration
+â€¢ Agree to submit to our account verification process
 
 Your account is subject to approval by Cab Safars. We reserve the right to reject or suspend accounts at our discretion. You are responsible for maintaining the confidentiality of your login credentials.`,
   },
@@ -38,7 +38,7 @@ Neither vendors nor drivers are employees or agents of Cab Safars.`,
   },
   {
     title: "4. Premium Subscription",
-    content: `Cab Safars offers a Premium subscription at ₹199 per month.
+    content: `Cab Safars offers a Premium subscription at â‚¹199 per month.
 
 Premium Drivers: Can view vendor contact information and initiate Call or WhatsApp communication with vendors.
 
@@ -48,7 +48,7 @@ Subscriptions auto-renew monthly unless cancelled. No refund is provided for the
   },
   {
     title: "5. Trip Posting & Matching",
-    content: `Vendors may post trips for drivers to discover. Trip posts must be genuine — false, misleading, or spam trips are prohibited.
+    content: `Vendors may post trips for drivers to discover. Trip posts must be genuine â€” false, misleading, or spam trips are prohibited.
 
 Contact activity (calls and WhatsApp messages initiated through the Platform) is logged for platform integrity purposes. The contact information shared is the vendor's registered mobile number.
 
@@ -58,13 +58,13 @@ Cab Safars does not guarantee that any trip will be fulfilled or that any driver
     title: "6. Prohibited Conduct",
     content: `You may not:
 
-• Create multiple accounts or impersonate another person
-• Post false, misleading, or fraudulent trip information
-• Use the Platform to harass, abuse, or harm other users
-• Attempt to access contact information through circumventing Premium restrictions
-• Use the Platform for any illegal purpose
-• Scrape, copy, or distribute Platform content without permission
-• Attempt to reverse-engineer or interfere with the Platform
+â€¢ Create multiple accounts or impersonate another person
+â€¢ Post false, misleading, or fraudulent trip information
+â€¢ Use the Platform to harass, abuse, or harm other users
+â€¢ Attempt to access contact information through circumventing Premium restrictions
+â€¢ Use the Platform for any illegal purpose
+â€¢ Scrape, copy, or distribute Platform content without permission
+â€¢ Attempt to reverse-engineer or interfere with the Platform
 
 Violations may result in immediate account suspension.`,
   },
@@ -131,7 +131,7 @@ export default function TermsPage() {
           </div>
           <h1 className="text-3xl sm:text-4xl font-bold text-[#F0F6FC] mb-3">Terms of Service</h1>
           <p className="text-[#8B949E]">
-            Effective Date: July 13, 2025 &nbsp;·&nbsp; Last Updated: July 13, 2025
+            Effective Date: July 13, 2026 &nbsp;Â·&nbsp; Last Updated: July 13, 2026
           </p>
           <p className="text-[#8B949E] mt-4 text-sm leading-relaxed">
             Please read these Terms of Service carefully before using Cab Safars. These terms constitute a legally binding
@@ -162,7 +162,7 @@ export default function TermsPage() {
 
         <div className="mt-8 pt-8 border-t border-[#30363D] text-center">
           <p className="text-xs text-[#8B949E]">
-            © 2025 Cab Safars. All rights reserved. &nbsp;·&nbsp;
+            Â© 2026 Cab Safars. All rights reserved. &nbsp;Â·&nbsp;
             <Link href="/privacy" className="hover:text-[#F0F6FC] transition-colors">Privacy Policy</Link>
           </p>
         </div>
