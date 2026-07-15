@@ -139,10 +139,27 @@ export default function FindTripsPage() {
     router.push(`/app/vendor/trip/${tripId}`);
   }
 
-  // In demo mode — show static list from driver trips page
-  const demoTrips = [
-    { id: 'TRP12563', from_city: 'Ahmedabad', to_city: 'Baroda', vehicle_type: '1.5 Ton', load_type: 'Open Body', trip_date: '2026-07-16', expected_fare: 8500, contacts_count: 5, is_premium_vendor: true, vendor_name: 'Rajesh Patel', vendor_city: 'Ahmedabad', created_at: '2026-07-14T08:00:00Z', from_state: 'Gujarat', to_state: 'Gujarat', trip_time: '10:00', is_contact_locked: false, contacts_count_x: 0 } as unknown as Trip,
-  ];
+  // In demo mode — show vendor's own state trips so View button works
+  const demoTrips: Trip[] = state.trips.map((t) => ({
+    id: t.id,
+    from_city: t.fromCity,
+    to_city: t.toCity,
+    from_state: t.fromState ?? 'Gujarat',
+    to_state: t.toState ?? 'Gujarat',
+    vehicle_type: t.vehicleType,
+    load_type: t.loadType ?? '',
+    trip_date: t.tripDate,
+    trip_time: '',
+    expected_fare: t.expectedFare ?? null,
+    contacts_count: t.contactsCount,
+    is_premium_vendor: false,
+    is_contact_locked: false,
+    contacts_count_x: 0,
+    vendor_name: 'Your Trip',
+    vendor_city: t.fromCity,
+    created_at: new Date().toISOString(),
+    status: t.status,
+  } as unknown as Trip));
   const displayTrips = IS_API_MODE ? trips : demoTrips;
 
   return (
