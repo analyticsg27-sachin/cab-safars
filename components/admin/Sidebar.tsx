@@ -59,18 +59,18 @@ export default function Sidebar() {
       {/* Logo */}
       <div
         className={cn(
-          "flex items-center border-b border-[#243042] shrink-0 px-4 py-5",
-          collapsed && "justify-center px-2 py-4"
+          "flex items-center justify-center border-b border-[#243042] shrink-0 px-2 py-3",
+          collapsed && "px-2 py-3"
         )}
       >
         {!collapsed ? (
-          <div>
+          <div className="flex flex-col items-center w-full">
             <img
               src={asset('/logo.png')}
               alt="CAB SAFARS"
               className="h-20 w-auto object-contain block"
             />
-            <p className="text-xs text-[#94A3B8] mt-1.5">Admin Panel</p>
+            <p className="text-sm font-semibold text-[#CBD5E1] mt-1 tracking-widest uppercase">Admin Panel</p>
           </div>
         ) : (
           <div className="w-8 h-8 rounded-lg bg-[#F5A623]/10 border border-[#F5A623]/30 flex items-center justify-center">

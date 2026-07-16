@@ -187,8 +187,8 @@ export default function WelcomePage() {
 
           {/* Tagline */}
           <span
-            className="text-xs font-semibold tracking-wider uppercase mb-6"
-            style={{ color: '#94A3B8', letterSpacing: '0.15em' }}
+            className="text-sm font-bold tracking-widest uppercase mb-6"
+            style={{ color: '#E2E8F0', letterSpacing: '0.18em', textShadow: '0 0 20px rgba(245,166,35,0.3)' }}
           >
             Safe Loads. Smart Journeys.
           </span>
