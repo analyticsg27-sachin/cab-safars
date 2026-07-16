@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { asset } from "@/lib/basepath";
 import Link from "next/link";
+import { asset } from "@/lib/basepath";
 import { usePathname } from "next/navigation";
 import {
   LayoutDashboard, Users, Car, ClipboardCheck, MapPin,
@@ -68,20 +68,9 @@ export default function Sidebar() {
             <img
               src={asset('/logo.png')}
               alt="CAB SAFARS"
-              className="h-10 w-auto object-contain"
-              onError={(e) => {
-                (e.currentTarget as HTMLImageElement).style.display = "none";
-                const fallback = e.currentTarget.nextElementSibling as HTMLElement | null;
-                if (fallback) fallback.style.display = "block";
-              }}
+              className="h-20 w-auto object-contain block"
             />
-            <span
-              className="hidden text-lg font-extrabold tracking-tight text-white"
-              style={{ display: "none" }}
-            >
-              CAB<span className="text-[#F5A623]">SAFARS</span>
-            </span>
-            <p className="text-xs text-[#94A3B8] mt-1">Admin Panel</p>
+            <p className="text-xs text-[#94A3B8] mt-1.5">Admin Panel</p>
           </div>
         ) : (
           <div className="w-8 h-8 rounded-lg bg-[#F5A623]/10 border border-[#F5A623]/30 flex items-center justify-center">

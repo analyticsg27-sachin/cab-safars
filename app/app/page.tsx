@@ -177,8 +177,12 @@ export default function WelcomePage() {
         {/* Hero section */}
         <div className="flex flex-col items-center justify-end pt-10 pb-5 px-6">
           {/* Logo */}
-          <div className="mb-1 flex items-center justify-center">
-            <img src={asset('/logo.png')} alt="CAB SAFARS" className="h-20 w-auto object-contain" />
+          <div className="mb-3 flex items-center justify-center">
+            <img
+              src={asset('/logo.png')}
+              alt="CAB SAFARS"
+              className="h-32 w-auto object-contain block"
+            />
           </div>
 
           {/* Tagline */}
