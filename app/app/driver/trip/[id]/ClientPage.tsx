@@ -9,65 +9,6 @@ import AppShell from '@/components/app/AppShell';
 import AppHeader from '@/components/app/AppHeader';
 import { useAppState } from '@/lib/app-state';
 
-// ─── Data ─────────────────────────────────────────────────────────────────────
-const AVAILABLE_TRIPS = [
-  {
-    id: 'TRP12563', vendorId: 'v001', vendorName: 'Rajesh Patel', vendorPhone: '+91 98250 11234',
-    fromCity: 'Ahmedabad', toCity: 'Baroda', fromState: 'Gujarat', toState: 'Gujarat',
-    vehicleType: '1.5 Ton', loadType: 'Open Body', tripDate: '2026-07-16', tripTime: '10:00 AM',
-    expectedFare: 8500, weightTons: 1.5, contactsCount: 5, isPremiumVendor: true,
-    status: 'open', createdAt: '2026-07-14T08:00:00Z', notes: 'Handle carefully',
-  },
-  {
-    id: 'TRP12562', vendorId: 'v002', vendorName: 'Sunita Shah', vendorPhone: '+91 99090 22345',
-    fromCity: 'Surat', toCity: 'Mumbai', fromState: 'Gujarat', toState: 'Maharashtra',
-    vehicleType: 'Container', loadType: 'General', tripDate: '2026-07-17', tripTime: '08:00 AM',
-    expectedFare: 18000, weightTons: 12, contactsCount: 2, isPremiumVendor: true,
-    status: 'open', createdAt: '2026-07-13T07:00:00Z',
-  },
-  {
-    id: 'TRP12561', vendorId: 'v003', vendorName: 'Mohan Verma', vendorPhone: '+91 97140 33456',
-    fromCity: 'Vadodara', toCity: 'Ahmedabad', fromState: 'Gujarat', toState: 'Gujarat',
-    vehicleType: 'Mini Truck', loadType: 'Agricultural', tripDate: '2026-07-15', tripTime: '07:00 AM',
-    expectedFare: 4500, weightTons: 2, contactsCount: 1, isPremiumVendor: false,
-    status: 'open', createdAt: '2026-07-13T09:00:00Z',
-  },
-  {
-    id: 'TRP12560', vendorId: 'v005', vendorName: 'Anil Kumar', vendorPhone: '+91 70160 55678',
-    fromCity: 'Rajkot', toCity: 'Pune', fromState: 'Gujarat', toState: 'Maharashtra',
-    vehicleType: 'Truck (Heavy)', loadType: 'Heavy Machinery', tripDate: '2026-07-18', tripTime: '06:00 AM',
-    expectedFare: 25000, weightTons: 22, contactsCount: 0, isPremiumVendor: true,
-    status: 'open', createdAt: '2026-07-14T06:00:00Z',
-  },
-  {
-    id: 'TRP12559', vendorId: 'v007', vendorName: 'Ravi Sharma', vendorPhone: '+91 91580 77890',
-    fromCity: 'Anand', toCity: 'Vadodara', fromState: 'Gujarat', toState: 'Gujarat',
-    vehicleType: 'Mini Truck (Tata Ace)', loadType: 'Agricultural', tripDate: '2026-07-16', tripTime: '07:00 AM',
-    expectedFare: 3500, weightTons: 2, contactsCount: 0, isPremiumVendor: false,
-    status: 'open', createdAt: '2026-07-15T10:00:00Z',
-  },
-  {
-    id: 'TRP12558', vendorId: 'v010', vendorName: 'Anita Desai', vendorPhone: '+91 98370 10123',
-    fromCity: 'Mumbai', toCity: 'Pune', fromState: 'Maharashtra', toState: 'Maharashtra',
-    vehicleType: 'Truck (Medium)', loadType: 'Dry Goods', tripDate: '2026-07-19', tripTime: '09:00 AM',
-    expectedFare: 9000, weightTons: 6, contactsCount: 3, isPremiumVendor: true,
-    status: 'open', createdAt: '2026-07-14T11:00:00Z',
-  },
-  {
-    id: 'TRP12557', vendorId: 'v011', vendorName: 'Nikhil Gupta', vendorPhone: '+91 96050 11234',
-    fromCity: 'Delhi', toCity: 'Jaipur', fromState: 'Delhi', toState: 'Rajasthan',
-    vehicleType: 'Container', loadType: 'General Goods', tripDate: '2026-07-20', tripTime: '05:00 AM',
-    expectedFare: 15000, weightTons: 10, contactsCount: 7, isPremiumVendor: true,
-    status: 'open', createdAt: '2026-07-13T05:00:00Z',
-  },
-  {
-    id: 'TRP12556', vendorId: 'v014', vendorName: 'Meena Iyer', vendorPhone: '+91 90440 44567',
-    fromCity: 'Ahmedabad', toCity: 'Surat', fromState: 'Gujarat', toState: 'Gujarat',
-    vehicleType: 'Truck (Light)', loadType: 'Textile', tripDate: '2026-07-16', tripTime: '11:00 AM',
-    expectedFare: 6500, weightTons: 3, contactsCount: 4, isPremiumVendor: true,
-    status: 'open', createdAt: '2026-07-15T08:00:00Z',
-  },
-];
 
 function timeAgo(dateStr: string) {
   const diff = Date.now() - new Date(dateStr).getTime();
@@ -102,7 +43,7 @@ export default function TripDetailPage() {
   const { state } = useAppState();
   const isPremiumDriver = state.currentUser?.isPremium ?? false;
   const id = typeof params?.id === 'string' ? params.id : Array.isArray(params?.id) ? params.id[0] : '';
-  const trip = AVAILABLE_TRIPS.find((t) => t.id === id);
+  const trip = state.trips.find((t) => t.id === id);
 
   if (!trip) {
     return (
@@ -174,8 +115,12 @@ export default function TripDetailPage() {
             <InfoRow icon={Calendar} label="Date & Time" value={`${trip.tripDate} · ${trip.tripTime}`} />
             <InfoRow icon={Truck} label="Vehicle Type" value={trip.vehicleType} />
             <InfoRow icon={Package} label="Load Type" value={trip.loadType} />
-            <InfoRow icon={Weight} label="Weight" value={`${trip.weightTons} Ton${trip.weightTons !== 1 ? 's' : ''}`} />
-            <InfoRow icon={DollarSign} label="Expected Fare" value={`₹${trip.expectedFare.toLocaleString('en-IN')}`} />
+            {trip.weightTons != null && (
+              <InfoRow icon={Weight} label="Weight" value={`${trip.weightTons} Ton${trip.weightTons !== 1 ? 's' : ''}`} />
+            )}
+            {trip.expectedFare != null && (
+              <InfoRow icon={DollarSign} label="Expected Fare" value={`₹${trip.expectedFare.toLocaleString('en-IN')}`} />
+            )}
             {trip.contactsCount > 0 && (
               <InfoRow icon={Users} label="Contacts Made" value={`${trip.contactsCount} driver${trip.contactsCount !== 1 ? 's' : ''}`} />
             )}
