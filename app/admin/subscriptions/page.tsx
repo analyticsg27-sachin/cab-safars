@@ -41,7 +41,7 @@ export default function SubscriptionsPage() {
       ]);
       setPlans((plansRes.data ?? []) as Plan[]);
       // Active subs come from payments/reports — show approved premium users for now
-      const usersRes = subsRes as { data?: Array<{ id: string; name: string; role: string; is_premium: boolean; created_at: string }> };
+      const usersRes = subsRes as unknown as { data?: Array<{ id: string; name: string; role: string; is_premium: boolean; created_at: string }> };
       const premiumUsers = (usersRes.data ?? []).filter((u) => u.is_premium);
       setSubs(premiumUsers.map((u) => ({
         id: u.id,

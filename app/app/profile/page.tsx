@@ -162,9 +162,9 @@ export default function ProfilePage() {
 
         {/* Account section */}
         <MenuSection title="Account">
-          <MenuRow icon={User} label="My Details" onClick={() => {}} />
-          <MenuRow icon={Lock} label="Change Password" onClick={() => {}} />
-          <MenuRow icon={FileText} label="Documents" onClick={() => {}} isLast />
+          <MenuRow icon={User} label="My Details" onClick={() => router.push('/app/my-details')} />
+          <MenuRow icon={Lock} label="Change Password" onClick={() => router.push('/app/change-password')} />
+          <MenuRow icon={FileText} label="Documents" onClick={() => router.push('/app/documents')} isLast />
         </MenuSection>
 
         {/* Subscription section */}
@@ -187,9 +187,9 @@ export default function ProfilePage() {
 
         {/* Support section */}
         <MenuSection title="Support">
-          <MenuRow icon={HelpCircle} label="Help & FAQ" onClick={() => {}} />
-          <MenuRow icon={Phone} label="Contact Support" onClick={() => {}} />
-          <MenuRow icon={Star} label="Rate the App" onClick={() => {}} isLast />
+          <MenuRow icon={HelpCircle} label="Help & FAQ" onClick={() => router.push('/app/help')} />
+          <MenuRow icon={Phone} label="Contact Support" onClick={() => router.push('/app/support')} />
+          <MenuRow icon={Star} label="Rate the App" onClick={() => router.push('/app/rate')} isLast />
         </MenuSection>
 
         {/* Danger zone */}

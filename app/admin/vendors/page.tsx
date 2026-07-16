@@ -46,7 +46,7 @@ export default function VendorsPage() {
         search: search || undefined,
         page,
       });
-      const r = res as { data?: ApiUser[]; pagination?: { total: number; total_pages: number } };
+      const r = res as unknown as { data?: ApiUser[]; pagination?: { total: number; total_pages: number } };
       setVendors(r.data ?? []);
       setTotal(r.pagination?.total ?? 0);
       setTotalPages(r.pagination?.total_pages ?? 1);

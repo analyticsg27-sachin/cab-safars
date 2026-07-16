@@ -41,7 +41,8 @@ const AdminService = {
   async getUsers(params?: { role?: string; status?: string; search?: string; page?: number }) {
     const q = new URLSearchParams();
     if (params) Object.entries(params).forEach(([k, v]) => v != null && q.set(k, String(v)));
-    return adminApiClient.get(`/admin/users?${q}`);
+    const res = await adminApiClient.get<{ items: AdminUser[]; pagination: { total: number; total_pages: number } }>(`/admin/users?${q}`);
+    return { data: res.data?.items ?? [], pagination: res.data?.pagination };
   },
 
   async approveUser(uuid: string) {
@@ -63,7 +64,8 @@ const AdminService = {
   async getTrips(params?: { status?: string; search?: string; page?: number }) {
     const q = new URLSearchParams();
     if (params) Object.entries(params).forEach(([k, v]) => v != null && q.set(k, String(v)));
-    return adminApiClient.get(`/admin/trips?${q}`);
+    const res = await adminApiClient.get<{ items: unknown[]; pagination: { total: number; total_pages: number } }>(`/admin/trips?${q}`);
+    return { data: res.data?.items ?? [], pagination: res.data?.pagination };
   },
 
   async cancelTrip(uuid: string) {
@@ -73,7 +75,8 @@ const AdminService = {
   async getPayments(params?: { status?: string; page?: number }) {
     const q = new URLSearchParams();
     if (params) Object.entries(params).forEach(([k, v]) => v != null && q.set(k, String(v)));
-    return adminApiClient.get(`/admin/payments?${q}`);
+    const res = await adminApiClient.get<{ items: unknown[]; pagination: { total: number; total_pages: number } }>(`/admin/payments?${q}`);
+    return { data: res.data?.items ?? [], pagination: res.data?.pagination };
   },
 
   async getPaymentsSummary() {

@@ -1,21 +1,21 @@
 {
-  "name": "Cab Safars",
-  "short_name": "CabSafars",
-  "description": "Vendor & Driver Transport Marketplace",
-  "start_url": "/app",
+  "name": "CAB SAFARS",
+  "short_name": "CAB SAFARS",
+  "description": "India's transport marketplace for vendors and drivers",
+  "start_url": "/cabsafars/app/",
   "display": "standalone",
-  "orientation": "portrait",
-  "background_color": "#0D1117",
+  "background_color": "#0B1220",
   "theme_color": "#F5A623",
+  "orientation": "portrait",
   "icons": [
     {
-      "src": "/icons/icon-192.png",
+      "src": "/cabsafars/icons/icon-192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "/icons/icon-512.png",
+      "src": "/cabsafars/icons/icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"

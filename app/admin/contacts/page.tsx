@@ -26,7 +26,7 @@ export default function ContactsPage() {
     try {
       // Contact activity tracked through approved premium users
       const res = await AdminService.getUsers({ status: 'approved' });
-      const r = res as { data?: ApiUser[] };
+      const r = res as unknown as { data?: ApiUser[] };
       setUsers((r.data ?? []).filter((u) => u.is_premium));
     } catch (e: unknown) {
       setError(e instanceof Error ? e.message : 'Failed to load contact data');

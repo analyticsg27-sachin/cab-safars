@@ -1,22 +1,49 @@
-# Allow access to _next static assets
-<IfModule mod_rewrite.c>
-  RewriteEngine On
+Options -Indexes
 
-  # Allow direct file/directory access
-  RewriteCond %{REQUEST_FILENAME} -f [OR]
-  RewriteCond %{REQUEST_FILENAME} -d
-  RewriteRule ^ - [L]
+# Explicitly allow __next.* RSC payload files (Next.js App Router needs these)
+<FilesMatch "^__next">
+    Order allow,deny
+    Allow from all
+    Satisfy Any
+</FilesMatch>
+
+# Block direct access to sensitive files
+<FilesMatch "\.(env|log|sql|sh|lock|md)$">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+# Route non-file/dir requests to PHP API (handles /api/v1/* routes)
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /cabsafars/
+
+    # Allow direct file and directory access (static Next.js files, _next/, etc.)
+    RewriteCond %{REQUEST_FILENAME} -f [OR]
+    RewriteCond %{REQUEST_FILENAME} -d
+    RewriteRule ^ - [L]
+
+    # Route everything else to the PHP API
+    RewriteRule ^(.*)$ api/index.php [QSA,L]
 </IfModule>
 
 # Cache static assets
 <IfModule mod_expires.c>
-  ExpiresActive On
-  ExpiresByType text/css "access plus 1 year"
-  ExpiresByType application/javascript "access plus 1 year"
-  ExpiresByType image/png "access plus 1 year"
-  ExpiresByType image/svg+xml "access plus 1 year"
+    ExpiresActive On
+    ExpiresByType text/css "access plus 1 year"
+    ExpiresByType application/javascript "access plus 1 year"
+    ExpiresByType image/png "access plus 1 year"
+    ExpiresByType image/svg+xml "access plus 1 year"
+    ExpiresByType image/webp "access plus 1 year"
 </IfModule>
 
 # Serve correct MIME types
 AddType application/javascript .js
 AddType text/css .css
+
+# Security headers
+<IfModule mod_headers.c>
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set X-Frame-Options "DENY"
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>

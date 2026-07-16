@@ -7,9 +7,7 @@ import {
 } from 'lucide-react';
 import AppShell from '@/components/app/AppShell';
 import AppHeader from '@/components/app/AppHeader';
-
-// ─── Demo config ─────────────────────────────────────────────────────────────
-const IS_PREMIUM_DRIVER = true; // toggle to test locked state
+import { useAppState } from '@/lib/app-state';
 
 // ─── Data ─────────────────────────────────────────────────────────────────────
 const AVAILABLE_TRIPS = [
@@ -101,6 +99,8 @@ function InfoRow({ icon: Icon, label, value }: { icon: React.ElementType; label:
 export default function TripDetailPage() {
   const router = useRouter();
   const params = useParams();
+  const { state } = useAppState();
+  const isPremiumDriver = state.currentUser?.isPremium ?? false;
   const id = typeof params?.id === 'string' ? params.id : Array.isArray(params?.id) ? params.id[0] : '';
   const trip = AVAILABLE_TRIPS.find((t) => t.id === id);
 
@@ -209,7 +209,7 @@ export default function TripDetailPage() {
         >
           <p className="text-xs font-semibold uppercase tracking-wider mb-3" style={{ color: '#8B949E' }}>Contact Vendor</p>
 
-          {IS_PREMIUM_DRIVER ? (
+          {isPremiumDriver ? (
             <>
               <div className="grid grid-cols-2 gap-3 mb-2">
                 {/* Call */}

@@ -39,8 +39,7 @@ export default function ApprovalsPage() {
     setError('');
     try {
       const res = await AdminService.getUsers({ status: 'pending' });
-      const r = res as { data?: PendingUser[] };
-      setApprovals(r.data ?? []);
+      setApprovals((res.data as unknown as PendingUser[]) ?? []);
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : 'Failed to load approvals');
     } finally {

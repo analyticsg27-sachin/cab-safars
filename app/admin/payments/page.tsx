@@ -37,7 +37,7 @@ export default function PaymentsPage() {
         status: statusFilter === 'all' ? undefined : statusFilter,
         page,
       });
-      const r = res as { data?: ApiPayment[]; pagination?: { total: number; total_pages: number } };
+      const r = res as unknown as { data?: ApiPayment[]; pagination?: { total: number; total_pages: number } };
       setPayments(r.data ?? []);
       setTotal(r.pagination?.total ?? 0);
       setTotalPages(r.pagination?.total_pages ?? 1);

@@ -68,7 +68,7 @@ export default function Sidebar() {
             <img
               src={asset('/logo.png')}
               alt="CAB SAFARS"
-              className="h-20 w-auto object-contain block"
+              className="max-w-[180px] w-full h-auto object-contain block"
             />
             <p className="text-sm font-semibold text-[#CBD5E1] mt-1 tracking-widest uppercase">Admin Panel</p>
           </div>

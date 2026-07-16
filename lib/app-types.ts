@@ -22,6 +22,14 @@ export interface AppTrip {
   closedDriverId?: string;
   closureNotes?: string;
   createdAt: string;
+  // Location data
+  latFrom?: number;
+  lngFrom?: number;
+  latTo?: number;
+  lngTo?: number;
+  // Expiry
+  expiryHours?: number;
+  expiresAt?: string;
 }
 
 export interface ContactedDriver {

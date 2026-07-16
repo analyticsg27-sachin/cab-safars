@@ -45,7 +45,7 @@ export default function TripsPage() {
         search: search || undefined,
         page,
       });
-      const r = res as { data?: ApiTrip[]; pagination?: { total: number; total_pages: number } };
+      const r = res as unknown as { data?: ApiTrip[]; pagination?: { total: number; total_pages: number } };
       setTrips(r.data ?? []);
       setTotal(r.pagination?.total ?? 0);
       setTotalPages(r.pagination?.total_pages ?? 1);

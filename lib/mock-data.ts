@@ -1,4 +1,4 @@
-import type {
+﻿import type {
   Vendor,
   Driver,
   Trip,
@@ -10,12 +10,12 @@ import type {
   DashboardStats,
 } from "./types";
 
-// ─── VENDORS ──────────────────────────────────────────────────────────────────
+// â”€â”€â”€ VENDORS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 export const mockVendors: Vendor[] = [
   {
     id: "v001", name: "Rajesh Patel", email: "rajesh@pateltravels.com",
     phone: "+91 98250 11234", role: "vendor", status: "active", city: "Ahmedabad",
-    state: "Gujarat", createdAt: "2024-01-15", updatedAt: "2024-07-01",
+    state: "Gujarat", createdAt: "2026-01-15", updatedAt: "2026-07-01",
     subscriptionPlan: "premium", subscriptionExpiresAt: "2025-01-15",
     companyName: "Patel Travels", tripsPosted: 42, totalContacts: 187,
     rating: 4.8, verified: true,
@@ -23,7 +23,7 @@ export const mockVendors: Vendor[] = [
   {
     id: "v002", name: "Sunita Shah", email: "sunita@shahlogistics.com",
     phone: "+91 99090 22345", role: "vendor", status: "active", city: "Surat",
-    state: "Gujarat", createdAt: "2024-02-10", updatedAt: "2024-07-02",
+    state: "Gujarat", createdAt: "2026-02-10", updatedAt: "2026-07-02",
     subscriptionPlan: "premium", subscriptionExpiresAt: "2025-02-10",
     companyName: "Shah Logistics", tripsPosted: 35, totalContacts: 144,
     rating: 4.6, verified: true,
@@ -31,7 +31,7 @@ export const mockVendors: Vendor[] = [
   {
     id: "v003", name: "Mohan Verma", email: "mohan@vermatransport.in",
     phone: "+91 97140 33456", role: "vendor", status: "active", city: "Vadodara",
-    state: "Gujarat", createdAt: "2024-03-05", updatedAt: "2024-07-03",
+    state: "Gujarat", createdAt: "2026-03-05", updatedAt: "2026-07-03",
     subscriptionPlan: "free",
     companyName: "Verma Transport", tripsPosted: 18, totalContacts: 52,
     rating: 4.3, verified: true,
@@ -39,7 +39,7 @@ export const mockVendors: Vendor[] = [
   {
     id: "v004", name: "Priya Mehta", email: "priya@mehtatours.com",
     phone: "+91 88660 44567", role: "vendor", status: "pending", city: "Mumbai",
-    state: "Maharashtra", createdAt: "2024-06-20", updatedAt: "2024-07-01",
+    state: "Maharashtra", createdAt: "2026-06-20", updatedAt: "2026-07-01",
     subscriptionPlan: "free",
     companyName: "Mehta Tours", tripsPosted: 0, totalContacts: 0,
     rating: 0, verified: false,
@@ -47,7 +47,7 @@ export const mockVendors: Vendor[] = [
   {
     id: "v005", name: "Anil Kumar", email: "anil@kumarrides.com",
     phone: "+91 70160 55678", role: "vendor", status: "active", city: "Rajkot",
-    state: "Gujarat", createdAt: "2024-01-28", updatedAt: "2024-06-15",
+    state: "Gujarat", createdAt: "2026-01-28", updatedAt: "2026-06-15",
     subscriptionPlan: "premium", subscriptionExpiresAt: "2025-01-28",
     companyName: "Kumar Rides", tripsPosted: 28, totalContacts: 97,
     rating: 4.5, verified: true,
@@ -55,7 +55,7 @@ export const mockVendors: Vendor[] = [
   {
     id: "v006", name: "Deepa Nair", email: "deepa@nairvoyage.com",
     phone: "+91 94270 66789", role: "vendor", status: "suspended", city: "Pune",
-    state: "Maharashtra", createdAt: "2023-12-10", updatedAt: "2024-05-20",
+    state: "Maharashtra", createdAt: "2025-12-10", updatedAt: "2026-05-20",
     subscriptionPlan: "free",
     companyName: "Nair Voyage", tripsPosted: 11, totalContacts: 23,
     rating: 3.8, verified: true,
@@ -63,7 +63,7 @@ export const mockVendors: Vendor[] = [
   {
     id: "v007", name: "Ravi Sharma", email: "ravi@sharmaexpress.in",
     phone: "+91 91580 77890", role: "vendor", status: "active", city: "Jaipur",
-    state: "Rajasthan", createdAt: "2024-04-12", updatedAt: "2024-07-04",
+    state: "Rajasthan", createdAt: "2026-04-12", updatedAt: "2026-07-04",
     subscriptionPlan: "premium", subscriptionExpiresAt: "2025-04-12",
     companyName: "Sharma Express", tripsPosted: 22, totalContacts: 86,
     rating: 4.7, verified: true,
@@ -71,7 +71,7 @@ export const mockVendors: Vendor[] = [
   {
     id: "v008", name: "Kavita Joshi", email: "kavita@joshitravels.com",
     phone: "+91 82490 88901", role: "vendor", status: "pending", city: "Indore",
-    state: "Madhya Pradesh", createdAt: "2024-06-28", updatedAt: "2024-06-28",
+    state: "Madhya Pradesh", createdAt: "2026-06-28", updatedAt: "2026-06-28",
     subscriptionPlan: "free",
     companyName: "Joshi Travels", tripsPosted: 0, totalContacts: 0,
     rating: 0, verified: false,
@@ -79,7 +79,7 @@ export const mockVendors: Vendor[] = [
   {
     id: "v009", name: "Suresh Pillai", email: "suresh@pillaitransport.com",
     phone: "+91 77320 99012", role: "vendor", status: "active", city: "Bangalore",
-    state: "Karnataka", createdAt: "2024-02-22", updatedAt: "2024-07-01",
+    state: "Karnataka", createdAt: "2026-02-22", updatedAt: "2026-07-01",
     subscriptionPlan: "free",
     companyName: "Pillai Transport", tripsPosted: 14, totalContacts: 41,
     rating: 4.2, verified: true,
@@ -87,7 +87,7 @@ export const mockVendors: Vendor[] = [
   {
     id: "v010", name: "Anita Desai", email: "anita@desaicarriers.in",
     phone: "+91 98370 10123", role: "vendor", status: "active", city: "Ahmedabad",
-    state: "Gujarat", createdAt: "2024-03-18", updatedAt: "2024-07-02",
+    state: "Gujarat", createdAt: "2026-03-18", updatedAt: "2026-07-02",
     subscriptionPlan: "premium", subscriptionExpiresAt: "2025-03-18",
     companyName: "Desai Carriers", tripsPosted: 31, totalContacts: 118,
     rating: 4.9, verified: true,
@@ -95,7 +95,7 @@ export const mockVendors: Vendor[] = [
   {
     id: "v011", name: "Nikhil Gupta", email: "nikhil@guptatravels.com",
     phone: "+91 96050 11234", role: "vendor", status: "active", city: "Delhi",
-    state: "Delhi", createdAt: "2024-01-05", updatedAt: "2024-07-03",
+    state: "Delhi", createdAt: "2026-01-05", updatedAt: "2026-07-03",
     subscriptionPlan: "premium", subscriptionExpiresAt: "2025-01-05",
     companyName: "Gupta Travels", tripsPosted: 55, totalContacts: 212,
     rating: 4.7, verified: true,
@@ -103,7 +103,7 @@ export const mockVendors: Vendor[] = [
   {
     id: "v012", name: "Pooja Rao", email: "pooja@raorides.com",
     phone: "+91 88150 22345", role: "vendor", status: "active", city: "Hyderabad",
-    state: "Telangana", createdAt: "2024-04-01", updatedAt: "2024-07-04",
+    state: "Telangana", createdAt: "2026-04-01", updatedAt: "2026-07-04",
     subscriptionPlan: "free",
     companyName: "Rao Rides", tripsPosted: 9, totalContacts: 27,
     rating: 4.1, verified: true,
@@ -111,14 +111,14 @@ export const mockVendors: Vendor[] = [
   {
     id: "v013", name: "Vijay Tiwari", email: "vijay@tiwarilogistics.in",
     phone: "+91 99820 33456", role: "vendor", status: "pending", city: "Lucknow",
-    state: "Uttar Pradesh", createdAt: "2024-07-01", updatedAt: "2024-07-01",
+    state: "Uttar Pradesh", createdAt: "2026-07-01", updatedAt: "2026-07-01",
     subscriptionPlan: "free",
     tripsPosted: 0, totalContacts: 0, rating: 0, verified: false,
   },
   {
     id: "v014", name: "Meena Iyer", email: "meena@iyertransport.com",
     phone: "+91 90440 44567", role: "vendor", status: "active", city: "Chennai",
-    state: "Tamil Nadu", createdAt: "2024-02-14", updatedAt: "2024-07-02",
+    state: "Tamil Nadu", createdAt: "2026-02-14", updatedAt: "2026-07-02",
     subscriptionPlan: "premium", subscriptionExpiresAt: "2025-02-14",
     companyName: "Iyer Transport", tripsPosted: 26, totalContacts: 94,
     rating: 4.6, verified: true,
@@ -126,19 +126,19 @@ export const mockVendors: Vendor[] = [
   {
     id: "v015", name: "Abhishek Singh", email: "abhishek@singhcabs.com",
     phone: "+91 75680 55678", role: "vendor", status: "active", city: "Surat",
-    state: "Gujarat", createdAt: "2024-05-10", updatedAt: "2024-07-03",
+    state: "Gujarat", createdAt: "2026-05-10", updatedAt: "2026-07-03",
     subscriptionPlan: "free",
     companyName: "Singh Cabs", tripsPosted: 7, totalContacts: 19,
     rating: 4.0, verified: true,
   },
 ];
 
-// ─── DRIVERS ──────────────────────────────────────────────────────────────────
+// â”€â”€â”€ DRIVERS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 export const mockDrivers: Driver[] = [
   {
     id: "d001", name: "Harshad Bhatt", email: "harshad@gmail.com",
     phone: "+91 98250 65432", role: "driver", status: "active", city: "Ahmedabad",
-    state: "Gujarat", createdAt: "2024-01-20", updatedAt: "2024-07-01",
+    state: "Gujarat", createdAt: "2026-01-20", updatedAt: "2026-07-01",
     subscriptionPlan: "premium", subscriptionExpiresAt: "2025-01-20",
     vehicleType: "Sedan (Toyota Etios)", vehicleNumber: "GJ01AB1234",
     licenseNumber: "GJ2014012345", tripsApplied: 38, tripsCompleted: 31,
@@ -147,7 +147,7 @@ export const mockDrivers: Driver[] = [
   {
     id: "d002", name: "Kiran Patel", email: "kiran.patel@gmail.com",
     phone: "+91 97140 76543", role: "driver", status: "active", city: "Vadodara",
-    state: "Gujarat", createdAt: "2024-02-05", updatedAt: "2024-07-02",
+    state: "Gujarat", createdAt: "2026-02-05", updatedAt: "2026-07-02",
     subscriptionPlan: "premium", subscriptionExpiresAt: "2025-02-05",
     vehicleType: "SUV (Innova Crysta)", vehicleNumber: "GJ06CD5678",
     licenseNumber: "GJ2016056789", tripsApplied: 52, tripsCompleted: 44,
@@ -156,7 +156,7 @@ export const mockDrivers: Driver[] = [
   {
     id: "d003", name: "Ramesh Yadav", email: "ramesh.yadav@gmail.com",
     phone: "+91 88660 87654", role: "driver", status: "active", city: "Surat",
-    state: "Gujarat", createdAt: "2024-01-30", updatedAt: "2024-06-28",
+    state: "Gujarat", createdAt: "2026-01-30", updatedAt: "2026-06-28",
     subscriptionPlan: "free",
     vehicleType: "Hatchback (Swift)", vehicleNumber: "GJ05EF9012",
     licenseNumber: "GJ2018050123", tripsApplied: 21, tripsCompleted: 16,
@@ -165,7 +165,7 @@ export const mockDrivers: Driver[] = [
   {
     id: "d004", name: "Pradeep Nair", email: "pradeep.nair@gmail.com",
     phone: "+91 70160 98765", role: "driver", status: "pending", city: "Pune",
-    state: "Maharashtra", createdAt: "2024-06-25", updatedAt: "2024-06-25",
+    state: "Maharashtra", createdAt: "2026-06-25", updatedAt: "2026-06-25",
     subscriptionPlan: "free",
     vehicleType: "Sedan (Dzire)", vehicleNumber: "MH12GH3456",
     licenseNumber: "MH2019123456", tripsApplied: 0, tripsCompleted: 0,
@@ -174,7 +174,7 @@ export const mockDrivers: Driver[] = [
   {
     id: "d005", name: "Sunil Maurya", email: "sunil.maurya@gmail.com",
     phone: "+91 94270 09876", role: "driver", status: "active", city: "Rajkot",
-    state: "Gujarat", createdAt: "2024-03-12", updatedAt: "2024-07-01",
+    state: "Gujarat", createdAt: "2026-03-12", updatedAt: "2026-07-01",
     subscriptionPlan: "premium", subscriptionExpiresAt: "2025-03-12",
     vehicleType: "SUV (Ertiga)", vehicleNumber: "GJ03IJ7890",
     licenseNumber: "GJ2017037890", tripsApplied: 29, tripsCompleted: 25,
@@ -183,7 +183,7 @@ export const mockDrivers: Driver[] = [
   {
     id: "d006", name: "Vikram Choudhary", email: "vikram.ch@gmail.com",
     phone: "+91 91580 10987", role: "driver", status: "active", city: "Jaipur",
-    state: "Rajasthan", createdAt: "2024-02-18", updatedAt: "2024-07-03",
+    state: "Rajasthan", createdAt: "2026-02-18", updatedAt: "2026-07-03",
     subscriptionPlan: "free",
     vehicleType: "Sedan (Maruti Ciaz)", vehicleNumber: "RJ14KL1234",
     licenseNumber: "RJ2015141234", tripsApplied: 17, tripsCompleted: 13,
@@ -192,7 +192,7 @@ export const mockDrivers: Driver[] = [
   {
     id: "d007", name: "Amit Srivastava", email: "amit.sriv@gmail.com",
     phone: "+91 82490 21098", role: "driver", status: "suspended", city: "Lucknow",
-    state: "Uttar Pradesh", createdAt: "2023-11-20", updatedAt: "2024-05-10",
+    state: "Uttar Pradesh", createdAt: "2025-11-20", updatedAt: "2026-05-10",
     subscriptionPlan: "free",
     vehicleType: "Hatchback (i10)", vehicleNumber: "UP32MN5678",
     licenseNumber: "UP2013325678", tripsApplied: 8, tripsCompleted: 4,
@@ -201,7 +201,7 @@ export const mockDrivers: Driver[] = [
   {
     id: "d008", name: "Gopal Sharma", email: "gopal.sharma@gmail.com",
     phone: "+91 77320 32109", role: "driver", status: "active", city: "Delhi",
-    state: "Delhi", createdAt: "2024-01-08", updatedAt: "2024-07-02",
+    state: "Delhi", createdAt: "2026-01-08", updatedAt: "2026-07-02",
     subscriptionPlan: "premium", subscriptionExpiresAt: "2025-01-08",
     vehicleType: "SUV (Fortuner)", vehicleNumber: "DL04OP9012",
     licenseNumber: "DL2014040123", tripsApplied: 61, tripsCompleted: 54,
@@ -210,7 +210,7 @@ export const mockDrivers: Driver[] = [
   {
     id: "d009", name: "Santosh Reddy", email: "santosh.reddy@gmail.com",
     phone: "+91 98370 43210", role: "driver", status: "active", city: "Hyderabad",
-    state: "Telangana", createdAt: "2024-04-05", updatedAt: "2024-07-04",
+    state: "Telangana", createdAt: "2026-04-05", updatedAt: "2026-07-04",
     subscriptionPlan: "free",
     vehicleType: "Sedan (Honda City)", vehicleNumber: "TS09QR3456",
     licenseNumber: "TS2016093456", tripsApplied: 14, tripsCompleted: 11,
@@ -219,7 +219,7 @@ export const mockDrivers: Driver[] = [
   {
     id: "d010", name: "Manish Dubey", email: "manish.dubey@gmail.com",
     phone: "+91 96050 54321", role: "driver", status: "active", city: "Indore",
-    state: "Madhya Pradesh", createdAt: "2024-03-22", updatedAt: "2024-07-01",
+    state: "Madhya Pradesh", createdAt: "2026-03-22", updatedAt: "2026-07-01",
     subscriptionPlan: "premium", subscriptionExpiresAt: "2025-03-22",
     vehicleType: "SUV (Innova)", vehicleNumber: "MP09ST7890",
     licenseNumber: "MP2017097890", tripsApplied: 33, tripsCompleted: 28,
@@ -228,7 +228,7 @@ export const mockDrivers: Driver[] = [
   {
     id: "d011", name: "Dilip Panchal", email: "dilip.panchal@gmail.com",
     phone: "+91 88150 65432", role: "driver", status: "pending", city: "Surat",
-    state: "Gujarat", createdAt: "2024-07-02", updatedAt: "2024-07-02",
+    state: "Gujarat", createdAt: "2026-07-02", updatedAt: "2026-07-02",
     subscriptionPlan: "free",
     vehicleType: "Sedan (Etios)", vehicleNumber: "GJ05UV1234",
     licenseNumber: "GJ2020051234", tripsApplied: 0, tripsCompleted: 0,
@@ -237,7 +237,7 @@ export const mockDrivers: Driver[] = [
   {
     id: "d012", name: "Lalit Thakkar", email: "lalit.thakkar@gmail.com",
     phone: "+91 99820 76543", role: "driver", status: "active", city: "Ahmedabad",
-    state: "Gujarat", createdAt: "2024-02-28", updatedAt: "2024-07-03",
+    state: "Gujarat", createdAt: "2026-02-28", updatedAt: "2026-07-03",
     subscriptionPlan: "free",
     vehicleType: "Hatchback (Baleno)", vehicleNumber: "GJ01WX5678",
     licenseNumber: "GJ2019015678", tripsApplied: 11, tripsCompleted: 8,
@@ -246,7 +246,7 @@ export const mockDrivers: Driver[] = [
   {
     id: "d013", name: "Devendra Solanki", email: "devendra.sol@gmail.com",
     phone: "+91 90440 87654", role: "driver", status: "active", city: "Bhavnagar",
-    state: "Gujarat", createdAt: "2024-05-15", updatedAt: "2024-07-04",
+    state: "Gujarat", createdAt: "2026-05-15", updatedAt: "2026-07-04",
     subscriptionPlan: "premium", subscriptionExpiresAt: "2025-05-15",
     vehicleType: "SUV (Tavera)", vehicleNumber: "GJ12YZ9012",
     licenseNumber: "GJ2018129012", tripsApplied: 19, tripsCompleted: 16,
@@ -255,7 +255,7 @@ export const mockDrivers: Driver[] = [
   {
     id: "d014", name: "Rekha Chauhan", email: "rekha.chauhan@gmail.com",
     phone: "+91 75680 98765", role: "driver", status: "active", city: "Mumbai",
-    state: "Maharashtra", createdAt: "2024-04-18", updatedAt: "2024-07-02",
+    state: "Maharashtra", createdAt: "2026-04-18", updatedAt: "2026-07-02",
     subscriptionPlan: "free",
     vehicleType: "Sedan (Dzire)", vehicleNumber: "MH01AB2345",
     licenseNumber: "MH2017012345", tripsApplied: 24, tripsCompleted: 20,
@@ -264,7 +264,7 @@ export const mockDrivers: Driver[] = [
   {
     id: "d015", name: "Jitendra Parmar", email: "jitendra.parmar@gmail.com",
     phone: "+91 93770 09876", role: "driver", status: "active", city: "Gandhinagar",
-    state: "Gujarat", createdAt: "2024-01-12", updatedAt: "2024-07-01",
+    state: "Gujarat", createdAt: "2026-01-12", updatedAt: "2026-07-01",
     subscriptionPlan: "premium", subscriptionExpiresAt: "2025-01-12",
     vehicleType: "Sedan (Maruti Ciaz)", vehicleNumber: "GJ18CD6789",
     licenseNumber: "GJ2016186789", tripsApplied: 45, tripsCompleted: 39,
@@ -273,7 +273,7 @@ export const mockDrivers: Driver[] = [
   {
     id: "d016", name: "Bhavna Trivedi", email: "bhavna.trivedi@gmail.com",
     phone: "+91 84350 10987", role: "driver", status: "pending", city: "Vadodara",
-    state: "Gujarat", createdAt: "2024-06-30", updatedAt: "2024-06-30",
+    state: "Gujarat", createdAt: "2026-06-30", updatedAt: "2026-06-30",
     subscriptionPlan: "free",
     vehicleType: "Hatchback (WagonR)", vehicleNumber: "GJ06EF7890",
     licenseNumber: "GJ2021067890", tripsApplied: 0, tripsCompleted: 0,
@@ -282,7 +282,7 @@ export const mockDrivers: Driver[] = [
   {
     id: "d017", name: "Naresh Prajapati", email: "naresh.praj@gmail.com",
     phone: "+91 96780 21098", role: "driver", status: "active", city: "Anand",
-    state: "Gujarat", createdAt: "2024-03-08", updatedAt: "2024-07-03",
+    state: "Gujarat", createdAt: "2026-03-08", updatedAt: "2026-07-03",
     subscriptionPlan: "free",
     vehicleType: "SUV (Ertiga)", vehicleNumber: "GJ21GH1234",
     licenseNumber: "GJ2018211234", tripsApplied: 16, tripsCompleted: 12,
@@ -291,7 +291,7 @@ export const mockDrivers: Driver[] = [
   {
     id: "d018", name: "Kapil Vaishnav", email: "kapil.vaishnav@gmail.com",
     phone: "+91 97900 32109", role: "driver", status: "active", city: "Ahmedabad",
-    state: "Gujarat", createdAt: "2024-02-01", updatedAt: "2024-07-04",
+    state: "Gujarat", createdAt: "2026-02-01", updatedAt: "2026-07-04",
     subscriptionPlan: "premium", subscriptionExpiresAt: "2025-02-01",
     vehicleType: "Sedan (Honda Amaze)", vehicleNumber: "GJ01IJ5678",
     licenseNumber: "GJ2017015678", tripsApplied: 40, tripsCompleted: 34,
@@ -300,7 +300,7 @@ export const mockDrivers: Driver[] = [
   {
     id: "d019", name: "Tejal Rathod", email: "tejal.rathod@gmail.com",
     phone: "+91 89540 43210", role: "driver", status: "active", city: "Rajkot",
-    state: "Gujarat", createdAt: "2024-05-28", updatedAt: "2024-07-02",
+    state: "Gujarat", createdAt: "2026-05-28", updatedAt: "2026-07-02",
     subscriptionPlan: "free",
     vehicleType: "Hatchback (Alto K10)", vehicleNumber: "GJ03KL9012",
     licenseNumber: "GJ2020039012", tripsApplied: 8, tripsCompleted: 6,
@@ -309,7 +309,7 @@ export const mockDrivers: Driver[] = [
   {
     id: "d020", name: "Mukesh Jain", email: "mukesh.jain@gmail.com",
     phone: "+91 99120 54321", role: "driver", status: "active", city: "Surat",
-    state: "Gujarat", createdAt: "2024-04-25", updatedAt: "2024-07-01",
+    state: "Gujarat", createdAt: "2026-04-25", updatedAt: "2026-07-01",
     subscriptionPlan: "premium", subscriptionExpiresAt: "2025-04-25",
     vehicleType: "SUV (Innova Crysta)", vehicleNumber: "GJ05MN3456",
     licenseNumber: "GJ2016053456", tripsApplied: 27, tripsCompleted: 22,
@@ -317,276 +317,276 @@ export const mockDrivers: Driver[] = [
   },
 ];
 
-// ─── TRIPS ─────────────────────────────────────────────────────────────────────
+// â”€â”€â”€ TRIPS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 export const mockTrips: Trip[] = [
   {
     id: "t001", vendorId: "v001", vendorName: "Rajesh Patel", vendorCity: "Ahmedabad",
     fromCity: "Ahmedabad", toCity: "Mumbai", fromState: "Gujarat", toState: "Maharashtra",
-    departureDate: "2024-07-15", vehicleType: "SUV", seatsAvailable: 4,
-    estimatedFare: 8500, status: "open", contactsCount: 12, createdAt: "2024-07-05",
+    departureDate: "2026-07-15", vehicleType: "SUV", seatsAvailable: 4,
+    estimatedFare: 8500, status: "open", contactsCount: 12, createdAt: "2026-07-05",
     isPremiumRequired: false,
   },
   {
     id: "t002", vendorId: "v002", vendorName: "Sunita Shah", vendorCity: "Surat",
     fromCity: "Surat", toCity: "Pune", fromState: "Gujarat", toState: "Maharashtra",
-    departureDate: "2024-07-18", returnDate: "2024-07-20", vehicleType: "Sedan",
+    departureDate: "2026-07-18", returnDate: "2026-07-20", vehicleType: "Sedan",
     seatsAvailable: 3, estimatedFare: 7200, status: "open", contactsCount: 8,
-    createdAt: "2024-07-06", isPremiumRequired: true,
+    createdAt: "2026-07-06", isPremiumRequired: true,
   },
   {
     id: "t003", vendorId: "v001", vendorName: "Rajesh Patel", vendorCity: "Ahmedabad",
     fromCity: "Ahmedabad", toCity: "Vadodara", fromState: "Gujarat", toState: "Gujarat",
-    departureDate: "2024-07-10", vehicleType: "Hatchback", seatsAvailable: 2,
-    estimatedFare: 2200, status: "closed", contactsCount: 5, createdAt: "2024-07-03",
+    departureDate: "2026-07-10", vehicleType: "Hatchback", seatsAvailable: 2,
+    estimatedFare: 2200, status: "closed", contactsCount: 5, createdAt: "2026-07-03",
     isPremiumRequired: false,
   },
   {
     id: "t004", vendorId: "v005", vendorName: "Anil Kumar", vendorCity: "Rajkot",
     fromCity: "Rajkot", toCity: "Ahmedabad", fromState: "Gujarat", toState: "Gujarat",
-    departureDate: "2024-07-20", vehicleType: "SUV", seatsAvailable: 6,
-    estimatedFare: 3800, status: "open", contactsCount: 15, createdAt: "2024-07-07",
+    departureDate: "2026-07-20", vehicleType: "SUV", seatsAvailable: 6,
+    estimatedFare: 3800, status: "open", contactsCount: 15, createdAt: "2026-07-07",
     isPremiumRequired: false,
   },
   {
     id: "t005", vendorId: "v007", vendorName: "Ravi Sharma", vendorCity: "Jaipur",
     fromCity: "Jaipur", toCity: "Delhi", fromState: "Rajasthan", toState: "Delhi",
-    departureDate: "2024-07-22", vehicleType: "Sedan", seatsAvailable: 3,
-    estimatedFare: 5500, status: "open", contactsCount: 9, createdAt: "2024-07-08",
+    departureDate: "2026-07-22", vehicleType: "Sedan", seatsAvailable: 3,
+    estimatedFare: 5500, status: "open", contactsCount: 9, createdAt: "2026-07-08",
     isPremiumRequired: true,
   },
   {
     id: "t006", vendorId: "v010", vendorName: "Anita Desai", vendorCity: "Ahmedabad",
     fromCity: "Ahmedabad", toCity: "Surat", fromState: "Gujarat", toState: "Gujarat",
-    departureDate: "2024-07-12", vehicleType: "SUV", seatsAvailable: 4,
-    estimatedFare: 4200, status: "completed", contactsCount: 7, createdAt: "2024-07-04",
+    departureDate: "2026-07-12", vehicleType: "SUV", seatsAvailable: 4,
+    estimatedFare: 4200, status: "completed", contactsCount: 7, createdAt: "2026-07-04",
     isPremiumRequired: false,
   },
   {
     id: "t007", vendorId: "v011", vendorName: "Nikhil Gupta", vendorCity: "Delhi",
     fromCity: "Delhi", toCity: "Agra", fromState: "Delhi", toState: "Uttar Pradesh",
-    departureDate: "2024-07-25", vehicleType: "Sedan", seatsAvailable: 4,
-    estimatedFare: 3500, status: "open", contactsCount: 11, createdAt: "2024-07-09",
+    departureDate: "2026-07-25", vehicleType: "Sedan", seatsAvailable: 4,
+    estimatedFare: 3500, status: "open", contactsCount: 11, createdAt: "2026-07-09",
     isPremiumRequired: false,
   },
   {
     id: "t008", vendorId: "v014", vendorName: "Meena Iyer", vendorCity: "Chennai",
     fromCity: "Chennai", toCity: "Bangalore", fromState: "Tamil Nadu", toState: "Karnataka",
-    departureDate: "2024-07-19", vehicleType: "SUV", seatsAvailable: 5,
-    estimatedFare: 6800, status: "open", contactsCount: 6, createdAt: "2024-07-06",
+    departureDate: "2026-07-19", vehicleType: "SUV", seatsAvailable: 5,
+    estimatedFare: 6800, status: "open", contactsCount: 6, createdAt: "2026-07-06",
     isPremiumRequired: true,
   },
   {
     id: "t009", vendorId: "v003", vendorName: "Mohan Verma", vendorCity: "Vadodara",
     fromCity: "Vadodara", toCity: "Mumbai", fromState: "Gujarat", toState: "Maharashtra",
-    departureDate: "2024-07-08", vehicleType: "Hatchback", seatsAvailable: 2,
-    estimatedFare: 6000, status: "cancelled", contactsCount: 3, createdAt: "2024-07-02",
+    departureDate: "2026-07-08", vehicleType: "Hatchback", seatsAvailable: 2,
+    estimatedFare: 6000, status: "cancelled", contactsCount: 3, createdAt: "2026-07-02",
     isPremiumRequired: false,
   },
   {
     id: "t010", vendorId: "v001", vendorName: "Rajesh Patel", vendorCity: "Ahmedabad",
     fromCity: "Ahmedabad", toCity: "Rajkot", fromState: "Gujarat", toState: "Gujarat",
-    departureDate: "2024-07-28", returnDate: "2024-07-30", vehicleType: "SUV",
+    departureDate: "2026-07-28", returnDate: "2026-07-30", vehicleType: "SUV",
     seatsAvailable: 5, estimatedFare: 4500, status: "open", contactsCount: 18,
-    createdAt: "2024-07-10", isPremiumRequired: false,
+    createdAt: "2026-07-10", isPremiumRequired: false,
   },
   {
     id: "t011", vendorId: "v002", vendorName: "Sunita Shah", vendorCity: "Surat",
     fromCity: "Surat", toCity: "Ahmedabad", fromState: "Gujarat", toState: "Gujarat",
-    departureDate: "2024-07-14", vehicleType: "Sedan", seatsAvailable: 3,
-    estimatedFare: 3200, status: "open", contactsCount: 14, createdAt: "2024-07-07",
+    departureDate: "2026-07-14", vehicleType: "Sedan", seatsAvailable: 3,
+    estimatedFare: 3200, status: "open", contactsCount: 14, createdAt: "2026-07-07",
     isPremiumRequired: false,
   },
   {
     id: "t012", vendorId: "v009", vendorName: "Suresh Pillai", vendorCity: "Bangalore",
     fromCity: "Bangalore", toCity: "Hyderabad", fromState: "Karnataka", toState: "Telangana",
-    departureDate: "2024-07-17", vehicleType: "SUV", seatsAvailable: 6,
-    estimatedFare: 7500, status: "open", contactsCount: 4, createdAt: "2024-07-06",
+    departureDate: "2026-07-17", vehicleType: "SUV", seatsAvailable: 6,
+    estimatedFare: 7500, status: "open", contactsCount: 4, createdAt: "2026-07-06",
     isPremiumRequired: true,
   },
   {
     id: "t013", vendorId: "v005", vendorName: "Anil Kumar", vendorCity: "Rajkot",
     fromCity: "Rajkot", toCity: "Jamnagar", fromState: "Gujarat", toState: "Gujarat",
-    departureDate: "2024-07-11", vehicleType: "Hatchback", seatsAvailable: 3,
-    estimatedFare: 1800, status: "completed", contactsCount: 6, createdAt: "2024-07-03",
+    departureDate: "2026-07-11", vehicleType: "Hatchback", seatsAvailable: 3,
+    estimatedFare: 1800, status: "completed", contactsCount: 6, createdAt: "2026-07-03",
     isPremiumRequired: false,
   },
   {
     id: "t014", vendorId: "v007", vendorName: "Ravi Sharma", vendorCity: "Jaipur",
     fromCity: "Jaipur", toCity: "Udaipur", fromState: "Rajasthan", toState: "Rajasthan",
-    departureDate: "2024-07-30", vehicleType: "SUV", seatsAvailable: 4,
-    estimatedFare: 4800, status: "open", contactsCount: 7, createdAt: "2024-07-10",
+    departureDate: "2026-07-30", vehicleType: "SUV", seatsAvailable: 4,
+    estimatedFare: 4800, status: "open", contactsCount: 7, createdAt: "2026-07-10",
     isPremiumRequired: false,
   },
   {
     id: "t015", vendorId: "v010", vendorName: "Anita Desai", vendorCity: "Ahmedabad",
     fromCity: "Ahmedabad", toCity: "Gandhinagar", fromState: "Gujarat", toState: "Gujarat",
-    departureDate: "2024-07-16", vehicleType: "Sedan", seatsAvailable: 3,
-    estimatedFare: 1200, status: "open", contactsCount: 9, createdAt: "2024-07-08",
+    departureDate: "2026-07-16", vehicleType: "Sedan", seatsAvailable: 3,
+    estimatedFare: 1200, status: "open", contactsCount: 9, createdAt: "2026-07-08",
     isPremiumRequired: false,
   },
   {
     id: "t016", vendorId: "v011", vendorName: "Nikhil Gupta", vendorCity: "Delhi",
     fromCity: "Delhi", toCity: "Chandigarh", fromState: "Delhi", toState: "Punjab",
-    departureDate: "2024-07-13", vehicleType: "Sedan", seatsAvailable: 4,
-    estimatedFare: 4200, status: "closed", contactsCount: 10, createdAt: "2024-07-05",
+    departureDate: "2026-07-13", vehicleType: "Sedan", seatsAvailable: 4,
+    estimatedFare: 4200, status: "closed", contactsCount: 10, createdAt: "2026-07-05",
     isPremiumRequired: true,
   },
   {
     id: "t017", vendorId: "v014", vendorName: "Meena Iyer", vendorCity: "Chennai",
     fromCity: "Chennai", toCity: "Coimbatore", fromState: "Tamil Nadu", toState: "Tamil Nadu",
-    departureDate: "2024-07-24", vehicleType: "SUV", seatsAvailable: 5,
-    estimatedFare: 5200, status: "open", contactsCount: 3, createdAt: "2024-07-09",
+    departureDate: "2026-07-24", vehicleType: "SUV", seatsAvailable: 5,
+    estimatedFare: 5200, status: "open", contactsCount: 3, createdAt: "2026-07-09",
     isPremiumRequired: false,
   },
   {
     id: "t018", vendorId: "v001", vendorName: "Rajesh Patel", vendorCity: "Ahmedabad",
     fromCity: "Ahmedabad", toCity: "Jaipur", fromState: "Gujarat", toState: "Rajasthan",
-    departureDate: "2024-08-01", returnDate: "2024-08-03", vehicleType: "SUV",
+    departureDate: "2026-08-01", returnDate: "2026-08-03", vehicleType: "SUV",
     seatsAvailable: 6, estimatedFare: 9200, status: "open", contactsCount: 21,
-    createdAt: "2024-07-11", isPremiumRequired: false,
+    createdAt: "2026-07-11", isPremiumRequired: false,
   },
   {
     id: "t019", vendorId: "v015", vendorName: "Abhishek Singh", vendorCity: "Surat",
     fromCity: "Surat", toCity: "Vapi", fromState: "Gujarat", toState: "Gujarat",
-    departureDate: "2024-07-15", vehicleType: "Hatchback", seatsAvailable: 2,
-    estimatedFare: 1500, status: "open", contactsCount: 5, createdAt: "2024-07-07",
+    departureDate: "2026-07-15", vehicleType: "Hatchback", seatsAvailable: 2,
+    estimatedFare: 1500, status: "open", contactsCount: 5, createdAt: "2026-07-07",
     isPremiumRequired: false,
   },
   {
     id: "t020", vendorId: "v012", vendorName: "Pooja Rao", vendorCity: "Hyderabad",
     fromCity: "Hyderabad", toCity: "Vijayawada", fromState: "Telangana", toState: "Andhra Pradesh",
-    departureDate: "2024-07-21", vehicleType: "Sedan", seatsAvailable: 3,
-    estimatedFare: 4100, status: "open", contactsCount: 6, createdAt: "2024-07-08",
+    departureDate: "2026-07-21", vehicleType: "Sedan", seatsAvailable: 3,
+    estimatedFare: 4100, status: "open", contactsCount: 6, createdAt: "2026-07-08",
     isPremiumRequired: true,
   },
 ];
 
-// ─── PAYMENTS ──────────────────────────────────────────────────────────────────
+// â”€â”€â”€ PAYMENTS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 export const mockPayments: Payment[] = [
   {
     id: "p001", userId: "v001", userName: "Rajesh Patel", userRole: "vendor",
     amount: 199, status: "paid", plan: "premium", gateway: "Razorpay",
-    transactionId: "pay_RP1234567890", createdAt: "2024-07-01",
+    transactionId: "pay_RP1234567890", createdAt: "2026-07-01",
   },
   {
     id: "p002", userId: "d001", userName: "Harshad Bhatt", userRole: "driver",
     amount: 199, status: "paid", plan: "premium", gateway: "Razorpay",
-    transactionId: "pay_RP2345678901", createdAt: "2024-07-02",
+    transactionId: "pay_RP2345678901", createdAt: "2026-07-02",
   },
   {
     id: "p003", userId: "v002", userName: "Sunita Shah", userRole: "vendor",
     amount: 199, status: "paid", plan: "premium", gateway: "PhonePe",
-    transactionId: "pay_PP3456789012", createdAt: "2024-07-03",
+    transactionId: "pay_PP3456789012", createdAt: "2026-07-03",
   },
   {
     id: "p004", userId: "d002", userName: "Kiran Patel", userRole: "driver",
     amount: 199, status: "paid", plan: "premium", gateway: "Razorpay",
-    transactionId: "pay_RP4567890123", createdAt: "2024-07-04",
+    transactionId: "pay_RP4567890123", createdAt: "2026-07-04",
   },
   {
     id: "p005", userId: "v005", userName: "Anil Kumar", userRole: "vendor",
     amount: 199, status: "paid", plan: "premium", gateway: "GPay",
-    transactionId: "pay_GP5678901234", createdAt: "2024-07-05",
+    transactionId: "pay_GP5678901234", createdAt: "2026-07-05",
   },
   {
     id: "p006", userId: "d005", userName: "Sunil Maurya", userRole: "driver",
     amount: 199, status: "failed", plan: "premium", gateway: "Razorpay",
-    transactionId: "pay_RP6789012345", createdAt: "2024-07-05",
+    transactionId: "pay_RP6789012345", createdAt: "2026-07-05",
   },
   {
     id: "p007", userId: "v007", userName: "Ravi Sharma", userRole: "vendor",
     amount: 199, status: "paid", plan: "premium", gateway: "Razorpay",
-    transactionId: "pay_RP7890123456", createdAt: "2024-07-06",
+    transactionId: "pay_RP7890123456", createdAt: "2026-07-06",
   },
   {
     id: "p008", userId: "d008", userName: "Gopal Sharma", userRole: "driver",
     amount: 199, status: "paid", plan: "premium", gateway: "PhonePe",
-    transactionId: "pay_PP8901234567", createdAt: "2024-07-07",
+    transactionId: "pay_PP8901234567", createdAt: "2026-07-07",
   },
   {
     id: "p009", userId: "v010", userName: "Anita Desai", userRole: "vendor",
     amount: 199, status: "paid", plan: "premium", gateway: "Razorpay",
-    transactionId: "pay_RP9012345678", createdAt: "2024-07-07",
+    transactionId: "pay_RP9012345678", createdAt: "2026-07-07",
   },
   {
     id: "p010", userId: "d010", userName: "Manish Dubey", userRole: "driver",
     amount: 199, status: "paid", plan: "premium", gateway: "GPay",
-    transactionId: "pay_GP0123456789", createdAt: "2024-07-08",
+    transactionId: "pay_GP0123456789", createdAt: "2026-07-08",
   },
   {
     id: "p011", userId: "v011", userName: "Nikhil Gupta", userRole: "vendor",
     amount: 199, status: "refunded", plan: "premium", gateway: "Razorpay",
-    transactionId: "pay_RP1234567891", createdAt: "2024-07-08",
+    transactionId: "pay_RP1234567891", createdAt: "2026-07-08",
   },
   {
     id: "p012", userId: "d013", userName: "Devendra Solanki", userRole: "driver",
     amount: 199, status: "paid", plan: "premium", gateway: "Razorpay",
-    transactionId: "pay_RP2345678902", createdAt: "2024-07-09",
+    transactionId: "pay_RP2345678902", createdAt: "2026-07-09",
   },
 ];
 
-// ─── MONTHLY STATS ──────────────────────────────────────────────────────────────
+// â”€â”€â”€ MONTHLY STATS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 export const mockMonthlyStats: MonthlyStats[] = [
-  { month: "Feb", revenue: 14800, vendors: 38, drivers: 72, trips: 312 },
-  { month: "Mar", revenue: 22400, vendors: 52, drivers: 98, trips: 445 },
-  { month: "Apr", revenue: 31200, vendors: 71, drivers: 134, trips: 598 },
-  { month: "May", revenue: 38600, vendors: 89, drivers: 167, trips: 734 },
-  { month: "Jun", revenue: 47200, vendors: 112, drivers: 198, trips: 891 },
-  { month: "Jul", revenue: 58400, vendors: 138, drivers: 241, trips: 1087 },
+  { month: "Feb", revenue: 2000, vendors: 8, drivers: 19, trips: 14 },
+  { month: "Mar", revenue: 4400, vendors: 16, drivers: 38, trips: 22 },
+  { month: "Apr", revenue: 7200, vendors: 27, drivers: 64, trips: 31 },
+  { month: "May", revenue: 9800, vendors: 41, drivers: 98, trips: 36 },
+  { month: "Jun", revenue: 12200, vendors: 58, drivers: 152, trips: 40 },
+  { month: "Jul", revenue: 14900, vendors: 78, drivers: 214, trips: 43 },
 ];
 
-// ─── DASHBOARD STATS ──────────────────────────────────────────────────────────
+// â”€â”€â”€ DASHBOARD STATS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 export const mockDashboardStats: DashboardStats = {
-  totalVendors: 1247,
-  totalDrivers: 4893,
-  activeTrips: 382,
-  revenueThisMonth: 58400,
-  premiumUsers: 892,
-  pendingApprovals: 23,
-  totalContacts: 15640,
-  subscriptionRate: 71.5,
-  vendorChange: 12.4,
-  driverChange: 18.7,
-  tripChange: 22.1,
-  revenueChange: 23.7,
+  totalVendors: 78,
+  totalDrivers: 214,
+  activeTrips: 43,
+  revenueThisMonth: 14900,
+  premiumUsers: 47,
+  pendingApprovals: 7,
+  totalContacts: 312,
+  subscriptionRate: 16.2,
+  vendorChange: 18.4,
+  driverChange: 24.7,
+  tripChange: 31.2,
+  revenueChange: 29.8,
 };
 
-// ─── PENDING APPROVALS (combined vendors + drivers) ───────────────────────────
+// â”€â”€â”€ PENDING APPROVALS (combined vendors + drivers) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 export const mockPendingApprovals = [
   ...mockVendors.filter((v) => v.status === "pending"),
   ...mockDrivers.filter((d) => d.status === "pending"),
 ].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
 
-// ─── NOTIFICATIONS ─────────────────────────────────────────────────────────────
+// â”€â”€â”€ NOTIFICATIONS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 export const mockNotifications: Notification[] = [
   {
     id: "n001", userId: "v001", title: "New Driver Contacted",
-    message: "Harshad Bhatt has contacted you for trip Ahmedabad → Mumbai.",
-    type: "info", read: false, createdAt: "2024-07-10T09:30:00",
+    message: "Harshad Bhatt has contacted you for trip Ahmedabad â†’ Mumbai.",
+    type: "info", read: false, createdAt: "2026-07-10T09:30:00",
   },
   {
     id: "n002", userId: "d002", title: "Trip Closed",
-    message: "The trip Surat → Pune by Sunita Shah is now closed.",
-    type: "warning", read: true, createdAt: "2024-07-09T14:20:00",
+    message: "The trip Surat â†’ Pune by Sunita Shah is now closed.",
+    type: "warning", read: true, createdAt: "2026-07-09T14:20:00",
   },
   {
     id: "n003", userId: "v003", title: "Premium Subscription",
     message: "Upgrade to Premium to get priority listing and more contacts.",
-    type: "info", read: false, createdAt: "2024-07-08T11:00:00",
+    type: "info", read: false, createdAt: "2026-07-08T11:00:00",
   },
   {
     id: "n004", userId: "admin", title: "New Registration",
     message: "Pradeep Nair registered as a Driver and requires approval.",
-    type: "info", read: false, createdAt: "2024-06-25T16:45:00",
+    type: "info", read: false, createdAt: "2026-06-25T16:45:00",
   },
   {
     id: "n005", userId: "admin", title: "Payment Failed",
     message: "Sunil Maurya's premium subscription payment failed.",
-    type: "error", read: false, createdAt: "2024-07-05T10:15:00",
+    type: "error", read: false, createdAt: "2026-07-05T10:15:00",
   },
 ];
 
-// ─── SUBSCRIPTIONS ─────────────────────────────────────────────────────────────
+// â”€â”€â”€ SUBSCRIPTIONS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 export const mockSubscriptions: Subscription[] = mockPayments
   .filter((p) => p.status === "paid")
   .map((p) => ({
@@ -604,24 +604,24 @@ export const mockSubscriptions: Subscription[] = mockPayments
     status: "active" as const,
   }));
 
-// ─── CONTACT ACTIVITY ──────────────────────────────────────────────────────────
+// â”€â”€â”€ CONTACT ACTIVITY â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 export const mockContactActivity: ContactActivity[] = [
   {
     id: "ca001", driverId: "d001", driverName: "Harshad Bhatt",
     vendorId: "v001", vendorName: "Rajesh Patel",
-    tripId: "t001", tripRoute: "Ahmedabad → Mumbai",
-    contactedAt: "2024-07-10T09:30:00", isPremium: true,
+    tripId: "t001", tripRoute: "Ahmedabad â†’ Mumbai",
+    contactedAt: "2026-07-10T09:30:00", isPremium: true,
   },
   {
     id: "ca002", driverId: "d002", driverName: "Kiran Patel",
     vendorId: "v002", vendorName: "Sunita Shah",
-    tripId: "t002", tripRoute: "Surat → Pune",
-    contactedAt: "2024-07-09T14:20:00", isPremium: true,
+    tripId: "t002", tripRoute: "Surat â†’ Pune",
+    contactedAt: "2026-07-09T14:20:00", isPremium: true,
   },
   {
     id: "ca003", driverId: "d005", driverName: "Sunil Maurya",
     vendorId: "v005", vendorName: "Anil Kumar",
-    tripId: "t004", tripRoute: "Rajkot → Ahmedabad",
-    contactedAt: "2024-07-09T11:10:00", isPremium: false,
+    tripId: "t004", tripRoute: "Rajkot â†’ Ahmedabad",
+    contactedAt: "2026-07-09T11:10:00", isPremium: false,
   },
 ];
