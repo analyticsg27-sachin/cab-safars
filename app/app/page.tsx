@@ -176,8 +176,7 @@ export default function WelcomePage() {
             <img
               src={asset('/logo.png')}
               alt="CAB SAFARS"
-              className="h-32 w-auto object-contain block"
-              style={{ filter: 'drop-shadow(0 0 8px rgba(59,130,246,0.6)) brightness(1.15)' }}
+              className="h-36 w-auto object-contain block"
             />
           </div>
 
