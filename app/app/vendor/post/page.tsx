@@ -16,8 +16,8 @@ import AppHeader from '@/components/app/AppHeader';
 const IS_API_MODE = process.env.NEXT_PUBLIC_DATA_MODE === 'api';
 
 const VEHICLE_TYPES = [
-  'Any Vehicle', 'Truck (Light)', 'Truck (Medium)', 'Truck (Heavy)',
-  'Mini Truck (Tata Ace)', 'Container', 'Tanker', 'Trailer', 'Pickup Van',
+  'Any Vehicle', 'Sedan', 'SUV', 'Hatchback', 'Tempo Travel',
+  'Bus', 'Mini Bus', 'Innova Crysta', 'Innova', 'Ecco', 'Luxury Car', 'Parcel Package',
 ];
 
 const LOAD_TYPES = [

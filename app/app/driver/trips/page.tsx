@@ -207,7 +207,7 @@ export default function FindTripsPage() {
               <div>
                 <label className="text-xs text-[#8B949E] mb-1 block">Vehicle Type</label>
                 <div className="flex gap-1.5 flex-wrap">
-                  {['Any', 'Truck (Light)', 'Truck (Medium)', 'Truck (Heavy)', 'Container', 'Mini Truck (Tata Ace)'].map(v => (
+                  {['Any', 'Sedan', 'SUV', 'Hatchback', 'Tempo Travel', 'Bus', 'Mini Bus', 'Innova Crysta', 'Innova', 'Ecco', 'Luxury Car', 'Parcel Package'].map(v => (
                     <button key={v} onClick={() => setVehicle(v)}
                       className="px-2.5 py-1 rounded-lg text-xs"
                       style={{ background: vehicle === v ? '#F5A623' : '#21262D', color: vehicle === v ? '#0D1117' : '#8B949E', border: vehicle === v ? 'none' : '1px solid #30363D' }}>

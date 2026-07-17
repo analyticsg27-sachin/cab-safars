@@ -13,15 +13,17 @@ import AppShell from '@/components/app/AppShell';
 type Role = 'vendor' | 'driver';
 
 const VEHICLE_TYPES = [
-  'Hatchback (Swift / Alto)',
-  'Sedan (Toyota Etios / Dzire)',
-  'SUV (Innova / Ertiga)',
-  'Tempo',
-  'Mini Truck',
-  'Truck 14ft',
-  'Truck 22ft',
-  'Truck 32ft',
-  'Trailer',
+  'Sedan',
+  'SUV',
+  'Hatchback',
+  'Tempo Travel',
+  'Bus',
+  'Mini Bus',
+  'Innova Crysta',
+  'Innova',
+  'Ecco',
+  'Luxury Car',
+  'Parcel Package',
 ];
 
 const CITIES = [
