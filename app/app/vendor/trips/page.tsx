@@ -201,7 +201,7 @@ export default function VendorTripsPage() {
   function handleTab(tab: string) {
     const paths: Record<string, string> = {
       home: '/app/vendor/home', trips: '/app/vendor/trips',
-      post: '/app/vendor/post', find: '/app/vendor/find-trips', profile: '/app/profile',
+      post: '/app/vendor/post', route: '/app/vendor/route', profile: '/app/profile',
     };
     if (paths[tab]) router.push(paths[tab]);
   }

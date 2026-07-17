@@ -132,7 +132,7 @@ export default function TripDetailPage() {
           className="rounded-2xl border p-4 mb-4"
           style={{ backgroundColor: '#161B22', borderColor: '#30363D' }}
         >
-          <p className="text-xs font-semibold uppercase tracking-wider mb-3" style={{ color: '#8B949E' }}>Vendor</p>
+          <p className="text-xs font-semibold uppercase tracking-wider mb-3" style={{ color: '#8B949E' }}>Trip Provider</p>
           <div className="flex items-center gap-3 mb-1">
             <div
               className="w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold"
@@ -142,7 +142,7 @@ export default function TripDetailPage() {
             </div>
             <div>
               <p className="font-semibold" style={{ color: '#F0F6FC' }}>{trip.vendorName}</p>
-              <p className="text-xs" style={{ color: '#8B949E' }}>Verified Vendor</p>
+              <p className="text-xs" style={{ color: '#8B949E' }}>Verified Provider</p>
             </div>
           </div>
         </div>
@@ -152,7 +152,7 @@ export default function TripDetailPage() {
           className="rounded-2xl border p-4 mb-4"
           style={{ backgroundColor: '#161B22', borderColor: '#30363D' }}
         >
-          <p className="text-xs font-semibold uppercase tracking-wider mb-3" style={{ color: '#8B949E' }}>Contact Vendor</p>
+          <p className="text-xs font-semibold uppercase tracking-wider mb-3" style={{ color: '#8B949E' }}>Contact Provider</p>
 
           {isPremiumDriver ? (
             <>
@@ -169,7 +169,7 @@ export default function TripDetailPage() {
                   }}
                 >
                   <Phone size={22} />
-                  <span className="text-sm font-semibold">Call Vendor</span>
+                  <span className="text-sm font-semibold">Call Provider</span>
                   <span className="text-[10px]" style={{ color: '#22C55E', opacity: 0.7 }}>{trip.vendorPhone}</span>
                 </a>
                 {/* WhatsApp */}
@@ -246,7 +246,7 @@ export default function TripDetailPage() {
               >
                 <div className="flex items-center gap-2 mb-1">
                   <Crown size={16} style={{ color: '#F5A623' }} />
-                  <span className="font-bold text-sm" style={{ color: '#F0F6FC' }}>Unlock Vendor Contacts</span>
+                  <span className="font-bold text-sm" style={{ color: '#F0F6FC' }}>Unlock Provider Contacts</span>
                 </div>
                 <p className="text-xs mb-3" style={{ color: '#8B949E' }}>
                   Get the vendor&apos;s phone number and WhatsApp to apply for this trip directly.

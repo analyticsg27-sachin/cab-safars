@@ -88,7 +88,7 @@ function TripCard({ trip, onView }: { trip: Trip; onView: () => void }) {
 export default function FindTripsPage() {
   const router = useRouter();
   const { state } = useAppState();
-  const [activeTab, setActiveTab] = useState('find');
+  const [activeTab, setActiveTab] = useState('route');
 
   const [fromLoc, setFromLoc] = useState<LocationValue>({ name: '', city: '', state: '' });
   const [toLoc, setToLoc]     = useState<LocationValue>({ name: '', city: '', state: '' });
@@ -130,7 +130,7 @@ export default function FindTripsPage() {
     setActiveTab(tab);
     const paths: Record<string, string> = {
       home: '/app/vendor/home', trips: '/app/vendor/trips',
-      post: '/app/vendor/post', profile: '/app/profile',
+      post: '/app/vendor/post', route: '/app/vendor/route', profile: '/app/profile',
     };
     if (paths[tab]) router.push(paths[tab]);
   }
@@ -139,8 +139,15 @@ export default function FindTripsPage() {
     router.push(`/app/driver/trip/${tripId}`);
   }
 
-  // In demo mode — show vendor's own state trips so View button works
-  const demoTrips: Trip[] = state.trips.map((t) => ({
+  const sameCityWarning = !IS_API_MODE && fromLoc.city && toLoc.city &&
+    fromLoc.city.trim().toLowerCase() === toLoc.city.trim().toLowerCase();
+
+  // In demo mode — show all trips filtered by city
+  const demoTrips: Trip[] = state.trips.filter((t) => {
+    if (fromLoc.city && !t.fromCity.toLowerCase().includes(fromLoc.city.toLowerCase())) return false;
+    if (toLoc.city && !t.toCity.toLowerCase().includes(toLoc.city.toLowerCase())) return false;
+    return true;
+  }).map((t) => ({
     id: t.id,
     from_city: t.fromCity,
     to_city: t.toCity,
@@ -221,10 +228,17 @@ export default function FindTripsPage() {
           )}
         </div>
 
+        {/* Same-city warning */}
+        {sameCityWarning && (
+          <div className="mx-4 mb-1 px-3 py-2 rounded-xl" style={{ background: 'rgba(245,166,35,0.08)', border: '1px solid rgba(245,166,35,0.3)' }}>
+            <span className="text-xs" style={{ color: '#F5A623' }}>⚠ Pickup and destination are the same city</span>
+          </div>
+        )}
+
         {/* Results count */}
         <div className="px-4 pb-2">
           <p className="text-xs" style={{ color: '#8B949E' }}>
-            {IS_API_MODE ? `${total} trip${total !== 1 ? 's' : ''} found` : 'Demo trips (connect API for live data)'}
+            {IS_API_MODE ? `${total} trip${total !== 1 ? 's' : ''} found` : `${demoTrips.length} trips (demo)`}
           </p>
         </div>
 

@@ -3,13 +3,15 @@
 import { useState, FormEvent } from 'react';
 import { useRouter } from 'next/navigation';
 import {
-  ArrowLeft, Calendar, Clock, Truck, Package, Weight,
+  Calendar, Clock, Truck, Package, Weight,
   IndianRupee, FileText, StickyNote, CheckCircle, AlertCircle, Timer,
 } from 'lucide-react';
 import type { AppTrip } from '@/lib/app-types';
 import { useAppState } from '@/lib/app-state';
 import TripsService from '@/lib/services/trips.service';
 import LocationAutocomplete, { type LocationValue } from '@/components/app/LocationAutocomplete';
+import AppShell from '@/components/app/AppShell';
+import AppHeader from '@/components/app/AppHeader';
 
 const IS_API_MODE = process.env.NEXT_PUBLIC_DATA_MODE === 'api';
 
@@ -142,46 +144,37 @@ export default function VendorPostPage() {
 
   if (success) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center px-6 gap-5" style={{ background: '#0D1117' }}>
-        <div className="w-20 h-20 rounded-full flex items-center justify-center" style={{ background: 'rgba(34,197,94,0.15)' }}>
-          <CheckCircle size={40} color="#22C55E" />
+      <AppShell>
+        <div className="flex-1 flex flex-col items-center justify-center px-6 gap-5">
+          <div className="w-20 h-20 rounded-full flex items-center justify-center" style={{ background: 'rgba(34,197,94,0.15)' }}>
+            <CheckCircle size={40} color="#22C55E" />
+          </div>
+          <div className="text-center">
+            <h2 className="text-xl font-bold text-[#F0F6FC]">Trip Posted!</h2>
+            <p className="text-[#8B949E] mt-2 text-sm leading-relaxed">
+              Your trip from <span className="text-[#F0F6FC]">{fromLoc.city}</span> to{' '}
+              <span className="text-[#F0F6FC]">{toLoc.city}</span> has been posted.
+              Drivers will start contacting you soon.
+            </p>
+          </div>
+          <p className="text-xs text-[#8B949E]">Redirecting…</p>
         </div>
-        <div className="text-center">
-          <h2 className="text-xl font-bold text-[#F0F6FC]">Trip Posted!</h2>
-          <p className="text-[#8B949E] mt-2 text-sm leading-relaxed">
-            Your trip from <span className="text-[#F0F6FC]">{fromLoc.city}</span> to{' '}
-            <span className="text-[#F0F6FC]">{toLoc.city}</span> has been posted.
-            Drivers will start contacting you soon.
-          </p>
-        </div>
-        <p className="text-xs text-[#8B949E]">Redirecting…</p>
-      </div>
+      </AppShell>
     );
   }
 
   return (
-    <div className="min-h-screen flex flex-col" style={{ background: '#0D1117' }}>
-      <header className="sticky top-0 z-30 flex items-center gap-3 px-4 py-3"
-        style={{ background: '#0D1117', borderBottom: '1px solid #30363D', minHeight: 56 }}>
-        <button onClick={() => router.back()}
-          className="w-10 h-10 flex items-center justify-center rounded-xl"
-          style={{ background: '#161B22', border: '1px solid #30363D' }}>
-          <ArrowLeft size={20} color="#F0F6FC" />
-        </button>
-        <div className="flex-1">
-          <h1 className="text-base font-semibold text-[#F0F6FC]">Post New Trip</h1>
-          <p className="text-xs text-[#8B949E]">Fill in the details to find drivers</p>
-        </div>
-      </header>
+    <AppShell>
+      <AppHeader title="Post New Trip" subtitle="Fill in the details to find drivers" showBack onBack={() => router.back()} />
 
-      {apiError && (
-        <div className="mx-4 mt-3 p-3 rounded-xl flex items-center gap-2" style={{ background: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.3)' }}>
-          <AlertCircle size={14} color="#EF4444" />
-          <span className="text-xs" style={{ color: '#EF4444' }}>{apiError}</span>
-        </div>
-      )}
 
-      <form onSubmit={handleSubmit} className="flex-1 overflow-y-auto px-4 pb-10 pt-5 flex flex-col gap-5">
+      <form onSubmit={handleSubmit} className="flex-1 overflow-y-auto px-4 pb-10 pt-5 flex flex-col gap-5" style={{ backgroundColor: '#0D1117' }}>
+        {apiError && (
+          <div className="p-3 rounded-xl flex items-center gap-2" style={{ background: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.3)' }}>
+            <AlertCircle size={14} color="#EF4444" />
+            <span className="text-xs" style={{ color: '#EF4444' }}>{apiError}</span>
+          </div>
+        )}
 
         {/* Route section — LocationAutocomplete */}
         <section>
@@ -355,7 +348,7 @@ export default function VendorPostPage() {
           Drivers matching your route will be notified instantly
         </p>
       </form>
-    </div>
+    </AppShell>
   );
 }
 

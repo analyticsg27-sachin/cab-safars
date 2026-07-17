@@ -1,6 +1,6 @@
 'use client';
 
-import { Home, Package, PlusCircle, Search, User, MapPin, Bell } from 'lucide-react';
+import { Home, Package, PlusCircle, Search, User, MapPin, Bell, Navigation } from 'lucide-react';
 
 interface BottomNavProps {
   role: 'vendor' | 'driver';
@@ -13,7 +13,7 @@ const vendorTabs = [
   { id: 'home',    label: 'Home',      icon: Home },
   { id: 'trips',   label: 'Trips',     icon: Package },
   { id: 'post',    label: 'Post Trip', icon: PlusCircle, isCenter: true },
-  { id: 'find',    label: 'Find',      icon: Search },
+  { id: 'route',   label: 'Route',     icon: Navigation },
   { id: 'profile', label: 'Profile',   icon: User },
 ];
 

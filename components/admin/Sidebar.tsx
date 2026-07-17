@@ -7,7 +7,7 @@ import { usePathname } from "next/navigation";
 import {
   LayoutDashboard, Users, Car, ClipboardCheck, MapPin,
   CreditCard, Star, Bell, BarChart3, Settings,
-  ChevronLeft, ChevronRight, LogOut, Shield, Phone,
+  ChevronLeft, ChevronRight, LogOut, Shield, Phone, X,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -45,14 +45,19 @@ const navGroups = [
   },
 ];
 
-export default function Sidebar() {
+interface SidebarProps {
+  mobileOpen?: boolean;
+  onMobileClose?: () => void;
+}
+
+export default function Sidebar({ mobileOpen = false, onMobileClose }: SidebarProps) {
   const [collapsed, setCollapsed] = useState(false);
   const pathname = usePathname();
 
-  return (
+  const sidebarContent = (
     <aside
       className={cn(
-        "relative hidden md:flex flex-col bg-[#0B1220] border-r border-[#243042] transition-all duration-300 ease-in-out shrink-0",
+        "relative flex flex-col bg-[#0B1220] border-r border-[#243042] transition-all duration-300 ease-in-out shrink-0 h-full",
         collapsed ? "w-16" : "w-60"
       )}
     >
@@ -152,10 +157,10 @@ export default function Sidebar() {
         </button>
       </div>
 
-      {/* Collapse toggle */}
+      {/* Collapse toggle (desktop only) */}
       <button
         onClick={() => setCollapsed(!collapsed)}
-        className="absolute -right-3 top-[72px] w-6 h-6 rounded-full bg-[#0B1220] border border-[#243042] flex items-center justify-center text-[#94A3B8] hover:text-[#F5A623] hover:border-[#F5A623]/50 transition-all duration-150 z-10 shadow-md"
+        className="absolute -right-3 top-[72px] w-6 h-6 rounded-full bg-[#0B1220] border border-[#243042] items-center justify-center text-[#94A3B8] hover:text-[#F5A623] hover:border-[#F5A623]/50 transition-all duration-150 z-10 shadow-md hidden md:flex"
       >
         {collapsed ? (
           <ChevronRight className="w-3.5 h-3.5" />
@@ -164,6 +169,36 @@ export default function Sidebar() {
         )}
       </button>
     </aside>
+  );
+
+  // Desktop: show inline; Mobile: show as overlay drawer when mobileOpen
+  return (
+    <>
+      {/* Desktop sidebar */}
+      <div className="hidden md:flex shrink-0" style={{ width: collapsed ? 64 : 240 }}>
+        {sidebarContent}
+      </div>
+
+      {/* Mobile drawer overlay */}
+      {mobileOpen && (
+        <>
+          <div
+            className="fixed inset-0 bg-black/60 z-40 md:hidden"
+            onClick={onMobileClose}
+          />
+          <div className="fixed left-0 top-0 h-full z-50 md:hidden" style={{ width: 240 }}>
+            {/* Close button */}
+            <button
+              onClick={onMobileClose}
+              className="absolute top-3 right-3 w-7 h-7 rounded-full bg-[#243042] flex items-center justify-center z-10"
+            >
+              <X className="w-4 h-4 text-[#94A3B8]" />
+            </button>
+            {sidebarContent}
+          </div>
+        </>
+      )}
+    </>
   );
 }
 

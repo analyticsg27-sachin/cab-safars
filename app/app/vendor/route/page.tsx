@@ -87,7 +87,7 @@ function MatchedTripCard({
   );
 }
 
-export default function SmartRoutePage() {
+export default function VendorRoutePage() {
   const router = useRouter();
   const { state } = useAppState();
   const isPremium = state.currentUser?.isPremium ?? false;
@@ -97,10 +97,8 @@ export default function SmartRoutePage() {
   const [form, setForm] = useState({ fromCity: '', toCity: '', date: '', time: '', radius: 50, expiry: 'Next 24 hours' });
   const [errors, setErrors] = useState<Record<string, string>>({});
 
-  // Nearby tab state
   const [nearbyCity, setNearbyCity] = useState('');
   const [nearbyRadius, setNearbyRadius] = useState(50);
-  const [nearbyErrors, setNearbyErrors] = useState<Record<string, string>>({});
 
   function handleActivate() {
     const e: Record<string, string> = {};
@@ -115,7 +113,6 @@ export default function SmartRoutePage() {
     setActiveRoute({ ...form });
   }
 
-  // Use app state trips for matching (real IDs)
   const allTrips = state.trips.filter((t) => t.status === 'open');
   const matchedTrips = activeRoute
     ? allTrips.filter((t) =>
@@ -131,12 +128,19 @@ export default function SmartRoutePage() {
     'rgba(168,85,247,0.12)', 'rgba(6,182,212,0.12)', 'rgba(139,148,158,0.12)',
   ];
 
-  // Nearby trips: show trips departing from the typed city
   const nearbyMatches = nearbyCity
     ? allTrips.filter((t) =>
         t.fromCity.toLowerCase().includes(nearbyCity.toLowerCase())
       ).slice(0, 8)
     : [];
+
+  function handleNav(t: string) {
+    const paths: Record<string, string> = {
+      home: '/app/vendor/home', trips: '/app/vendor/trips',
+      post: '/app/vendor/post', route: '/app/vendor/route', profile: '/app/profile',
+    };
+    if (paths[t]) router.push(paths[t]);
+  }
 
   return (
     <AppShell>
@@ -161,7 +165,6 @@ export default function SmartRoutePage() {
 
       <main className="flex-1 overflow-y-auto pb-24">
         {tab === 'route' ? (
-          // ── Route Match Tab ──────────────────────────────────────────────────
           <div className="px-4 pt-4">
             {!activeRoute ? (
               <>
@@ -170,9 +173,9 @@ export default function SmartRoutePage() {
                     <Navigation size={30} style={{ color: '#F5A623' }} />
                   </div>
                 </div>
-                <h2 className="text-xl font-bold text-center mb-1" style={{ color: '#F0F6FC' }}>Set Your Active Route</h2>
+                <h2 className="text-xl font-bold text-center mb-1" style={{ color: '#F0F6FC' }}>Find Matching Trips</h2>
                 <p className="text-sm text-center mb-5" style={{ color: '#8B949E' }}>
-                  Tell us where you&apos;re travelling and we&apos;ll find matching trips
+                  Set a route to discover trips that match your path
                 </p>
 
                 <div className="space-y-3">
@@ -243,13 +246,12 @@ export default function SmartRoutePage() {
                   <button className="w-full h-14 rounded-xl font-semibold text-base mt-2"
                     style={{ backgroundColor: '#F5A623', color: '#0D1117' }}
                     onClick={handleActivate}>
-                    Activate Route
+                    Find Matching Trips
                   </button>
                 </div>
               </>
             ) : (
               <>
-                {/* Active route card */}
                 <div className="rounded-2xl border p-4 mb-5" style={{ backgroundColor: '#161B22', borderColor: 'rgba(34,197,94,0.3)' }}>
                   <div className="flex items-center justify-between mb-3">
                     <span className="flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-full"
@@ -293,7 +295,7 @@ export default function SmartRoutePage() {
                 {matchedTrips.length === 0 ? (
                   <div className="text-center py-12">
                     <p className="font-semibold mb-1" style={{ color: '#F0F6FC' }}>No trips yet</p>
-                    <p className="text-sm" style={{ color: '#8B949E' }}>No trips found for this route. We&apos;ll notify you when new ones match.</p>
+                    <p className="text-sm" style={{ color: '#8B949E' }}>No trips found for this route.</p>
                   </div>
                 ) : (
                   matchedTrips.map((trip, i) => (
@@ -312,7 +314,6 @@ export default function SmartRoutePage() {
             )}
           </div>
         ) : (
-          // ── Nearby Tab ───────────────────────────────────────────────────────
           <div className="px-4 pt-4">
             <div className="flex justify-center mb-4">
               <div className="w-14 h-14 rounded-full flex items-center justify-center" style={{ backgroundColor: 'rgba(45,107,228,0.1)', border: '2px solid rgba(45,107,228,0.2)' }}>
@@ -321,7 +322,7 @@ export default function SmartRoutePage() {
             </div>
             <h2 className="text-lg font-bold text-center mb-1" style={{ color: '#F0F6FC' }}>Nearby Trips</h2>
             <p className="text-sm text-center mb-5" style={{ color: '#8B949E' }}>
-              Enter your current city to find trips nearby
+              Enter your current city to find trips departing nearby
             </p>
 
             <LocationAutocomplete
@@ -330,7 +331,6 @@ export default function SmartRoutePage() {
               onChange={(loc: LocationValue) => setNearbyCity(loc.city)}
               placeholder="e.g. Ahmedabad"
               pinColor="#2D6BE4"
-              error={nearbyErrors.city}
             />
 
             <div className="mt-3 mb-5">
@@ -398,10 +398,7 @@ export default function SmartRoutePage() {
         )}
       </main>
 
-      <BottomNav role="driver" activeTab="route" onTabChange={(t) => {
-        const paths: Record<string, string> = { home: '/app/driver/home', trips: '/app/driver/trips', route: '/app/driver/route', notifications: '/app/notifications', profile: '/app/profile' };
-        if (paths[t]) router.push(paths[t]);
-      }} />
+      <BottomNav role="vendor" activeTab="route" onTabChange={handleNav} unreadNotifications={state.unreadNotifications} />
     </AppShell>
   );
 }

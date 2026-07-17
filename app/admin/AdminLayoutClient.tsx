@@ -4,7 +4,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import Sidebar from '@/components/admin/Sidebar';
 import AdminAuthGuard from './AdminAuthGuard';
 import AdminService from '@/lib/services/admin.service';
-import { Shield, ChevronDown, LogOut } from 'lucide-react';
+import { Shield, ChevronDown, LogOut, Menu } from 'lucide-react';
 import { useState } from 'react';
 
 function getSectionName(pathname: string): string {
@@ -33,6 +33,7 @@ export default function AdminLayoutClient({ children }: { children: React.ReactN
   const router = useRouter();
   const isLoginPage = pathname === '/admin/login' || pathname === '/admin/login/';
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
 
   async function handleLogout() {
     await AdminService.logout();
@@ -49,13 +50,19 @@ export default function AdminLayoutClient({ children }: { children: React.ReactN
   return (
     <AdminAuthGuard>
       <div className="flex h-screen bg-[#0B1220] overflow-hidden">
-        <Sidebar />
+        <Sidebar mobileOpen={mobileSidebarOpen} onMobileClose={() => setMobileSidebarOpen(false)} />
 
         <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
           {/* Header */}
           <header className="h-16 bg-[#111827] border-b border-[#243042] flex items-center justify-between px-6 shrink-0">
-            {/* Left: breadcrumb + section */}
+            {/* Left: hamburger (mobile) + breadcrumb */}
             <div className="flex items-center gap-2 min-w-0">
+              <button
+                onClick={() => setMobileSidebarOpen(true)}
+                className="md:hidden w-9 h-9 flex items-center justify-center rounded-xl bg-[#1A2332] border border-[#243042] shrink-0"
+              >
+                <Menu className="w-4 h-4 text-[#94A3B8]" />
+              </button>
               <nav className="flex items-center gap-1.5 text-xs text-[#6B7280]" aria-label="Breadcrumb">
                 {breadcrumbs.map((crumb, i) => (
                   <span key={crumb.href} className="flex items-center gap-1.5">

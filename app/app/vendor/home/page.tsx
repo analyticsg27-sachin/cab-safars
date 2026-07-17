@@ -48,7 +48,7 @@ export default function TripProviderHomePage() {
     const paths: Record<string, string> = {
       trips: '/app/vendor/trips',
       post: '/app/vendor/post',
-      find: '/app/vendor/find-trips',
+      route: '/app/vendor/route',
       notifications: '/app/notifications',
       profile: '/app/profile',
     };

@@ -99,6 +99,8 @@ export default function FindTripsPage() {
   const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading]       = useState(false);
   const [error, setError]           = useState('');
+  const [demoPage, setDemoPage]     = useState(1);
+  const DEMO_PER_PAGE = 5;
 
   const fetchTrips = useCallback(async (p = 1) => {
     if (!IS_API_MODE) return;
@@ -125,8 +127,16 @@ export default function FindTripsPage() {
   useEffect(() => { fetchTrips(1); }, [fetchTrips]);
 
   // In demo mode, map state.trips (AppTrip) to the Trip shape this page uses
+  const sameCityWarning = !IS_API_MODE && fromLoc.city && toLoc.city &&
+    fromLoc.city.trim().toLowerCase() === toLoc.city.trim().toLowerCase();
+
   const stateTrips: Trip[] = state.trips
-    .filter((t) => t.status === 'open')
+    .filter((t) => {
+      if (t.status !== 'open') return false;
+      if (fromLoc.city && !t.fromCity.toLowerCase().includes(fromLoc.city.toLowerCase())) return false;
+      if (toLoc.city && !t.toCity.toLowerCase().includes(toLoc.city.toLowerCase())) return false;
+      return true;
+    })
     .map((t) => ({
       id: t.id,
       from_city: t.fromCity,
@@ -147,8 +157,9 @@ export default function FindTripsPage() {
       created_at: t.createdAt,
     } as Trip));
 
-  const displayTrips = IS_API_MODE ? trips : stateTrips;
+  const displayTrips = IS_API_MODE ? trips : stateTrips.slice(0, demoPage * DEMO_PER_PAGE);
   const displayTotal = IS_API_MODE ? total : stateTrips.length;
+  const hasDemoMore = !IS_API_MODE && stateTrips.length > demoPage * DEMO_PER_PAGE;
 
   return (
     <AppShell>
@@ -206,6 +217,13 @@ export default function FindTripsPage() {
           )}
         </div>
 
+        {/* Same-city warning */}
+        {sameCityWarning && (
+          <div className="mx-4 mb-1 px-3 py-2 rounded-xl flex items-center gap-2" style={{ background: 'rgba(245,166,35,0.08)', border: '1px solid rgba(245,166,35,0.3)' }}>
+            <span className="text-xs" style={{ color: '#F5A623' }}>⚠ Pickup and destination are the same city</span>
+          </div>
+        )}
+
         {/* Results count */}
         <div className="px-4 pb-2">
           <p className="text-xs" style={{ color: '#8B949E' }}>
@@ -245,6 +263,13 @@ export default function FindTripsPage() {
                   className="w-full py-3 rounded-xl text-sm font-medium mb-3"
                   style={{ background: '#21262D', color: '#F5A623', border: '1px solid #30363D' }}>
                   {loading ? 'Loading…' : 'Load More'}
+                </button>
+              )}
+              {hasDemoMore && (
+                <button onClick={() => setDemoPage(p => p + 1)}
+                  className="w-full py-3 rounded-xl text-sm font-medium mb-3"
+                  style={{ background: '#21262D', color: '#F5A623', border: '1px solid #30363D' }}>
+                  Load More ({stateTrips.length - demoPage * DEMO_PER_PAGE} remaining)
                 </button>
               )}
             </>
