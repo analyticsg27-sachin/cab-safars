@@ -1,10 +1,11 @@
 ﻿'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Crown, Lock, Check, X, RefreshCw, ChevronRight, Calendar } from 'lucide-react';
+import { Crown, Lock, Check, X, ChevronRight, Calendar, Shield } from 'lucide-react';
 import AppShell from '@/components/app/AppShell';
 import AppHeader from '@/components/app/AppHeader';
+import { useAppState } from '@/lib/app-state';
 
 type PaymentState = 'idle' | 'processing' | 'success' | 'failed';
 
@@ -41,7 +42,7 @@ function addDays(days: number) {
   return d.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
 }
 
-// â”€â”€â”€ Spinner â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// â"€â"€â"€ Spinner â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€
 function GoldSpinner() {
   return (
     <div className="flex flex-col items-center justify-center gap-6">
@@ -60,7 +61,7 @@ function GoldSpinner() {
   );
 }
 
-// â”€â”€â”€ Success â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// â"€â"€â"€ Success â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€
 function PaymentSuccess({ txnId, onContinue }: { txnId: string; onContinue: () => void }) {
   return (
     <div className="flex flex-col items-center justify-center gap-6 px-6 text-center">
@@ -122,7 +123,7 @@ function PaymentSuccess({ txnId, onContinue }: { txnId: string; onContinue: () =
   );
 }
 
-// â”€â”€â”€ Failed â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// â"€â"€â"€ Failed â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€
 function PaymentFailed({ onRetry, onContact }: { onRetry: () => void; onContact: () => void }) {
   return (
     <div className="flex flex-col items-center justify-center gap-6 px-6 text-center">
@@ -161,13 +162,18 @@ function PaymentFailed({ onRetry, onContact }: { onRetry: () => void; onContact:
   );
 }
 
-// â”€â”€â”€ Page â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// â"€â"€â"€ Page â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€
 export default function SubscriptionPage() {
   const router = useRouter();
-  const [isPremium, setIsPremium] = useState(false);
+  const { state, dispatch } = useAppState();
+  const currentUser = state.currentUser;
+  const isDriver = currentUser?.role === 'driver';
+
   const [paymentState, setPaymentState] = useState<PaymentState>('idle');
   const [txnId, setTxnId] = useState('');
-  const [isDriver] = useState(true); // demo: driver view
+
+  // Read real premium status from app state
+  const isPremium = currentUser?.isPremium ?? false;
 
   function handleSubscribe(simulateFail = false) {
     setPaymentState('processing');
@@ -182,14 +188,16 @@ export default function SubscriptionPage() {
   }
 
   function handleSuccess() {
-    setIsPremium(true);
+    const expiry = new Date();
+    expiry.setDate(expiry.getDate() + 30);
+    dispatch({ type: 'UPGRADE_PREMIUM', payload: { premiumExpiry: expiry.toISOString().split('T')[0] } });
     setPaymentState('idle');
-    router.push('/app/driver/home');
+    router.push(isDriver ? '/app/driver/home' : '/app/vendor/home');
   }
 
   const features = isDriver ? DRIVER_FEATURES : VENDOR_FEATURES;
 
-  // â”€â”€ Processing overlay â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // â"€â"€ Processing overlay â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€
   if (paymentState === 'processing') {
     return (
       <AppShell>
@@ -203,7 +211,7 @@ export default function SubscriptionPage() {
     );
   }
 
-  // â”€â”€ Success â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // â"€â"€ Success â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€
   if (paymentState === 'success') {
     return (
       <AppShell>
@@ -215,7 +223,7 @@ export default function SubscriptionPage() {
     );
   }
 
-  // â”€â”€ Failed â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // â"€â"€ Failed â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€
   if (paymentState === 'failed') {
     return (
       <AppShell>
@@ -223,7 +231,7 @@ export default function SubscriptionPage() {
         <main className="flex-1 flex items-center overflow-y-auto px-4 py-8">
           <PaymentFailed
             onRetry={() => setPaymentState('idle')}
-            onContact={() => { /* placeholder */ }}
+            onContact={() => router.push('/app/support')}
           />
         </main>
       </AppShell>
@@ -315,7 +323,7 @@ export default function SubscriptionPage() {
             </div>
           </>
         ) : (
-          /* â”€â”€ Active Premium State â”€â”€ */
+          /* ── Active Premium State ── */
           <>
             {/* Active badge */}
             <div className="flex flex-col items-center text-center mb-6">
@@ -338,34 +346,40 @@ export default function SubscriptionPage() {
               <p className="text-sm" style={{ color: '#8B949E' }}>You have full access to all features</p>
             </div>
 
-            {/* Current plan info */}
+            {/* Current plan info — real dates from state */}
             <div
               className="rounded-2xl border p-4 mb-4"
-              style={{ backgroundColor: '#161B22', borderColor: '#30363D' }}
+              style={{ backgroundColor: '#161B22', borderColor: 'rgba(34,197,94,0.3)' }}
             >
-              <p className="text-xs font-semibold uppercase tracking-wider mb-3" style={{ color: '#8B949E' }}>Current Plan</p>
-              {[
-                { label: 'Plan', value: 'Premium Monthly' },
-                { label: 'Price', value: '₹199/month' },
-                { label: 'Valid till', value: addDays(23) },
-                { label: 'Remaining', value: '23 days' },
-              ].map(({ label, value }) => (
-                <div key={label} className="flex justify-between py-2.5" style={{ borderBottom: '1px solid #30363D' }}>
-                  <span className="text-sm" style={{ color: '#8B949E' }}>{label}</span>
-                  <span className="text-sm font-medium" style={{ color: '#F0F6FC' }}>{value}</span>
-                </div>
-              ))}
-              {/* Auto-renew toggle (visual) */}
+              <div className="flex items-center gap-2 mb-3">
+                <Shield size={14} style={{ color: '#22C55E' }} />
+                <p className="text-xs font-semibold uppercase tracking-wider" style={{ color: '#8B949E' }}>Current Plan</p>
+              </div>
+              {(() => {
+                const expiry = currentUser?.premiumExpiry ?? addDays(30);
+                const expiryDate = new Date(expiry);
+                const today = new Date();
+                const daysLeft = Math.max(0, Math.ceil((expiryDate.getTime() - today.getTime()) / 86400000));
+                const startDate = new Date(expiryDate);
+                startDate.setDate(startDate.getDate() - 30);
+                const fmtDate = (d: Date) => d.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
+                return [
+                  { label: 'Plan', value: 'Premium Monthly' },
+                  { label: 'Price', value: '₹199/month' },
+                  { label: 'Started on', value: fmtDate(startDate) },
+                  { label: 'Valid till', value: fmtDate(expiryDate) },
+                  { label: 'Days remaining', value: `${daysLeft} day${daysLeft !== 1 ? 's' : ''}` },
+                ].map(({ label, value }) => (
+                  <div key={label} className="flex justify-between py-2.5" style={{ borderBottom: '1px solid #30363D' }}>
+                    <span className="text-sm" style={{ color: '#8B949E' }}>{label}</span>
+                    <span className="text-sm font-medium" style={{ color: label === 'Days remaining' ? '#22C55E' : '#F0F6FC' }}>{value}</span>
+                  </div>
+                ));
+              })()}
               <div className="flex justify-between items-center py-2.5">
                 <span className="text-sm" style={{ color: '#8B949E' }}>Auto-Renew</span>
-                <div
-                  className="w-11 h-6 rounded-full relative"
-                  style={{ backgroundColor: '#22C55E' }}
-                >
-                  <div
-                    className="absolute w-5 h-5 rounded-full top-0.5 right-0.5"
-                    style={{ backgroundColor: '#fff' }}
-                  />
+                <div className="w-11 h-6 rounded-full relative" style={{ backgroundColor: '#22C55E' }}>
+                  <div className="absolute w-5 h-5 rounded-full top-0.5 right-0.5" style={{ backgroundColor: '#fff' }} />
                 </div>
               </div>
             </div>
