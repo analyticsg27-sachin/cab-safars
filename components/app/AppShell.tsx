@@ -55,7 +55,7 @@ export default function AppShell({ children }: AppShellProps) {
         `}</style>
         <div
           className="app-shell-frame flex flex-col flex-1 w-full"
-          style={{ backgroundColor: '#0B1220' }}
+          style={{ backgroundColor: '#0B1220', position: 'relative' }}
         >
           {children}
         </div>

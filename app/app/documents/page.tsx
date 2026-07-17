@@ -26,7 +26,7 @@ type Doc = { name: string; status: string; type: string; pages: number };
 
 function DocViewer({ doc, onClose }: { doc: Doc; onClose: () => void }) {
   return (
-    <div className="fixed inset-0 z-50 flex items-end justify-center" style={{ backgroundColor: 'rgba(0,0,0,0.7)' }}>
+    <div className="absolute inset-0 z-50 flex items-end justify-center" style={{ backgroundColor: 'rgba(0,0,0,0.7)' }}>
       <div className="w-full rounded-t-3xl overflow-hidden" style={{ backgroundColor: '#161B22', border: '1px solid #30363D', maxHeight: '85vh' }}>
         {/* Header */}
         <div className="flex items-center justify-between px-5 py-4" style={{ borderBottom: '1px solid #30363D' }}>
@@ -89,6 +89,7 @@ export default function DocumentsPage() {
   const { state } = useAppState();
   const user = state.currentUser;
   const [viewing, setViewing] = useState<Doc | null>(null);
+  const [uploadMsg, setUploadMsg] = useState('');
 
   if (!user) { router.replace('/app/'); return null; }
 
@@ -129,9 +130,25 @@ export default function DocumentsPage() {
             </div>
           ))}
         </div>
-        <button className="w-full flex items-center justify-center gap-2 py-4 rounded-2xl mt-5 text-sm font-semibold" style={{ border: '1.5px dashed #30363D', color: '#8B949E' }}>
+        <label className="w-full flex items-center justify-center gap-2 py-4 rounded-2xl mt-5 text-sm font-semibold cursor-pointer" style={{ border: '1.5px dashed #30363D', color: '#8B949E' }}>
           <Upload size={16} /> Upload New Document
-        </button>
+          <input
+            type="file"
+            accept="image/*,.pdf"
+            className="hidden"
+            onChange={(e) => {
+              const file = e.target.files?.[0];
+              if (file) {
+                setUploadMsg(`"${file.name}" selected — pending admin review`);
+                setTimeout(() => setUploadMsg(''), 4000);
+              }
+              e.target.value = '';
+            }}
+          />
+        </label>
+        {uploadMsg && (
+          <p className="text-center text-xs mt-2 px-2" style={{ color: '#22C55E' }}>{uploadMsg}</p>
+        )}
         <p className="text-center text-xs mt-3" style={{ color: '#8B949E' }}>Documents are verified within 24–48 hours.</p>
       </main>
     </AppShell>

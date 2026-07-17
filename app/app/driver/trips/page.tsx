@@ -13,6 +13,8 @@ import LocationAutocomplete, { type LocationValue } from '@/components/app/Locat
 import TripsService from '@/lib/services/trips.service';
 import type { Trip, FeedFilters } from '@/lib/services/trips.service';
 import { useAppState } from '@/lib/app-state';
+import { vendorFreeTrips, vendorPremiumTrips } from '@/lib/demo-users';
+import { Lock } from 'lucide-react';
 
 const IS_API_MODE = process.env.NEXT_PUBLIC_DATA_MODE === 'api';
 
@@ -161,6 +163,12 @@ export default function FindTripsPage() {
   const displayTotal = IS_API_MODE ? total : stateTrips.length;
   const hasDemoMore = !IS_API_MODE && stateTrips.length > demoPage * DEMO_PER_PAGE;
 
+  // Closed/missed trips for demo — show to motivate drivers
+  const missedTrips = IS_API_MODE ? [] : [
+    ...vendorFreeTrips.filter(t => t.status === 'closed'),
+    ...vendorPremiumTrips.filter(t => t.status === 'closed'),
+  ];
+
   return (
     <AppShell>
       <AppHeader title="Available Trips" />
@@ -276,6 +284,74 @@ export default function FindTripsPage() {
           )}
         </div>
       </main>
+
+        {/* Missed/Closed trips section */}
+        {!IS_API_MODE && missedTrips.length > 0 && (
+          <div className="px-4 mt-2 mb-4">
+            <div className="flex items-center gap-2 mb-3 mt-2">
+              <div className="flex-1 h-px" style={{ backgroundColor: '#30363D' }} />
+              <p className="text-[11px] font-semibold uppercase tracking-wider px-2" style={{ color: '#8B949E' }}>
+                Trips You Missed
+              </p>
+              <div className="flex-1 h-px" style={{ backgroundColor: '#30363D' }} />
+            </div>
+
+            <div className="rounded-2xl border p-3 mb-3" style={{ backgroundColor: 'rgba(239,68,68,0.04)', borderColor: 'rgba(239,68,68,0.2)' }}>
+              <p className="text-xs text-center" style={{ color: '#EF4444' }}>
+                🔔 Turn on notifications to never miss a trip — drivers who respond fast get more work!
+              </p>
+            </div>
+
+            {missedTrips.map((t) => (
+              <div
+                key={t.id}
+                className="rounded-2xl border p-4 mb-3 opacity-60"
+                style={{ backgroundColor: '#161B22', borderColor: '#30363D' }}
+              >
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-xs px-2 py-0.5 rounded-full font-semibold" style={{ backgroundColor: 'rgba(239,68,68,0.12)', color: '#EF4444' }}>
+                    Trip Filled
+                  </span>
+                  <span className="text-[10px] font-mono" style={{ color: '#8B949E' }}>
+                    {new Date(t.createdAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}
+                  </span>
+                </div>
+
+                <div className="flex items-center gap-2 mb-2">
+                  <MapPin size={14} style={{ color: '#8B949E' }} />
+                  <span className="text-base font-bold" style={{ color: '#8B949E' }}>
+                    {t.fromCity} → {t.toCity}
+                  </span>
+                </div>
+
+                <div className="flex gap-3 mb-3 text-xs flex-wrap" style={{ color: '#8B949E' }}>
+                  <span>{t.vehicleType}</span>
+                  <span>·</span>
+                  <span>{t.tripDate}</span>
+                  {t.loadType && <><span>·</span><span>{t.loadType}</span></>}
+                </div>
+
+                <div className="flex items-center justify-between">
+                  <span className="text-base font-bold" style={{ color: '#8B949E' }}>
+                    ₹{(t.expectedFare ?? 0).toLocaleString('en-IN')}
+                  </span>
+                  <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs" style={{ backgroundColor: '#21262D', color: '#8B949E' }}>
+                    <Lock size={11} /> Driver Found
+                  </div>
+                </div>
+
+                <p className="text-xs mt-2" style={{ color: '#6B7280' }}>
+                  by {t.vendorName} · {t.fromCity}
+                  {t.closureType === 'app_driver' ? ' — booked via app' : ' — found outside app'}
+                </p>
+              </div>
+            ))}
+
+            <p className="text-center text-xs pb-2" style={{ color: '#8B949E' }}>
+              Stay active — more trips are posted daily.
+            </p>
+          </div>
+        )}
 
       <BottomNav role="driver" activeTab="trips" onTabChange={(tab) => {
         const paths: Record<string, string> = {
