@@ -170,6 +170,7 @@ export default function TripDetailPage() {
                 >
                   <Phone size={22} />
                   <span className="text-sm font-semibold">Call Vendor</span>
+                  <span className="text-[10px]" style={{ color: '#22C55E', opacity: 0.7 }}>{trip.vendorPhone}</span>
                 </a>
                 {/* WhatsApp */}
                 <a
@@ -186,6 +187,7 @@ export default function TripDetailPage() {
                 >
                   <MessageCircle size={22} />
                   <span className="text-sm font-semibold">WhatsApp</span>
+                  <span className="text-[10px]" style={{ color: '#25D366', opacity: 0.7 }}>Open Chat</span>
                 </a>
               </div>
               <p className="text-center text-xs" style={{ color: '#8B949E' }}>
@@ -194,48 +196,77 @@ export default function TripDetailPage() {
             </>
           ) : (
             <>
-              {/* Locked buttons */}
+              {/* Locked contact buttons — clearly distinct */}
               <div className="grid grid-cols-2 gap-3 mb-4">
-                {['Call Vendor', 'WhatsApp'].map((label) => (
-                  <div
-                    key={label}
-                    className="relative flex flex-col items-center justify-center gap-2 py-4 rounded-xl"
-                    style={{ backgroundColor: '#21262D', border: '1px solid #30363D' }}
-                  >
+                {/* Locked Call */}
+                <button
+                  onClick={() => router.push('/app/subscription')}
+                  className="flex flex-col items-center justify-center gap-1.5 py-4 rounded-xl transition-all active:scale-95"
+                  style={{ backgroundColor: 'rgba(34,197,94,0.06)', border: '1px solid rgba(34,197,94,0.2)' }}
+                >
+                  <div className="relative">
+                    <Phone size={22} style={{ color: '#22C55E', opacity: 0.5 }} />
                     <div
-                      className="absolute inset-0 rounded-xl flex flex-col items-center justify-center gap-1 backdrop-blur-sm"
-                      style={{ backgroundColor: 'rgba(13,17,23,0.75)' }}
+                      className="absolute -top-1.5 -right-2 w-4 h-4 rounded-full flex items-center justify-center"
+                      style={{ backgroundColor: '#F5A623' }}
                     >
-                      <Lock size={18} style={{ color: '#8B949E' }} />
-                      <span className="text-xs font-medium" style={{ color: '#8B949E' }}>Premium Required</span>
+                      <Lock size={9} style={{ color: '#0D1117' }} />
                     </div>
-                    {label === 'Call Vendor' ? <Phone size={22} style={{ color: '#30363D' }} /> : <MessageCircle size={22} style={{ color: '#30363D' }} />}
-                    <span className="text-sm font-semibold" style={{ color: '#30363D' }}>{label}</span>
                   </div>
-                ))}
+                  <span className="text-sm font-semibold" style={{ color: '#22C55E', opacity: 0.7 }}>Call Vendor</span>
+                  <span className="text-[10px] tracking-widest" style={{ color: '#8B949E' }}>●●●●● ●●●●●</span>
+                </button>
+                {/* Locked WhatsApp */}
+                <button
+                  onClick={() => router.push('/app/subscription')}
+                  className="flex flex-col items-center justify-center gap-1.5 py-4 rounded-xl transition-all active:scale-95"
+                  style={{ backgroundColor: 'rgba(37,211,102,0.06)', border: '1px solid rgba(37,211,102,0.2)' }}
+                >
+                  <div className="relative">
+                    <MessageCircle size={22} style={{ color: '#25D366', opacity: 0.5 }} />
+                    <div
+                      className="absolute -top-1.5 -right-2 w-4 h-4 rounded-full flex items-center justify-center"
+                      style={{ backgroundColor: '#F5A623' }}
+                    >
+                      <Lock size={9} style={{ color: '#0D1117' }} />
+                    </div>
+                  </div>
+                  <span className="text-sm font-semibold" style={{ color: '#25D366', opacity: 0.7 }}>WhatsApp</span>
+                  <span className="text-[10px] tracking-widest" style={{ color: '#8B949E' }}>●●●●● ●●●●●</span>
+                </button>
               </div>
 
-              {/* Upgrade card */}
+              {/* Upgrade prompt */}
               <div
                 className="rounded-xl p-4"
-                style={{ backgroundColor: '#21262D', border: '1px solid rgba(245,166,35,0.3)' }}
+                style={{
+                  background: 'linear-gradient(135deg, rgba(245,166,35,0.08), rgba(245,166,35,0.03))',
+                  border: '1px solid rgba(245,166,35,0.35)',
+                }}
               >
-                <div className="flex items-center gap-2 mb-2">
+                <div className="flex items-center gap-2 mb-1">
                   <Crown size={16} style={{ color: '#F5A623' }} />
-                  <span className="font-semibold text-sm" style={{ color: '#F0F6FC' }}>Unlock Vendor Contacts</span>
+                  <span className="font-bold text-sm" style={{ color: '#F0F6FC' }}>Unlock Vendor Contacts</span>
                 </div>
                 <p className="text-xs mb-3" style={{ color: '#8B949E' }}>
-                  Get direct access to all vendor phone numbers
+                  Get the vendor&apos;s phone number and WhatsApp to apply for this trip directly.
                 </p>
-                <ul className="text-xs space-y-1 mb-3" style={{ color: '#8B949E' }}>
-                  {['Direct call access', 'WhatsApp vendor', 'Contact history'].map((f) => (
-                    <li key={f} className="flex items-center gap-2">
-                      <span style={{ color: '#22C55E' }}>✓</span> {f}
-                    </li>
-                  ))}
-                </ul>
+                <div className="flex gap-4 mb-3">
+                  <div className="flex items-center gap-1.5">
+                    <Phone size={12} style={{ color: '#22C55E' }} />
+                    <span className="text-xs font-medium" style={{ color: '#CBD5E1' }}>Direct Call</span>
+                  </div>
+                  <div className="flex items-center gap-1.5">
+                    <MessageCircle size={12} style={{ color: '#25D366' }} />
+                    <span className="text-xs font-medium" style={{ color: '#CBD5E1' }}>WhatsApp Chat</span>
+                  </div>
+                  <div className="flex items-center gap-1.5">
+                    <Users size={12} style={{ color: '#2D6BE4' }} />
+                    <span className="text-xs font-medium" style={{ color: '#CBD5E1' }}>Contact Log</span>
+                  </div>
+                </div>
                 <button
-                  className="w-full py-3 rounded-xl text-sm font-semibold"
+                  className="w-full py-3 rounded-xl text-sm font-bold"
                   style={{ backgroundColor: '#F5A623', color: '#0D1117' }}
                   onClick={() => router.push('/app/subscription')}
                 >

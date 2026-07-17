@@ -16,15 +16,6 @@ import { useAppState } from '@/lib/app-state';
 
 const IS_API_MODE = process.env.NEXT_PUBLIC_DATA_MODE === 'api';
 
-// Demo trips for non-API mode
-const DEMO_TRIPS: Trip[] = [
-  { id: 'TRP12563', from_city: 'Ahmedabad', to_city: 'Baroda', from_state: 'Gujarat', to_state: 'Gujarat', vehicle_type: '1.5 Ton', load_type: 'Open Body', trip_date: '2026-07-16', trip_time: '10:00', expected_fare: 8500, weight_tons: 1.5, contacts_count: 5, is_premium_vendor: true, vendor_name: 'Rajesh Patel', vendor_city: 'Ahmedabad', created_at: '2026-07-14T08:00:00Z', is_contact_locked: true },
-  { id: 'TRP12562', from_city: 'Surat', to_city: 'Mumbai', from_state: 'Gujarat', to_state: 'Maharashtra', vehicle_type: 'Container', load_type: 'General', trip_date: '2026-07-17', trip_time: '08:00', expected_fare: 18000, weight_tons: 12, contacts_count: 2, is_premium_vendor: true, vendor_name: 'Sunita Shah', vendor_city: 'Surat', created_at: '2026-07-13T07:00:00Z', is_contact_locked: true },
-  { id: 'TRP12561', from_city: 'Vadodara', to_city: 'Ahmedabad', from_state: 'Gujarat', to_state: 'Gujarat', vehicle_type: 'Mini Truck', load_type: 'Agricultural', trip_date: '2026-07-15', trip_time: '07:00', expected_fare: 4500, weight_tons: 2, contacts_count: 1, is_premium_vendor: false, vendor_name: 'Mohan Verma', vendor_city: 'Vadodara', created_at: '2026-07-13T09:00:00Z', is_contact_locked: true },
-  { id: 'TRP12560', from_city: 'Rajkot', to_city: 'Pune', from_state: 'Gujarat', to_state: 'Maharashtra', vehicle_type: 'Truck (Heavy)', load_type: 'Heavy Machinery', trip_date: '2026-07-18', trip_time: '06:00', expected_fare: 25000, weight_tons: 22, contacts_count: 0, is_premium_vendor: true, vendor_name: 'Anil Kumar', vendor_city: 'Rajkot', created_at: '2026-07-14T06:00:00Z', is_contact_locked: true },
-  { id: 'TRP12558', from_city: 'Mumbai', to_city: 'Pune', from_state: 'Maharashtra', to_state: 'Maharashtra', vehicle_type: 'Truck (Medium)', load_type: 'Dry Goods', trip_date: '2026-07-19', trip_time: '09:00', expected_fare: 9000, weight_tons: 6, contacts_count: 3, is_premium_vendor: true, vendor_name: 'Anita Desai', vendor_city: 'Mumbai', created_at: '2026-07-14T11:00:00Z', is_contact_locked: true },
-];
-
 function TripCard({ trip }: { trip: Trip }) {
   const router = useRouter();
   const fare = trip.expected_fare ? Number(trip.expected_fare) : null;
@@ -133,8 +124,31 @@ export default function FindTripsPage() {
 
   useEffect(() => { fetchTrips(1); }, [fetchTrips]);
 
-  const displayTrips = IS_API_MODE ? trips : DEMO_TRIPS;
-  const displayTotal = IS_API_MODE ? total : DEMO_TRIPS.length;
+  // In demo mode, map state.trips (AppTrip) to the Trip shape this page uses
+  const stateTrips: Trip[] = state.trips
+    .filter((t) => t.status === 'open')
+    .map((t) => ({
+      id: t.id,
+      from_city: t.fromCity,
+      to_city: t.toCity,
+      from_state: t.fromState ?? '',
+      to_state: t.toState ?? '',
+      vehicle_type: t.vehicleType,
+      load_type: t.loadType ?? '',
+      trip_date: t.tripDate,
+      trip_time: t.tripTime,
+      expected_fare: t.expectedFare ?? null,
+      weight_tons: t.weightTons ?? null,
+      contacts_count: t.contactsCount,
+      is_premium_vendor: t.isPremiumVendor,
+      is_contact_locked: true,
+      vendor_name: t.vendorName,
+      vendor_city: t.fromCity,
+      created_at: t.createdAt,
+    } as Trip));
+
+  const displayTrips = IS_API_MODE ? trips : stateTrips;
+  const displayTotal = IS_API_MODE ? total : stateTrips.length;
 
   return (
     <AppShell>
