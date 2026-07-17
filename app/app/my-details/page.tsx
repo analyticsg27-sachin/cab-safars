@@ -22,6 +22,7 @@ export default function MyDetailsPage() {
   const roleLabel = user.role === 'vendor' ? 'Trip Provider' : 'Driver';
 
   function startEdit() {
+    if (!user) return;
     setDraftName(user.name);
     setDraftPhone(user.phone);
     setDraftCity(user.city || '');
