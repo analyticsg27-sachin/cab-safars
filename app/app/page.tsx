@@ -185,7 +185,7 @@ export default function WelcomePage() {
             className="text-sm font-bold tracking-widest uppercase mb-6"
             style={{ color: '#E2E8F0', letterSpacing: '0.18em', textShadow: '0 0 20px rgba(245,166,35,0.3)' }}
           >
-            Safe Loads. Smart Journeys.
+            Safe Trips. Smart Journeys.
           </span>
 
           {/* Illustration */}
@@ -201,7 +201,7 @@ export default function WelcomePage() {
             className="text-2xl font-bold text-center mb-1.5 leading-tight"
             style={{ color: '#F8FAFC' }}
           >
-            India's Transport Marketplace
+            India's Travels Marketplace
           </h1>
           <p
             className="text-sm text-center mb-5 font-semibold tracking-wide"
