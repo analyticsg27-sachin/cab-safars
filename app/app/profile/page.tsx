@@ -179,8 +179,8 @@ export default function ProfilePage() {
           <MenuRow
             icon={CreditCard}
             label="Payment History"
-            value={`${DEMO_PAYMENTS.length} payments`}
-            onClick={() => router.push('/app/subscription')}
+            value={user.isPremium ? `${DEMO_PAYMENTS.length} payments` : 'No payments'}
+            onClick={() => router.push('/app/payment-history')}
             isLast
           />
         </MenuSection>

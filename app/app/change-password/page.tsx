@@ -13,6 +13,7 @@ export default function ChangePasswordPage() {
   const [confirm, setConfirm] = useState('');
   const [showCurrent, setShowCurrent] = useState(false);
   const [showNext, setShowNext] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
   const [done, setDone] = useState(false);
   const [error, setError] = useState('');
 
@@ -42,7 +43,7 @@ export default function ChangePasswordPage() {
             {[
               { label: 'Current Password', val: current, set: setCurrent, show: showCurrent, toggle: () => setShowCurrent(v => !v) },
               { label: 'New Password', val: next, set: setNext, show: showNext, toggle: () => setShowNext(v => !v) },
-              { label: 'Confirm New Password', val: confirm, set: setConfirm, show: showNext, toggle: () => {} },
+              { label: 'Confirm New Password', val: confirm, set: setConfirm, show: showConfirm, toggle: () => setShowConfirm(v => !v) },
             ].map(({ label, val, set, show, toggle }, i) => (
               <div key={label} className="mb-4">
                 <p className="text-xs font-semibold mb-1.5" style={{ color: '#8B949E' }}>{label}</p>
@@ -56,7 +57,7 @@ export default function ChangePasswordPage() {
                     className="flex-1 bg-transparent text-sm outline-none"
                     style={{ color: '#F0F6FC' }}
                   />
-                  {i < 2 && <button onClick={toggle} type="button">{show ? <EyeOff size={14} style={{ color: '#8B949E' }} /> : <Eye size={14} style={{ color: '#8B949E' }} />}</button>}
+                  <button onClick={toggle} type="button">{show ? <EyeOff size={14} style={{ color: '#8B949E' }} /> : <Eye size={14} style={{ color: '#8B949E' }} />}</button>
                 </div>
               </div>
             ))}

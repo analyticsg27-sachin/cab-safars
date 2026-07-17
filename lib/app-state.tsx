@@ -23,7 +23,8 @@ export type AppAction =
   | { type: 'CLOSE_TRIP'; payload: { tripId: string; closureType: 'app_driver' | 'outside_driver'; closedDriverId?: string; closureNotes?: string } }
   | { type: 'ADD_NOTIFICATION'; payload: AppNotification }
   | { type: 'MARK_NOTIFICATIONS_READ' }
-  | { type: 'UPGRADE_PREMIUM'; payload: { premiumExpiry: string } };
+  | { type: 'UPGRADE_PREMIUM'; payload: { premiumExpiry: string } }
+  | { type: 'UPDATE_USER'; payload: Partial<Pick<AppUser, 'name' | 'phone' | 'city'>> };
 
 const initialState: AppState = {
   currentUser: null,
@@ -103,6 +104,11 @@ function appReducer(state: AppState, action: AppAction): AppState {
     case 'UPGRADE_PREMIUM': {
       if (!state.currentUser) return state;
       return { ...state, currentUser: { ...state.currentUser, isPremium: true, premiumExpiry: action.payload.premiumExpiry } };
+    }
+
+    case 'UPDATE_USER': {
+      if (!state.currentUser) return state;
+      return { ...state, currentUser: { ...state.currentUser, ...action.payload } };
     }
 
     default:

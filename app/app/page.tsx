@@ -276,7 +276,7 @@ export default function WelcomePage() {
               />
               <DemoButton
                 label="Trip Provider"
-                sublabel="Premium â˜…"
+                sublabel="Premium ★"
                 color="#F5A623"
                 onClick={() => loginAs('vendorPremium')}
               />
@@ -288,7 +288,7 @@ export default function WelcomePage() {
               />
               <DemoButton
                 label="Driver"
-                sublabel="Premium â˜…"
+                sublabel="Premium ★"
                 color="#2D6BE4"
                 onClick={() => loginAs('driverPremium')}
               />

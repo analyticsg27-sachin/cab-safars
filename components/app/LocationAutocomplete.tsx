@@ -173,6 +173,16 @@ export default function LocationAutocomplete({ value, onChange, placeholder, pin
           autoComplete="off"
           onChange={(e) => { setQuery(e.target.value); setOpen(true); }}
           onFocus={() => setOpen(true)}
+          onBlur={() => {
+            setTimeout(() => {
+              setOpen(false);
+              if (query.trim()) {
+                const exact = CITIES.find(c => c.city.toLowerCase() === query.trim().toLowerCase());
+                if (exact) { select(exact); }
+                else { onChange({ name: query.trim(), city: query.trim(), state: '' }); }
+              }
+            }, 150);
+          }}
           className="w-full pl-9 pr-8 py-3.5 bg-transparent text-sm outline-none"
           style={{ color: '#F0F6FC' }}
         />
