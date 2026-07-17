@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
@@ -71,7 +71,7 @@ export default function AdminLoginPage() {
             <div className="flex flex-col items-center mb-8">
               <div className="mb-5">
                 <img
-                  src={asset('/logo.png')}
+                  src={asset('/logo-v2.png')}
                   alt="CAB SAFARS"
                   className="h-12 w-auto object-contain mx-auto"
                   onError={(e) => {
@@ -149,7 +149,7 @@ export default function AdminLoginPage() {
 
               {error && (
                 <div className="flex items-start gap-2 text-sm text-[#EF4444] bg-[#EF4444]/8 border border-[#EF4444]/20 rounded-xl px-4 py-3">
-                  <span className="mt-0.5 shrink-0">⚠</span>
+                  <span className="mt-0.5 shrink-0">âš </span>
                   <span>{error}</span>
                 </div>
               )}
@@ -172,7 +172,7 @@ export default function AdminLoginPage() {
                       <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                       <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
                     </svg>
-                    Signing in…
+                    Signing inâ€¦
                   </span>
                 ) : (
                   'Sign In'
@@ -190,3 +190,4 @@ export default function AdminLoginPage() {
     </div>
   );
 }
+

@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import Link from "next/link";
@@ -66,7 +66,7 @@ export default function Sidebar() {
         {!collapsed ? (
           <div className="flex flex-col items-center w-full">
             <img
-              src={asset('/logo.png')}
+              src={asset('/logo-v2.png')}
               alt="CAB SAFARS"
               className="max-w-[200px] w-full h-auto object-contain block"
             />
@@ -166,3 +166,4 @@ export default function Sidebar() {
     </aside>
   );
 }
+

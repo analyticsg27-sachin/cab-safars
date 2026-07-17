@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
@@ -7,7 +7,7 @@ import { asset } from '@/lib/basepath';
 import { demoUsers, vendorFreeTrips, vendorPremiumTrips, availableTripsForDriver, demoNotifications } from '@/lib/demo-users';
 import AppShell from '@/components/app/AppShell';
 
-// ── Transport Illustration (Car/Sedan) ────────────────────────────────────────
+// â”€â”€ Transport Illustration (Car/Sedan) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function TransportIllustration() {
   return (
     <svg viewBox="0 0 320 160" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full max-w-[300px]">
@@ -74,7 +74,7 @@ function TransportIllustration() {
   );
 }
 
-// ── Feature Pill ──────────────────────────────────────────────────────────────
+// â”€â”€ Feature Pill â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function FeaturePill({ text }: { text: string }) {
   return (
     <span
@@ -94,7 +94,7 @@ function FeaturePill({ text }: { text: string }) {
   );
 }
 
-// ── Demo Quick Login Button ───────────────────────────────────────────────────
+// â”€â”€ Demo Quick Login Button â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 interface DemoButtonProps {
   label: string;
   sublabel: string;
@@ -123,7 +123,7 @@ function DemoButton({ label, sublabel, color, onClick }: DemoButtonProps) {
   );
 }
 
-// ── Welcome Page ──────────────────────────────────────────────────────────────
+// â”€â”€ Welcome Page â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 export default function WelcomePage() {
   const { state, dispatch } = useAppState();
   const router = useRouter();
@@ -174,7 +174,7 @@ export default function WelcomePage() {
           {/* Logo */}
           <div className="mb-3 flex items-center justify-center">
             <img
-              src={asset('/logo.png')}
+              src={asset('/logo-v2.png')}
               alt="CAB SAFARS"
               className="h-36 w-auto object-contain block"
             />
@@ -276,7 +276,7 @@ export default function WelcomePage() {
               />
               <DemoButton
                 label="Trip Provider"
-                sublabel="Premium ★"
+                sublabel="Premium â˜…"
                 color="#F5A623"
                 onClick={() => loginAs('vendorPremium')}
               />
@@ -288,7 +288,7 @@ export default function WelcomePage() {
               />
               <DemoButton
                 label="Driver"
-                sublabel="Premium ★"
+                sublabel="Premium â˜…"
                 color="#2D6BE4"
                 onClick={() => loginAs('driverPremium')}
               />
@@ -297,10 +297,11 @@ export default function WelcomePage() {
 
           {/* Testing note */}
           <p className="text-center mt-4 text-[10px]" style={{ color: '#374151' }}>
-            Testing Mode — Data is simulated
+            Testing Mode â€” Data is simulated
           </p>
         </div>
       </div>
     </AppShell>
   );
 }
+

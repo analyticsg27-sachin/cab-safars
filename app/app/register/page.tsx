@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -206,7 +206,7 @@ export default function RegisterPage() {
         {/* Logo + heading */}
         <div className="px-6 pt-4 pb-2 flex flex-col items-center">
           <img
-            src={asset('/logo.png')}
+            src={asset('/logo-v2.png')}
             alt="CAB SAFARS"
             className="h-14 w-auto object-contain mx-auto mb-6"
           />
@@ -298,7 +298,7 @@ export default function RegisterPage() {
                   className="flex items-center px-3 rounded-xl text-sm font-semibold flex-shrink-0"
                   style={{ backgroundColor: '#1A2332', border: '1px solid #243042', color: '#94A3B8', minWidth: '68px' }}
                 >
-                  🇮🇳 +91
+                  ðŸ‡®ðŸ‡³ +91
                 </div>
                 <input
                   type="tel"
@@ -420,3 +420,4 @@ export default function RegisterPage() {
     </AppShell>
   );
 }
+

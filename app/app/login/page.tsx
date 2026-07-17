@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -137,7 +137,7 @@ export default function LoginPage() {
         {/* Logo */}
         <div className="px-6 pt-4 pb-2 flex flex-col items-center">
           <img
-            src={asset('/logo.png')}
+            src={asset('/logo-v2.png')}
             alt="CAB SAFARS"
             className="h-14 w-auto object-contain mx-auto mb-6"
           />
@@ -164,7 +164,7 @@ export default function LoginPage() {
             </div>
           )}
 
-          {/* Role toggle — mock mode only */}
+          {/* Role toggle â€” mock mode only */}
           {!IS_API_MODE && (
             <div className="flex gap-2 mb-6">
               {(['vendor', 'driver'] as Role[]).map((r) => (
@@ -284,7 +284,7 @@ export default function LoginPage() {
           </button>
         </p>
 
-        {/* Demo shortcuts — mock mode only */}
+        {/* Demo shortcuts â€” mock mode only */}
         {!IS_API_MODE && (
           <div
             className="mx-4 mb-8 rounded-2xl p-4"
@@ -300,9 +300,9 @@ export default function LoginPage() {
               {(
                 [
                   { key: 'vendorFree', label: 'Vendor Free', color: '#F5A623' },
-                  { key: 'vendorPremium', label: 'Vendor Premium ★', color: '#F5A623' },
+                  { key: 'vendorPremium', label: 'Vendor Premium â˜…', color: '#F5A623' },
                   { key: 'driverFree', label: 'Driver Free', color: '#60A5FA' },
-                  { key: 'driverPremium', label: 'Driver Premium ★', color: '#60A5FA' },
+                  { key: 'driverPremium', label: 'Driver Premium â˜…', color: '#60A5FA' },
                 ] as const
               ).map(({ key, label, color }) => (
                 <button
@@ -321,3 +321,4 @@ export default function LoginPage() {
     </AppShell>
   );
 }
+

@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { asset } from '@/lib/basepath';
 
@@ -15,7 +15,7 @@ export default function AppShell({ children }: AppShellProps) {
       {/* Desktop label */}
       <div className="hidden md:flex items-center gap-3 mb-3">
         <img
-          src={asset('/logo.png')}
+          src={asset('/logo-v2.png')}
           alt="CAB SAFARS"
           className="h-7 w-auto object-contain"
           style={{ filter: 'brightness(0) invert(1)' }}
@@ -63,3 +63,4 @@ export default function AppShell({ children }: AppShellProps) {
     </div>
   );
 }
+
