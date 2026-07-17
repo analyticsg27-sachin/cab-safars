@@ -96,7 +96,7 @@ export default function ProfilePage() {
 
   return (
     <AppShell>
-      <AppHeader title="Profile" />
+      <AppHeader title="Profile" showBack onBack={() => router.back()} />
 
       <main className="flex-1 overflow-y-auto pb-10 pt-5 px-4">
         {/* Avatar + name */}

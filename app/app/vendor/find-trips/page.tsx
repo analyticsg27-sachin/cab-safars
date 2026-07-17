@@ -136,7 +136,7 @@ export default function FindTripsPage() {
   }
 
   function viewTrip(tripId: string) {
-    router.push(`/app/vendor/trip/${tripId}`);
+    router.push(`/app/driver/trip/${tripId}`);
   }
 
   // In demo mode — show vendor's own state trips so View button works

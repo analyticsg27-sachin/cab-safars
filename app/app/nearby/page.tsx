@@ -2,7 +2,8 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { Navigation, MapPin, Calendar, Users, ChevronRight, ArrowLeft, AlertCircle } from 'lucide-react';
+import { Navigation, MapPin, Calendar, Users, ArrowLeft, AlertCircle } from 'lucide-react';
+import AppShell from '@/components/app/AppShell';
 import TripsService from '@/lib/services/trips.service';
 import type { Trip } from '@/lib/services/trips.service';
 
@@ -87,7 +88,7 @@ export default function NearbyPage() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col" style={{ background: '#0D1117' }}>
+    <AppShell>
       <header className="sticky top-0 z-30 flex items-center gap-3 px-4 py-3"
         style={{ background: '#0D1117', borderBottom: '1px solid #30363D', minHeight: 56 }}>
         <button onClick={() => router.back()}
@@ -185,6 +186,6 @@ export default function NearbyPage() {
           </>
         )}
       </div>
-    </div>
+    </AppShell>
   );
 }
