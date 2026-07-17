@@ -66,14 +66,14 @@ export default function AdminLoginPage() {
           {/* Top accent line */}
           <div className="h-[2px] w-full" style={{ background: 'linear-gradient(90deg, transparent, #F5A623, transparent)' }} />
 
-          <div className="px-8 pt-8 pb-10">
+          <div className="px-8 pt-6 pb-8">
             {/* Logo + badge */}
-            <div className="flex flex-col items-center mb-8">
-              <div className="mb-5">
+            <div className="flex flex-col items-center mb-6">
+              <div className="mb-4">
                 <img
                   src={asset('/logo-v2.png')}
                   alt="CAB SAFARS"
-                  className="h-12 w-auto object-contain mx-auto"
+                  className="h-[200px] w-auto object-contain mx-auto"
                   onError={(e) => {
                     (e.currentTarget as HTMLImageElement).style.display = 'none';
                     const fallback = e.currentTarget.nextElementSibling as HTMLElement | null;
