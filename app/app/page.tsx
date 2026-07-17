@@ -7,12 +7,12 @@ import { asset } from '@/lib/basepath';
 import { demoUsers, vendorFreeTrips, vendorPremiumTrips, availableTripsForDriver, demoNotifications } from '@/lib/demo-users';
 import AppShell from '@/components/app/AppShell';
 
-// ── Premium Transport Illustration ────────────────────────────────────────────
+// ── Transport Illustration (Car/Sedan) ────────────────────────────────────────
 function TransportIllustration() {
   return (
     <svg viewBox="0 0 320 160" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full max-w-[300px]">
-      {/* Glow under truck */}
-      <ellipse cx="170" cy="132" rx="100" ry="10" fill="#F5A623" opacity="0.07" />
+      {/* Glow under car */}
+      <ellipse cx="160" cy="132" rx="90" ry="9" fill="#F5A623" opacity="0.08" />
       {/* Road */}
       <rect x="0" y="122" width="320" height="38" fill="#111827" rx="4" />
       <rect x="10" y="139" width="36" height="3" fill="#1F2937" rx="1.5" />
@@ -21,60 +21,55 @@ function TransportIllustration() {
       <rect x="172" y="139" width="36" height="3" fill="#1F2937" rx="1.5" />
       <rect x="226" y="139" width="36" height="3" fill="#1F2937" rx="1.5" />
       <rect x="280" y="139" width="36" height="3" fill="#1F2937" rx="1.5" />
-      {/* Truck body */}
-      <rect x="55" y="70" width="168" height="52" fill="#1C2430" rx="8" />
-      {/* Body top highlight */}
-      <rect x="55" y="70" width="168" height="3" fill="#F5A623" rx="8" opacity="0.25" />
-      {/* Cargo hold */}
-      <rect x="63" y="78" width="122" height="36" fill="#131D2A" rx="5" />
-      {/* Cargo stripes */}
-      <rect x="72" y="85" width="7" height="22" fill="#F5A623" rx="2" opacity="0.9" />
-      <rect x="85" y="85" width="7" height="22" fill="#F5A623" rx="2" opacity="0.5" />
-      <rect x="98" y="85" width="7" height="22" fill="#F5A623" rx="2" opacity="0.9" />
-      <rect x="111" y="85" width="7" height="22" fill="#F5A623" rx="2" opacity="0.5" />
-      <rect x="124" y="85" width="7" height="22" fill="#F5A623" rx="2" opacity="0.9" />
-      <rect x="137" y="85" width="7" height="22" fill="#F5A623" rx="2" opacity="0.5" />
-      <rect x="150" y="85" width="7" height="22" fill="#F5A623" rx="2" opacity="0.9" />
-      <rect x="163" y="85" width="7" height="22" fill="#F5A623" rx="2" opacity="0.5" />
-      {/* Truck cabin */}
-      <rect x="203" y="76" width="60" height="46" fill="#1E2A3A" rx="8" />
-      {/* Cabin top accent */}
-      <rect x="203" y="76" width="60" height="3" fill="#F5A623" rx="8" opacity="0.3" />
-      {/* Cabin window */}
-      <rect x="212" y="83" width="38" height="24" fill="#1E3A5F" rx="4" opacity="0.9" />
-      <line x1="231" y1="83" x2="231" y2="107" stroke="#2D6BE4" strokeWidth="1" opacity="0.4" />
-      {/* Headlight */}
-      <rect x="258" y="94" width="8" height="5" fill="#F5A623" rx="2" opacity="0.9" />
-      <rect x="263" y="94" width="18" height="5" fill="#F5A623" rx="2" opacity="0.25" />
+      {/* Car body (lower) */}
+      <rect x="68" y="96" width="184" height="30" fill="#1C2430" rx="8" />
+      {/* Car roof / cabin */}
+      <path d="M110 96 C118 72 202 72 210 96 Z" fill="#1E2A3A" />
+      {/* Roof highlight */}
+      <path d="M118 89 C124 77 196 77 202 89" stroke="#F5A623" strokeWidth="1.5" opacity="0.2" fill="none" strokeLinecap="round" />
+      {/* Windshield front */}
+      <path d="M193 96 C199 80 208 76 210 96 Z" fill="#1E3A5F" opacity="0.85" />
+      {/* Windshield rear */}
+      <path d="M110 96 C112 76 121 72 127 96 Z" fill="#1E3A5F" opacity="0.85" />
+      {/* Side windows */}
+      <path d="M130 96 C131 78 163 76 163 96 Z" fill="#1E3A5F" opacity="0.7" />
+      <path d="M166 96 C166 76 190 78 191 96 Z" fill="#1E3A5F" opacity="0.7" />
+      {/* Window divider */}
+      <line x1="164" y1="76" x2="164" y2="96" stroke="#2D6BE4" strokeWidth="1" opacity="0.35" />
+      {/* Body accent stripe */}
+      <rect x="68" y="96" width="184" height="2" fill="#F5A623" opacity="0.18" rx="1" />
+      {/* Door lines */}
+      <line x1="164" y1="98" x2="164" y2="126" stroke="#30363D" strokeWidth="1" opacity="0.6" />
+      {/* Headlights */}
+      <rect x="246" y="102" width="10" height="5" fill="#F5A623" rx="2" opacity="0.95" />
+      <ellipse cx="256" cy="104.5" rx="10" ry="4" fill="#F5A623" opacity="0.12" />
+      {/* Tail lights */}
+      <rect x="68" y="102" width="8" height="5" fill="#EF4444" rx="2" opacity="0.7" />
       {/* Wheels */}
-      <circle cx="96" cy="124" r="15" fill="#0F172A" />
-      <circle cx="96" cy="124" r="10" fill="#1E293B" />
-      <circle cx="96" cy="124" r="4" fill="#374151" />
-      <circle cx="198" cy="124" r="15" fill="#0F172A" />
-      <circle cx="198" cy="124" r="10" fill="#1E293B" />
-      <circle cx="198" cy="124" r="4" fill="#374151" />
-      <circle cx="232" cy="124" r="15" fill="#0F172A" />
-      <circle cx="232" cy="124" r="10" fill="#1E293B" />
-      <circle cx="232" cy="124" r="4" fill="#374151" />
+      <circle cx="112" cy="124" r="14" fill="#0F172A" />
+      <circle cx="112" cy="124" r="9" fill="#1E293B" />
+      <circle cx="112" cy="124" r="4" fill="#374151" />
+      <circle cx="112" cy="124" r="2" fill="#4B5563" />
+      <circle cx="208" cy="124" r="14" fill="#0F172A" />
+      <circle cx="208" cy="124" r="9" fill="#1E293B" />
+      <circle cx="208" cy="124" r="4" fill="#374151" />
+      <circle cx="208" cy="124" r="2" fill="#4B5563" />
       {/* Wheel glints */}
-      <circle cx="91" cy="119" r="2" fill="#475569" opacity="0.6" />
-      <circle cx="193" cy="119" r="2" fill="#475569" opacity="0.6" />
-      <circle cx="227" cy="119" r="2" fill="#475569" opacity="0.6" />
-      {/* Route dots */}
-      <circle cx="26" cy="54" r="7" fill="#F5A623" />
-      <circle cx="26" cy="54" r="3.5" fill="#0B1220" />
-      <line x1="26" y1="61" x2="26" y2="72" stroke="#F5A623" strokeWidth="1.5" strokeDasharray="3 2" opacity="0.6" />
-      <circle cx="294" cy="54" r="7" fill="#22C55E" />
-      <circle cx="294" cy="54" r="3.5" fill="#0B1220" />
-      <line x1="294" y1="61" x2="294" y2="72" stroke="#22C55E" strokeWidth="1.5" strokeDasharray="3 2" opacity="0.6" />
+      <circle cx="107" cy="119" r="2" fill="#475569" opacity="0.5" />
+      <circle cx="203" cy="119" r="2" fill="#475569" opacity="0.5" />
       {/* Route line */}
-      <line x1="33" y1="54" x2="287" y2="54" stroke="#1F2937" strokeWidth="1.5" strokeDasharray="6 4" />
+      <line x1="20" y1="52" x2="300" y2="52" stroke="#1F2937" strokeWidth="1.5" strokeDasharray="6 4" />
+      {/* Origin pin */}
+      <circle cx="20" cy="52" r="6" fill="#F5A623" opacity="0.9" />
+      <circle cx="20" cy="52" r="3" fill="#0B1220" />
+      {/* Destination pin */}
+      <circle cx="300" cy="52" r="6" fill="#F5A623" opacity="0.9" />
+      <circle cx="300" cy="52" r="3" fill="#0B1220" />
       {/* Midpoint pin */}
-      <circle cx="160" cy="54" r="4" fill="#2D6BE4" opacity="0.6" />
+      <circle cx="160" cy="52" r="4" fill="#2D6BE4" opacity="0.5" />
       {/* Speed lines */}
-      <line x1="10" y1="90" x2="42" y2="90" stroke="#F5A623" strokeWidth="1.5" strokeLinecap="round" opacity="0.45" />
-      <line x1="10" y1="97" x2="36" y2="97" stroke="#F5A623" strokeWidth="1" strokeLinecap="round" opacity="0.25" />
-      <line x1="10" y1="104" x2="28" y2="104" stroke="#F5A623" strokeWidth="1" strokeLinecap="round" opacity="0.15" />
+      <line x1="8" y1="100" x2="40" y2="100" stroke="#F5A623" strokeWidth="1.5" strokeLinecap="round" opacity="0.4" />
+      <line x1="8" y1="107" x2="34" y2="107" stroke="#F5A623" strokeWidth="1" strokeLinecap="round" opacity="0.2" />
     </svg>
   );
 }
@@ -182,6 +177,7 @@ export default function WelcomePage() {
               src={asset('/logo.png')}
               alt="CAB SAFARS"
               className="h-32 w-auto object-contain block"
+              style={{ filter: 'drop-shadow(0 0 8px rgba(59,130,246,0.6)) brightness(1.15)' }}
             />
           </div>
 
