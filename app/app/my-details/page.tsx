@@ -30,6 +30,7 @@ export default function MyDetailsPage() {
   }
 
   function saveEdit() {
+    if (!user) return;
     dispatch({ type: 'UPDATE_USER', payload: { name: draftName.trim() || user.name, phone: draftPhone.trim() || user.phone, city: draftCity.trim() || user.city } });
     setEditing(false);
   }
