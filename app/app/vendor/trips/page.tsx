@@ -285,7 +285,7 @@ export default function VendorTripsPage() {
       </button>
 
       <BottomNav role="vendor" activeTab="trips" onTabChange={handleTab}
-        unreadNotifications={state.unreadNotifications} isPremium={user?.isPremium} />
+        unreadNotifications={state.unreadNotifications} isPremium={state.currentUser?.isPremium} />
     </div>
     </AppShell>
   );
