@@ -91,6 +91,11 @@ const SLIDES = [
 
 const SLIDE_DURATION = 3500; // ms per slide
 
+function finish(router: ReturnType<typeof useRouter>) {
+  localStorage.setItem('cs_onboarding_done', '1');
+  router.replace('/app/');
+}
+
 export default function OnboardingPage() {
   const router = useRouter();
   const [current, setCurrent] = useState(0);
@@ -101,22 +106,21 @@ export default function OnboardingPage() {
       if (current < SLIDES.length - 1) {
         setCurrent(c => c + 1);
       } else {
-        // Auto-finish after last slide
-        setTimeout(() => router.replace('/app/'), 1200);
+        setTimeout(() => finish(router), 1200);
       }
     }, SLIDE_DURATION);
     return () => clearTimeout(timer);
   }, [current, router]);
 
   function skip() {
-    router.replace('/app/');
+    finish(router);
   }
 
   function goNext() {
     if (current < SLIDES.length - 1) {
       setCurrent(c => c + 1);
     } else {
-      router.replace('/app/');
+      finish(router);
     }
   }
 

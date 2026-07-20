@@ -128,6 +128,13 @@ export default function WelcomePage() {
   const { state, dispatch } = useAppState();
   const router = useRouter();
 
+  // First-launch: show onboarding splash once
+  useEffect(() => {
+    if (!localStorage.getItem('cs_onboarding_done')) {
+      router.replace('/app/onboarding');
+    }
+  }, [router]);
+
   // If already authenticated, redirect to the correct home
   useEffect(() => {
     if (!state.isAuthenticated) return;
