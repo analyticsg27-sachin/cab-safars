@@ -57,7 +57,7 @@ export default function ChangePasswordPage() {
                     className="flex-1 bg-transparent text-sm outline-none"
                     style={{ color: '#F0F6FC' }}
                   />
-                  <button onClick={toggle} type="button">{show ? <EyeOff size={14} style={{ color: '#8B949E' }} /> : <Eye size={14} style={{ color: '#8B949E' }} />}</button>
+                  <button onClick={toggle} type="button" className="flex items-center justify-center w-8 h-8 shrink-0">{show ? <EyeOff size={16} style={{ color: '#F5A623' }} /> : <Eye size={16} style={{ color: '#8B949E' }} />}</button>
                 </div>
               </div>
             ))}

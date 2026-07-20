@@ -139,7 +139,7 @@ export default function LoginPage() {
           <img
             src={asset('/logo-v2.png')}
             alt="CAB SAFARS"
-            className="h-14 w-auto object-contain mx-auto mb-6"
+            style={{ height: 50 }} className="w-auto object-contain mx-auto mb-6"
           />
           <h1 className="text-2xl font-bold text-white mb-1">Welcome Back</h1>
           <p className="text-sm" style={{ color: '#94A3B8' }}>Sign in to continue your journey</p>
@@ -300,9 +300,9 @@ export default function LoginPage() {
               {(
                 [
                   { key: 'vendorFree', label: 'Vendor Free', color: '#F5A623' },
-                  { key: 'vendorPremium', label: 'Vendor Premium â˜…', color: '#F5A623' },
+                  { key: 'vendorPremium', label: 'Vendor Premium ★', color: '#F5A623' },
                   { key: 'driverFree', label: 'Driver Free', color: '#60A5FA' },
-                  { key: 'driverPremium', label: 'Driver Premium â˜…', color: '#60A5FA' },
+                  { key: 'driverPremium', label: 'Driver Premium ★', color: '#60A5FA' },
                 ] as const
               ).map(({ key, label, color }) => (
                 <button

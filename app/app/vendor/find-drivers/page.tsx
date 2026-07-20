@@ -138,7 +138,7 @@ export default function FindDriversPage() {
                 <div className="flex gap-2">
                   <a href={`tel:${driver.phone}`}
                     className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-semibold"
-                    style={{ backgroundColor: 'rgba(34,197,94,0.12)', color: '#22C55E', border: '1px solid rgba(34,197,94,0.25)', textDecoration: 'none' }}>
+                    style={{ backgroundColor: 'rgba(45,107,228,0.12)', color: '#2D6BE4', border: '1px solid rgba(45,107,228,0.3)', textDecoration: 'none' }}>
                     <Phone size={14} /> Call
                   </a>
                   <a href={`https://wa.me/${driver.phone.replace(/\D/g, '')}`}

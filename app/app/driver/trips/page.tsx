@@ -137,6 +137,7 @@ export default function FindTripsPage() {
       if (t.status !== 'open') return false;
       if (fromLoc.city && !t.fromCity.toLowerCase().includes(fromLoc.city.toLowerCase())) return false;
       if (toLoc.city && !t.toCity.toLowerCase().includes(toLoc.city.toLowerCase())) return false;
+      if (vehicle !== 'Any' && t.vehicleType !== vehicle) return false;
       return true;
     })
     .map((t) => ({

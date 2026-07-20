@@ -162,15 +162,15 @@ export default function TripDetailPage() {
                   href={`tel:${trip.vendorPhone}`}
                   className="flex flex-col items-center justify-center gap-2 py-4 rounded-xl"
                   style={{
-                    backgroundColor: 'rgba(34,197,94,0.1)',
-                    border: '1px solid rgba(34,197,94,0.3)',
-                    color: '#22C55E',
+                    backgroundColor: 'rgba(45,107,228,0.12)',
+                    border: '1px solid rgba(45,107,228,0.35)',
+                    color: '#2D6BE4',
                     textDecoration: 'none',
                   }}
                 >
                   <Phone size={22} />
                   <span className="text-sm font-semibold">Call Provider</span>
-                  <span className="text-[10px]" style={{ color: '#22C55E', opacity: 0.7 }}>{trip.vendorPhone}</span>
+                  <span className="text-[10px]" style={{ color: '#2D6BE4', opacity: 0.8 }}>{trip.vendorPhone}</span>
                 </a>
                 {/* WhatsApp */}
                 <a
@@ -202,10 +202,10 @@ export default function TripDetailPage() {
                 <button
                   onClick={() => router.push('/app/subscription')}
                   className="flex flex-col items-center justify-center gap-1.5 py-4 rounded-xl transition-all active:scale-95"
-                  style={{ backgroundColor: 'rgba(34,197,94,0.06)', border: '1px solid rgba(34,197,94,0.2)' }}
+                  style={{ backgroundColor: 'rgba(45,107,228,0.08)', border: '1px solid rgba(45,107,228,0.2)' }}
                 >
                   <div className="relative">
-                    <Phone size={22} style={{ color: '#22C55E', opacity: 0.5 }} />
+                    <Phone size={22} style={{ color: '#2D6BE4', opacity: 0.6 }} />
                     <div
                       className="absolute -top-1.5 -right-2 w-4 h-4 rounded-full flex items-center justify-center"
                       style={{ backgroundColor: '#F5A623' }}
@@ -213,7 +213,7 @@ export default function TripDetailPage() {
                       <Lock size={9} style={{ color: '#0D1117' }} />
                     </div>
                   </div>
-                  <span className="text-sm font-semibold" style={{ color: '#22C55E', opacity: 0.7 }}>Call Vendor</span>
+                  <span className="text-sm font-semibold" style={{ color: '#2D6BE4', opacity: 0.8 }}>Call Provider</span>
                   <span className="text-[10px] tracking-widest" style={{ color: '#8B949E' }}>●●●●● ●●●●●</span>
                 </button>
                 {/* Locked WhatsApp */}

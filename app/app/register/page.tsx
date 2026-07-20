@@ -210,7 +210,7 @@ export default function RegisterPage() {
           <img
             src={asset('/logo-v2.png')}
             alt="CAB SAFARS"
-            className="h-14 w-auto object-contain mx-auto mb-6"
+            style={{ height: 50 }} className="w-auto object-contain mx-auto mb-6"
           />
           <h1 className="text-2xl font-bold text-white mb-1">Create Account</h1>
           <p className="text-sm" style={{ color: '#94A3B8' }}>Join the Cab Safars network</p>
@@ -300,7 +300,7 @@ export default function RegisterPage() {
                   className="flex items-center px-3 rounded-xl text-sm font-semibold flex-shrink-0"
                   style={{ backgroundColor: '#1A2332', border: '1px solid #243042', color: '#94A3B8', minWidth: '68px' }}
                 >
-                  ðŸ‡®ðŸ‡³ +91
+                  +91
                 </div>
                 <input
                   type="tel"
