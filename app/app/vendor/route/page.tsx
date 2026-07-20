@@ -137,7 +137,7 @@ export default function VendorRoutePage() {
   function handleNav(t: string) {
     const paths: Record<string, string> = {
       home: '/app/vendor/home', trips: '/app/vendor/trips',
-      post: '/app/vendor/post', route: '/app/vendor/route', profile: '/app/profile',
+      post: '/app/vendor/post', route: '/app/vendor/route', drivers: '/app/vendor/find-drivers', profile: '/app/profile',
     };
     if (paths[t]) router.push(paths[t]);
   }
@@ -398,7 +398,7 @@ export default function VendorRoutePage() {
         )}
       </main>
 
-      <BottomNav role="vendor" activeTab="route" onTabChange={handleNav} unreadNotifications={state.unreadNotifications} />
+      <BottomNav role="vendor" activeTab="route" onTabChange={handleNav} unreadNotifications={state.unreadNotifications} isPremium={state.currentUser?.isPremium} />
     </AppShell>
   );
 }

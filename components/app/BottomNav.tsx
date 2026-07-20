@@ -1,19 +1,28 @@
 'use client';
 
-import { Home, Package, PlusCircle, Search, User, MapPin, Bell, Navigation } from 'lucide-react';
+import { Home, Package, PlusCircle, Search, User, MapPin, Bell, Navigation, Users } from 'lucide-react';
 
 interface BottomNavProps {
   role: 'vendor' | 'driver';
   activeTab: string;
   onTabChange: (tab: string) => void;
   unreadNotifications?: number;
+  isPremium?: boolean;
 }
 
-const vendorTabs = [
+const vendorTabsFree = [
   { id: 'home',    label: 'Home',      icon: Home },
   { id: 'trips',   label: 'Trips',     icon: Package },
   { id: 'post',    label: 'Post Trip', icon: PlusCircle, isCenter: true },
   { id: 'route',   label: 'Route',     icon: Navigation },
+  { id: 'profile', label: 'Profile',   icon: User },
+];
+
+const vendorTabsPremium = [
+  { id: 'home',    label: 'Home',      icon: Home },
+  { id: 'trips',   label: 'Trips',     icon: Package },
+  { id: 'post',    label: 'Post Trip', icon: PlusCircle, isCenter: true },
+  { id: 'drivers', label: 'Drivers',   icon: Users },
   { id: 'profile', label: 'Profile',   icon: User },
 ];
 
@@ -30,8 +39,11 @@ export default function BottomNav({
   activeTab,
   onTabChange,
   unreadNotifications = 0,
+  isPremium = false,
 }: BottomNavProps) {
-  const tabs = role === 'vendor' ? vendorTabs : driverTabs;
+  const tabs = role === 'vendor'
+    ? (isPremium ? vendorTabsPremium : vendorTabsFree)
+    : driverTabs;
 
   return (
     <nav

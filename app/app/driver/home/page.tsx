@@ -7,6 +7,7 @@ import { useAppState } from '@/lib/app-state';
 import AppShell from '@/components/app/AppShell';
 import BottomNav from '@/components/app/BottomNav';
 import AppHeader from '@/components/app/AppHeader';
+import TripAlertBanner from '@/components/app/TripAlertBanner';
 
 export default function DriverHomePage() {
   const { state } = useAppState();
@@ -33,6 +34,7 @@ export default function DriverHomePage() {
 
   return (
     <AppShell>
+      <TripAlertBanner role="driver" />
       <div className="flex flex-col flex-1 overflow-hidden" style={{ backgroundColor: '#0D1117' }}>
         <AppHeader
           title="Cab Safars"

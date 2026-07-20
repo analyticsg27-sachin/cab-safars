@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { CheckCircle, XCircle, Clock, Phone, Mail, MapPin, Car, Users, AlertCircle, RefreshCw } from "lucide-react";
+import { CheckCircle, XCircle, Clock, Phone, Mail, MapPin, Car, Users, AlertCircle, RefreshCw, Printer } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import AdminService from "@/lib/services/admin.service";
@@ -48,6 +48,39 @@ export default function ApprovalsPage() {
   }, []);
 
   useEffect(() => { fetchApprovals(); }, [fetchApprovals]);
+
+  function printUser(user: PendingUser) {
+    const vehicleOrCompany = user.vehicle_type
+      ? `Vehicle Type: ${user.vehicle_type}`
+      : user.company_name
+      ? `Company: ${user.company_name}`
+      : '—';
+    const html = `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Registration - ${user.name}</title><style>
+      body { font-family: Arial, sans-serif; background: #fff; color: #111; margin: 40px; }
+      h1 { font-size: 22px; margin-bottom: 4px; }
+      .subtitle { color: #666; font-size: 13px; margin-bottom: 28px; }
+      table { border-collapse: collapse; width: 100%; max-width: 480px; }
+      td { padding: 8px 12px; font-size: 14px; border-bottom: 1px solid #e5e7eb; }
+      td:first-child { font-weight: 600; width: 160px; color: #444; }
+      .status { display: inline-block; background: #fef3c7; color: #92400e; padding: 2px 10px; border-radius: 12px; font-size: 12px; font-weight: 600; }
+      @media print { body { margin: 20px; } }
+    </style></head><body>
+      <h1>${user.name}</h1>
+      <div class="subtitle">Registration Details</div>
+      <table>
+        <tr><td>Role</td><td>${user.role.charAt(0).toUpperCase() + user.role.slice(1)}</td></tr>
+        <tr><td>Phone</td><td>${user.phone}</td></tr>
+        <tr><td>Email</td><td>${user.email || '—'}</td></tr>
+        <tr><td>City</td><td>${user.city}${user.state ? `, ${user.state}` : ''}</td></tr>
+        <tr><td>${user.vehicle_type ? 'Vehicle Type' : 'Company'}</td><td>${vehicleOrCompany.split(': ').slice(1).join(': ') || '—'}</td></tr>
+        <tr><td>Registration Date</td><td>${new Date(user.created_at).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}</td></tr>
+        <tr><td>Status</td><td><span class="status">Pending</span></td></tr>
+      </table>
+    </body></html>`;
+    const blob = new Blob([html], { type: 'text/html' });
+    const url = URL.createObjectURL(blob);
+    window.open(url, '_blank');
+  }
 
   async function handleAction(id: string, action: "approve" | "reject") {
     setActionLoading(true);
@@ -214,6 +247,12 @@ export default function ApprovalsPage() {
                     onClick={() => setConfirming({ id: user.id, name: user.name, action: "reject" })}
                   >
                     <XCircle className="w-4 h-4" /> Reject
+                  </Button>
+                  <Button
+                    variant="secondary" size="sm" className="flex-1 sm:flex-none"
+                    onClick={() => printUser(user)}
+                  >
+                    <Printer className="w-4 h-4" /> Print / Download
                   </Button>
                 </div>
               </div>

@@ -201,7 +201,7 @@ export default function VendorTripsPage() {
   function handleTab(tab: string) {
     const paths: Record<string, string> = {
       home: '/app/vendor/home', trips: '/app/vendor/trips',
-      post: '/app/vendor/post', route: '/app/vendor/route', profile: '/app/profile',
+      post: '/app/vendor/post', route: '/app/vendor/route', drivers: '/app/vendor/find-drivers', profile: '/app/profile',
     };
     if (paths[tab]) router.push(paths[tab]);
   }
@@ -285,7 +285,7 @@ export default function VendorTripsPage() {
       </button>
 
       <BottomNav role="vendor" activeTab="trips" onTabChange={handleTab}
-        unreadNotifications={state.unreadNotifications} />
+        unreadNotifications={state.unreadNotifications} isPremium={user?.isPremium} />
     </div>
     </AppShell>
   );

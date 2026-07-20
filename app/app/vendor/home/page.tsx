@@ -49,6 +49,7 @@ export default function TripProviderHomePage() {
       trips: '/app/vendor/trips',
       post: '/app/vendor/post',
       route: '/app/vendor/route',
+      drivers: '/app/vendor/find-drivers',
       notifications: '/app/notifications',
       profile: '/app/profile',
     };
@@ -211,7 +212,7 @@ export default function TripProviderHomePage() {
           </div>
         </div>
 
-        <BottomNav role="vendor" activeTab={activeTab} onTabChange={handleTab} unreadNotifications={state.unreadNotifications} />
+        <BottomNav role="vendor" activeTab={activeTab} onTabChange={handleTab} unreadNotifications={state.unreadNotifications} isPremium={user.isPremium} />
       </div>
     </AppShell>
   );

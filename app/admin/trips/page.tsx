@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { Search, AlertCircle, RefreshCw, MapPin, XCircle } from "lucide-react";
+import { Search, AlertCircle, RefreshCw, MapPin, XCircle, AlertTriangle } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -80,6 +80,42 @@ export default function TripsPage() {
           <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
         </button>
       </div>
+
+      {(() => {
+        const THREE_DAYS_MS = 3 * 24 * 60 * 60 * 1000;
+        const staleTrips = trips.filter(
+          (t) => t.status === 'active' && (Date.now() - new Date(t.created_at).getTime()) > THREE_DAYS_MS
+        );
+        if (staleTrips.length === 0) return null;
+        return (
+          <div className="bg-[#F5A623]/10 border border-[#F5A623]/40 rounded-xl p-4 flex flex-col gap-3">
+            <div className="flex items-center gap-2">
+              <AlertTriangle className="w-4 h-4 text-[#F5A623] shrink-0" />
+              <p className="text-sm font-medium text-[#F5A623]">
+                {staleTrips.length} trip{staleTrips.length > 1 ? 's' : ''} have been open for 3+ days — consider reminding the Trip Provider to close them
+              </p>
+            </div>
+            <div className="flex flex-col gap-1.5">
+              {staleTrips.map((t) => {
+                const daysOpen = Math.floor((Date.now() - new Date(t.created_at).getTime()) / (24 * 60 * 60 * 1000));
+                return (
+                  <div key={t.id} className="flex items-center justify-between bg-[#0D1117]/40 rounded-lg px-3 py-2 gap-3 flex-wrap">
+                    <span className="text-xs font-medium text-[#F0F6FC]">{t.from_city} → {t.to_city}</span>
+                    <span className="text-xs text-[#8B949E]">{t.vendor_name}</span>
+                    <span className="text-xs text-[#F5A623]">{daysOpen}d open</span>
+                    <button
+                      onClick={() => cancelTrip(t.id)}
+                      className="text-xs px-2.5 py-1 rounded-lg bg-[#F5A623]/20 text-[#F5A623] hover:bg-[#F5A623]/30 font-medium transition-colors"
+                    >
+                      Mark Closed
+                    </button>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        );
+      })()}
 
       <div className="flex flex-wrap gap-3">
         <div className="flex-1 min-w-[200px] max-w-xs">

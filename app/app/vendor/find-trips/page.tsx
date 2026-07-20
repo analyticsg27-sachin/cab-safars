@@ -130,7 +130,7 @@ export default function FindTripsPage() {
     setActiveTab(tab);
     const paths: Record<string, string> = {
       home: '/app/vendor/home', trips: '/app/vendor/trips',
-      post: '/app/vendor/post', route: '/app/vendor/route', profile: '/app/profile',
+      post: '/app/vendor/post', route: '/app/vendor/route', drivers: '/app/vendor/find-drivers', profile: '/app/profile',
     };
     if (paths[tab]) router.push(paths[tab]);
   }
@@ -283,7 +283,7 @@ export default function FindTripsPage() {
       </main>
 
       <BottomNav role="vendor" activeTab={activeTab} onTabChange={handleTab}
-        unreadNotifications={state.unreadNotifications} />
+        unreadNotifications={state.unreadNotifications} isPremium={state.currentUser?.isPremium} />
     </AppShell>
   );
 }
