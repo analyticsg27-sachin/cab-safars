@@ -189,6 +189,7 @@ export default function ProfilePage() {
         <MenuSection title="Support">
           <MenuRow icon={HelpCircle} label="Help & FAQ" onClick={() => router.push('/app/help')} />
           <MenuRow icon={Phone} label="Contact Support" onClick={() => router.push('/app/support')} />
+          <MenuRow icon={FileText} label="Terms & Privacy Policy" onClick={() => router.push('/app/terms')} />
           <MenuRow icon={Star} label="Rate the App" onClick={() => router.push('/app/rate')} isLast />
         </MenuSection>
 
