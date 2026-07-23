@@ -304,7 +304,7 @@ export default function WelcomePage() {
 
           {/* Testing note */}
           <p className="text-center mt-4 text-[10px]" style={{ color: '#374151' }}>
-            Testing Mode â€” Data is simulated
+            Testing Mode — Data is simulated
           </p>
         </div>
       </div>

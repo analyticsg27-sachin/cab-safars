@@ -119,7 +119,7 @@ export default function ProfilePage() {
               className="text-xs font-semibold px-2.5 py-1 rounded-full capitalize"
               style={{ backgroundColor: '#21262D', color: '#8B949E', border: '1px solid #30363D' }}
             >
-              {user.role}
+              {user.role === 'vendor' ? 'Trip Provider' : 'Driver'}
             </span>
             {user.isPremium && (
               <span
@@ -207,7 +207,7 @@ export default function ProfilePage() {
 
         {/* Version */}
         <p className="text-center text-xs mt-2" style={{ color: '#8B949E' }}>
-          Cab Safars v1.0.0 Â· Built with care
+          Cab Safars v1.0.0 · Built with care
         </p>
       </main>
     </AppShell>

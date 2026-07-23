@@ -11,18 +11,18 @@ import { useAppState } from '@/lib/app-state';
 
 const DEMO_CONTACTS: Record<string, ContactedDriver[]> = {
   'tr-v003-001': [
-    { driverId: 'd010', driverName: 'Vijay Kumar', driverPhone: '+91 94260 78901', vehicleType: 'Truck 14ft', city: 'Vadodara', isPremium: false, contactMethod: 'call', contactedAt: '2026-07-11T09:00:00Z' },
-    { driverId: 'd011', driverName: 'Sunil Mehta', driverPhone: '+91 98765 43210', vehicleType: 'Truck 14ft', city: 'Surat', isPremium: true, contactMethod: 'whatsapp', contactedAt: '2026-07-12T14:30:00Z' },
+    { driverId: 'd010', driverName: 'Vijay Kumar', driverPhone: '+91 94260 78901', vehicleType: 'SUV', city: 'Vadodara', isPremium: false, contactMethod: 'call', contactedAt: '2026-07-11T09:00:00Z' },
+    { driverId: 'd011', driverName: 'Sunil Mehta', driverPhone: '+91 98765 43210', vehicleType: 'SUV', city: 'Surat', isPremium: true, contactMethod: 'whatsapp', contactedAt: '2026-07-12T14:30:00Z' },
   ],
   'tr-v003-002': [
-    { driverId: 'd012', driverName: 'Ravi Joshi', driverPhone: '+91 91234 56789', vehicleType: 'Mini Truck', city: 'Vadodara', isPremium: false, contactMethod: 'call', contactedAt: '2026-07-09T08:00:00Z' },
-    { driverId: 'd013', driverName: 'Dinesh Patel', driverPhone: '+91 87654 32109', vehicleType: 'Mini Truck', city: 'Anand', isPremium: false, contactMethod: 'call', contactedAt: '2026-07-09T10:00:00Z' },
-    { driverId: 'd014', driverName: 'Ketan Shah', driverPhone: '+91 99012 34567', vehicleType: 'Mini Truck', city: 'Surat', isPremium: true, contactMethod: 'whatsapp', contactedAt: '2026-07-10T07:30:00Z' },
-    { driverId: 'd015', driverName: 'Ashok Trivedi', driverPhone: '+91 76543 21098', vehicleType: 'Tempo', city: 'Vadodara', isPremium: false, contactMethod: 'call', contactedAt: '2026-07-10T11:00:00Z' },
-    { driverId: 'd016', driverName: 'Mahesh Rao', driverPhone: '+91 93456 78901', vehicleType: 'Mini Truck', city: 'Bharuch', isPremium: false, contactMethod: 'call', contactedAt: '2026-07-11T06:00:00Z' },
+    { driverId: 'd012', driverName: 'Ravi Joshi', driverPhone: '+91 91234 56789', vehicleType: 'Sedan', city: 'Vadodara', isPremium: false, contactMethod: 'call', contactedAt: '2026-07-09T08:00:00Z' },
+    { driverId: 'd013', driverName: 'Dinesh Patel', driverPhone: '+91 87654 32109', vehicleType: 'Hatchback', city: 'Anand', isPremium: false, contactMethod: 'call', contactedAt: '2026-07-09T10:00:00Z' },
+    { driverId: 'd014', driverName: 'Ketan Shah', driverPhone: '+91 99012 34567', vehicleType: 'Sedan', city: 'Surat', isPremium: true, contactMethod: 'whatsapp', contactedAt: '2026-07-10T07:30:00Z' },
+    { driverId: 'd015', driverName: 'Ashok Trivedi', driverPhone: '+91 76543 21098', vehicleType: 'Tempo Travel', city: 'Vadodara', isPremium: false, contactMethod: 'call', contactedAt: '2026-07-10T11:00:00Z' },
+    { driverId: 'd016', driverName: 'Mahesh Rao', driverPhone: '+91 93456 78901', vehicleType: 'Hatchback', city: 'Bharuch', isPremium: false, contactMethod: 'call', contactedAt: '2026-07-11T06:00:00Z' },
   ],
   'tr-v003-003': [
-    { driverId: 'd017', driverName: 'Prakash Bhatt', driverPhone: '+91 88901 23456', vehicleType: 'Tempo', city: 'Rajkot', isPremium: false, contactMethod: 'call', contactedAt: '2026-07-13T10:00:00Z' },
+    { driverId: 'd017', driverName: 'Prakash Bhatt', driverPhone: '+91 88901 23456', vehicleType: 'Tempo Travel', city: 'Rajkot', isPremium: false, contactMethod: 'call', contactedAt: '2026-07-13T10:00:00Z' },
   ],
 };
 
