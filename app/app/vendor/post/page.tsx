@@ -3,7 +3,7 @@
 import { useState, FormEvent } from 'react';
 import { useRouter } from 'next/navigation';
 import {
-  Calendar, Clock, Truck, Package, Weight,
+  Calendar, Clock, Truck, Package, Users,
   IndianRupee, FileText, StickyNote, CheckCircle, AlertCircle, Timer,
 } from 'lucide-react';
 import type { AppTrip } from '@/lib/app-types';
@@ -21,8 +21,8 @@ const VEHICLE_TYPES = [
 ];
 
 const LOAD_TYPES = [
-  'General Goods', 'Dry Goods', 'Liquid/Chemicals', 'Perishable',
-  'Fragile', 'Heavy Machinery', 'Agricultural', 'Other',
+  'City to City', 'Airport Transfer', 'Corporate Transfer', 'Outstation',
+  'Group Outstation', 'Wedding / Event', 'Pilgrimage Tour', 'Parcel Package', 'Other',
 ];
 
 const EXPIRY_OPTIONS = [
@@ -48,7 +48,7 @@ export default function VendorPostPage() {
     tripDate: '',
     tripTime: '',
     vehicleType: 'Any Vehicle',
-    loadType: 'General Goods',
+    loadType: 'City to City',
     weightTons: '',
     expectedFare: '',
     additionalDetails: '',
@@ -259,7 +259,7 @@ export default function VendorPostPage() {
 
         {/* Vehicle & Load */}
         <section>
-          <h2 className="text-sm font-semibold text-[#8B949E] uppercase tracking-wider mb-3">Vehicle &amp; Cargo</h2>
+          <h2 className="text-sm font-semibold text-[#8B949E] uppercase tracking-wider mb-3">Vehicle &amp; Trip Type</h2>
           <div className="flex flex-col gap-3">
             <div>
               <label className="text-sm text-[#8B949E] mb-2 flex items-center gap-1.5 block">
@@ -287,13 +287,13 @@ export default function VendorPostPage() {
 
         {/* Weight & Fare */}
         <section>
-          <h2 className="text-sm font-semibold text-[#8B949E] uppercase tracking-wider mb-3">Details (Optional)</h2>
+          <h2 className="text-sm font-semibold text-[#8B949E] uppercase tracking-wider mb-3">Trip Details (Optional)</h2>
           <div className="grid grid-cols-2 gap-3">
             <div>
               <label className="text-sm text-[#8B949E] mb-2 flex items-center gap-1.5 block">
-                <Weight size={14} /> Weight (Tons)
+                <Users size={14} /> Passengers
               </label>
-              <input type="number" min="0" step="0.5" placeholder="e.g. 5"
+              <input type="number" min="1" step="1" placeholder="e.g. 4"
                 value={form.weightTons} onChange={e => setField('weightTons', e.target.value)}
                 className="w-full px-4 py-3 rounded-xl text-sm outline-none text-[#F0F6FC] placeholder-[#8B949E]"
                 style={{ background: '#21262D', border: '1px solid #30363D' }} />
