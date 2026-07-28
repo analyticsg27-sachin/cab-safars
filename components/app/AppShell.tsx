@@ -18,7 +18,7 @@ export default function AppShell({ children }: AppShellProps) {
           src={asset('/logo-v2.png')}
           alt="CAB SAFARS"
           className="h-7 w-auto object-contain"
-          style={{ filter: 'brightness(0) invert(1)' }}
+          style={{ filter: 'drop-shadow(0 0 6px rgba(245,166,35,0.5)) brightness(1.2)' }}
         />
         <span
           className="text-xs font-semibold tracking-widest uppercase"

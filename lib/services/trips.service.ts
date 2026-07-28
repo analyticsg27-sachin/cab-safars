@@ -127,10 +127,11 @@ const TripsService = {
     return res.data!;
   },
 
-  async getMyTrips(page = 1, status?: string): Promise<ApiResponse<Trip[]>> {
+  async getMyTrips(page = 1, status?: string): Promise<{ data: Trip[]; pagination?: { total: number; total_pages: number; page: number; per_page: number } }> {
     const q = new URLSearchParams({ page: String(page) });
     if (status) q.set('status', status);
-    return apiClient.get<Trip[]>(`/vendor/trips?${q}`);
+    const res = await apiClient.get<{ items: Trip[]; pagination: { total: number; total_pages: number; page: number; per_page: number } }>(`/vendor/trips?${q}`);
+    return { data: res.data?.items ?? [], pagination: res.data?.pagination };
   },
 
   async getTripDetail(id: string): Promise<TripDetail> {
@@ -143,10 +144,11 @@ const TripsService = {
   },
 
   // Driver
-  async getFeed(filters: FeedFilters = {}): Promise<ApiResponse<Trip[]>> {
+  async getFeed(filters: FeedFilters = {}): Promise<{ data: Trip[]; pagination?: { total: number; total_pages: number; page: number; per_page: number } }> {
     const q = new URLSearchParams();
     Object.entries(filters).forEach(([k, v]) => v != null && q.set(k, String(v)));
-    return apiClient.get<Trip[]>(`/driver/trips?${q}`);
+    const res = await apiClient.get<{ items: Trip[]; pagination: { total: number; total_pages: number; page: number; per_page: number } }>(`/driver/trips?${q}`);
+    return { data: res.data?.items ?? [], pagination: res.data?.pagination };
   },
 
   async getDriverTripDetail(id: string): Promise<TripDetail> {

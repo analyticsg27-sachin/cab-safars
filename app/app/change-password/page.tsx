@@ -41,10 +41,10 @@ export default function ChangePasswordPage() {
         ) : (
           <div className="rounded-2xl border p-5" style={{ backgroundColor: '#161B22', borderColor: '#30363D' }}>
             {[
-              { label: 'Current Password', val: current, set: setCurrent, show: showCurrent, toggle: () => setShowCurrent(v => !v) },
-              { label: 'New Password', val: next, set: setNext, show: showNext, toggle: () => setShowNext(v => !v) },
-              { label: 'Confirm New Password', val: confirm, set: setConfirm, show: showConfirm, toggle: () => setShowConfirm(v => !v) },
-            ].map(({ label, val, set, show, toggle }, i) => (
+              { label: 'Current Password', placeholder: 'Enter current password', val: current, set: setCurrent, show: showCurrent, toggle: () => setShowCurrent(v => !v) },
+              { label: 'New Password', placeholder: 'Enter new password', val: next, set: setNext, show: showNext, toggle: () => setShowNext(v => !v) },
+              { label: 'Confirm New Password', placeholder: 'Confirm new password', val: confirm, set: setConfirm, show: showConfirm, toggle: () => setShowConfirm(v => !v) },
+            ].map(({ label, placeholder, val, set, show, toggle }) => (
               <div key={label} className="mb-4">
                 <p className="text-xs font-semibold mb-1.5" style={{ color: '#8B949E' }}>{label}</p>
                 <div className="flex items-center rounded-xl px-4" style={{ backgroundColor: '#21262D', border: '1px solid #30363D', height: '48px' }}>
@@ -53,11 +53,18 @@ export default function ChangePasswordPage() {
                     type={show ? 'text' : 'password'}
                     value={val}
                     onChange={e => set(e.target.value)}
-                    placeholder="••••••••"
+                    placeholder={placeholder}
                     className="flex-1 bg-transparent text-sm outline-none"
-                    style={{ color: '#F0F6FC' }}
+                    style={{ color: '#F0F6FC', caretColor: '#F5A623' }}
                   />
-                  <button onClick={toggle} type="button" className="flex items-center justify-center w-8 h-8 shrink-0">{show ? <EyeOff size={16} style={{ color: '#F5A623' }} /> : <Eye size={16} style={{ color: '#8B949E' }} />}</button>
+                  <button
+                    onClick={toggle}
+                    type="button"
+                    className="flex items-center justify-center w-8 h-8 shrink-0"
+                    style={{ color: show ? '#F5A623' : '#8B949E' }}
+                  >
+                    {show ? <EyeOff size={16} /> : <Eye size={16} />}
+                  </button>
                 </div>
               </div>
             ))}

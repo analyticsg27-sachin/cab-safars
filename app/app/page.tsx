@@ -1,11 +1,12 @@
 ﻿'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAppState } from '@/lib/app-state';
 import { asset } from '@/lib/basepath';
 import { demoUsers, vendorFreeTrips, vendorPremiumTrips, availableTripsForDriver, demoNotifications } from '@/lib/demo-users';
 import AppShell from '@/components/app/AppShell';
+import SplashScreen from '@/components/app/SplashScreen';
 
 // â”€â”€ Transport Illustration (Car/Sedan) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function TransportIllustration() {
@@ -127,6 +128,7 @@ function DemoButton({ label, sublabel, color, onClick }: DemoButtonProps) {
 export default function WelcomePage() {
   const { state, dispatch } = useAppState();
   const router = useRouter();
+  const [splashDone, setSplashDone] = useState(false);
 
   // First-launch: show onboarding splash once
   useEffect(() => {
@@ -167,6 +169,8 @@ export default function WelcomePage() {
   }
 
   return (
+    <>
+    {!splashDone && <SplashScreen onComplete={() => setSplashDone(true)} />}
     <AppShell>
       <div
         className="flex flex-col flex-1 overflow-y-auto"
@@ -309,6 +313,7 @@ export default function WelcomePage() {
         </div>
       </div>
     </AppShell>
+    </>
   );
 }
 

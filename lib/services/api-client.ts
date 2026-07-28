@@ -103,7 +103,7 @@ async function request<T>(
     }
     // Redirect to login if on client
     if (typeof window !== 'undefined') {
-      window.location.href = '/login';
+      window.location.href = '/app/login';
     }
   }
 
