@@ -130,15 +130,16 @@ export default function WelcomePage() {
   const router = useRouter();
   const [splashDone, setSplashDone] = useState(false);
 
-  // First-launch: show onboarding splash once
+  // All routing waits until splash finishes
   useEffect(() => {
+    if (!splashDone) return;
     if (!localStorage.getItem('cs_onboarding_done')) {
       router.replace('/app/onboarding');
     }
-  }, [router]);
+  }, [router, splashDone]);
 
-  // If already authenticated, redirect to the correct home
   useEffect(() => {
+    if (!splashDone) return;
     if (!state.isAuthenticated) return;
     const u = state.currentUser!;
     if (u.status === 'pending') {
@@ -148,7 +149,7 @@ export default function WelcomePage() {
     } else {
       router.push('/app/driver/home');
     }
-  }, [state.isAuthenticated, state.currentUser, router]);
+  }, [state.isAuthenticated, state.currentUser, router, splashDone]);
 
   function loginAs(key: keyof typeof demoUsers) {
     dispatch({ type: 'LOGOUT' }); // clear any stale localStorage state
