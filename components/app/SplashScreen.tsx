@@ -11,9 +11,8 @@ export default function SplashScreen({ onComplete }: SplashScreenProps) {
   const [phase, setPhase] = useState<'enter' | 'exit'>('enter');
 
   useEffect(() => {
-    // At 2.8s begin exit fade, then call onComplete at 3.4s
-    const exitTimer = setTimeout(() => setPhase('exit'), 2800);
-    const doneTimer = setTimeout(onComplete, 3400);
+    const exitTimer = setTimeout(() => setPhase('exit'), 3200);
+    const doneTimer = setTimeout(onComplete, 3900);
     return () => {
       clearTimeout(exitTimer);
       clearTimeout(doneTimer);
@@ -24,59 +23,59 @@ export default function SplashScreen({ onComplete }: SplashScreenProps) {
     <>
       <style>{`
         @keyframes cs-bg-in {
-          from { opacity: 0; }
-          to   { opacity: 1; }
+          from { opacity: 0; } to { opacity: 1; }
         }
         @keyframes cs-glow-pulse {
-          0%, 100% { opacity: 0.45; transform: scale(1); }
-          50%       { opacity: 0.70; transform: scale(1.06); }
+          0%, 100% { opacity: 0.5; transform: translateX(-50%) scale(1); }
+          50%       { opacity: 0.8; transform: translateX(-50%) scale(1.1); }
         }
         @keyframes cs-logo-in {
-          from { opacity: 0; transform: scale(0.92); }
+          from { opacity: 0; transform: scale(0.88); }
           to   { opacity: 1; transform: scale(1); }
         }
         @keyframes cs-breathe {
           0%, 100% { transform: scale(1); }
-          50%       { transform: scale(1.018); }
+          50%       { transform: scale(1.02); }
         }
         @keyframes cs-tagline-in {
-          from { opacity: 0; transform: translateY(8px); }
+          from { opacity: 0; transform: translateY(10px); }
           to   { opacity: 1; transform: translateY(0); }
         }
         @keyframes cs-road-in {
           from { opacity: 0; transform: scaleX(0); }
           to   { opacity: 1; transform: scaleX(1); }
         }
-        @keyframes cs-truck-move {
-          from { transform: translateX(-60px); opacity: 0; }
-          10%  { opacity: 1; }
-          90%  { opacity: 1; }
-          to   { transform: translateX(calc(100vw + 60px)); opacity: 0; }
+        @keyframes cs-car-drive {
+          0%   { left: -120px; opacity: 0; }
+          8%   { opacity: 1; }
+          92%  { opacity: 1; }
+          100% { left: calc(100% + 120px); opacity: 0; }
+        }
+        @keyframes cs-headlight {
+          0%   { left: -60px; opacity: 0; width: 60px; }
+          8%   { opacity: 0.7; }
+          92%  { opacity: 0.7; }
+          100% { left: calc(100% + 10px); opacity: 0; }
         }
         @keyframes cs-particle-float {
-          0%   { transform: translateY(0px) translateX(0px); opacity: 0; }
-          20%  { opacity: 0.6; }
-          80%  { opacity: 0.3; }
-          100% { transform: translateY(-60px) translateX(10px); opacity: 0; }
-        }
-        @keyframes cs-road-sweep {
-          from { transform: translateX(-100%); }
-          to   { transform: translateX(400%); }
+          0%   { transform: translateY(0) translateX(0); opacity: 0; }
+          20%  { opacity: 0.5; }
+          80%  { opacity: 0.2; }
+          100% { transform: translateY(-70px) translateX(8px); opacity: 0; }
         }
         @keyframes cs-splash-exit {
           from { opacity: 1; transform: scale(1); }
-          to   { opacity: 0; transform: scale(1.04); }
+          to   { opacity: 0; transform: scale(1.03); }
         }
 
-        .cs-bg           { animation: cs-bg-in 0.6s ease forwards; }
-        .cs-glow         { animation: cs-glow-pulse 3s ease-in-out infinite; animation-delay: 0.3s; opacity: 0; }
-        .cs-glow-start   { animation: cs-bg-in 0.5s 0.3s ease forwards, cs-glow-pulse 3s 0.8s ease-in-out infinite; opacity: 0; }
-        .cs-logo         { animation: cs-logo-in 0.7s 0.5s cubic-bezier(0.34,1.56,0.64,1) forwards, cs-breathe 2.2s 1.2s ease-in-out infinite; opacity: 0; }
-        .cs-tagline      { animation: cs-tagline-in 0.6s 1.4s ease forwards; opacity: 0; }
-        .cs-road         { animation: cs-road-in 0.5s 1.8s ease forwards; opacity: 0; transform-origin: left center; }
-        .cs-truck        { animation: cs-truck-move 1.0s 2.2s cubic-bezier(0.4,0,0.2,1) forwards; opacity: 0; }
-        .cs-sweep        { animation: cs-road-sweep 1.2s 2.2s ease-in-out forwards; }
-        .cs-exit         { animation: cs-splash-exit 0.6s ease forwards; }
+        .cs-bg       { animation: cs-bg-in 0.7s ease forwards; }
+        .cs-glow     { animation: cs-bg-in 0.5s 0.3s ease forwards, cs-glow-pulse 2.8s 0.8s ease-in-out infinite; opacity: 0; }
+        .cs-logo     { animation: cs-logo-in 0.8s 0.5s cubic-bezier(0.34,1.4,0.64,1) forwards, cs-breathe 2.5s 1.3s ease-in-out infinite; opacity: 0; }
+        .cs-tagline  { animation: cs-tagline-in 0.6s 1.4s ease forwards; opacity: 0; }
+        .cs-road     { animation: cs-road-in 0.6s 1.8s ease forwards; opacity: 0; transform-origin: left center; }
+        .cs-car      { animation: cs-car-drive 2.2s 2.0s linear forwards; opacity: 0; position: absolute; bottom: 4px; }
+        .cs-light    { animation: cs-headlight 2.2s 2.0s linear forwards; opacity: 0; position: absolute; bottom: 2px; height: 14px; }
+        .cs-exit     { animation: cs-splash-exit 0.7s ease forwards; }
       `}</style>
 
       <div
@@ -93,99 +92,88 @@ export default function SplashScreen({ onComplete }: SplashScreenProps) {
           background: '#060D1A',
         }}
       >
-        {/* ── Animated background ── */}
+        {/* Background gradient */}
         <div
           className="cs-bg"
           style={{
             position: 'absolute',
             inset: 0,
             background:
-              'radial-gradient(ellipse 80% 60% at 50% 30%, rgba(245,166,35,0.07) 0%, transparent 65%),' +
-              'radial-gradient(ellipse 60% 40% at 80% 80%, rgba(45,107,228,0.05) 0%, transparent 55%),' +
+              'radial-gradient(ellipse 80% 55% at 50% 30%, rgba(245,166,35,0.08) 0%, transparent 65%),' +
+              'radial-gradient(ellipse 50% 35% at 80% 85%, rgba(45,107,228,0.05) 0%, transparent 55%),' +
               'linear-gradient(180deg, #060D1A 0%, #0B1525 50%, #060D1A 100%)',
           }}
         />
 
-        {/* ── Ambient gold glow ── */}
+        {/* Ambient glow behind logo */}
         <div
-          className="cs-glow-start"
+          className="cs-glow"
           style={{
             position: 'absolute',
-            top: '20%',
+            top: '22%',
             left: '50%',
-            transform: 'translateX(-50%)',
-            width: '280px',
-            height: '280px',
+            width: '320px',
+            height: '320px',
             borderRadius: '50%',
-            background: 'radial-gradient(circle, rgba(245,166,35,0.12) 0%, transparent 70%)',
+            background: 'radial-gradient(circle, rgba(245,166,35,0.14) 0%, transparent 70%)',
             pointerEvents: 'none',
           }}
         />
 
-        {/* ── Floating particles ── */}
+        {/* Floating particles */}
         {[
-          { x: '20%', delay: '0.8s', size: 3 },
-          { x: '75%', delay: '1.1s', size: 2 },
-          { x: '35%', delay: '1.5s', size: 2 },
-          { x: '60%', delay: '0.9s', size: 3 },
-          { x: '85%', delay: '1.3s', size: 2 },
-          { x: '10%', delay: '1.7s', size: 2 },
+          { x: '18%', y: '38%', delay: '0.9s', dur: 2.8 },
+          { x: '72%', y: '42%', delay: '1.2s', dur: 3.1 },
+          { x: '38%', y: '55%', delay: '1.6s', dur: 2.6 },
+          { x: '58%', y: '35%', delay: '1.0s', dur: 3.3 },
+          { x: '82%', y: '48%', delay: '1.4s', dur: 2.9 },
+          { x: '12%', y: '50%', delay: '1.8s', dur: 3.0 },
         ].map((p, i) => (
           <div
             key={i}
             style={{
               position: 'absolute',
-              bottom: '35%',
               left: p.x,
-              width: p.size,
-              height: p.size,
+              top: p.y,
+              width: i % 2 === 0 ? 3 : 2,
+              height: i % 2 === 0 ? 3 : 2,
               borderRadius: '50%',
               backgroundColor: '#F5A623',
-              animation: `cs-particle-float ${2.5 + i * 0.3}s ${p.delay} ease-in-out infinite`,
+              animation: `cs-particle-float ${p.dur}s ${p.delay} ease-in-out infinite`,
               opacity: 0,
             }}
           />
         ))}
 
-        {/* ── Grid texture (very subtle) ── */}
+        {/* Subtle grid texture */}
         <div
           style={{
             position: 'absolute',
             inset: 0,
             backgroundImage:
-              'linear-gradient(rgba(245,166,35,0.025) 1px, transparent 1px),' +
-              'linear-gradient(90deg, rgba(245,166,35,0.025) 1px, transparent 1px)',
-            backgroundSize: '40px 40px',
+              'linear-gradient(rgba(245,166,35,0.02) 1px, transparent 1px),' +
+              'linear-gradient(90deg, rgba(245,166,35,0.02) 1px, transparent 1px)',
+            backgroundSize: '44px 44px',
             pointerEvents: 'none',
           }}
         />
 
-        {/* ── Center content ── */}
-        <div
-          style={{
-            position: 'relative',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            gap: 0,
-          }}
-        >
-          {/* Logo */}
+        {/* ── Center: logo + tagline ── */}
+        <div style={{ position: 'relative', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           <div
             className="cs-logo"
             style={{
-              filter: 'drop-shadow(0 0 20px rgba(245,166,35,0.35)) drop-shadow(0 0 40px rgba(245,166,35,0.15))',
-              marginBottom: 20,
+              filter: 'drop-shadow(0 0 24px rgba(245,166,35,0.4)) drop-shadow(0 0 48px rgba(245,166,35,0.12))',
+              marginBottom: 22,
             }}
           >
             <img
               src={asset('/logo-v2.png')}
               alt="CAB SAFARS"
-              style={{ height: 90, width: 'auto', objectFit: 'contain', display: 'block' }}
+              style={{ height: 88, width: 'auto', objectFit: 'contain', display: 'block' }}
             />
           </div>
 
-          {/* Tagline */}
           <p
             className="cs-tagline"
             style={{
@@ -194,90 +182,97 @@ export default function SplashScreen({ onComplete }: SplashScreenProps) {
               letterSpacing: '0.22em',
               textTransform: 'uppercase',
               color: '#CBD5E1',
-              marginBottom: 32,
-              textShadow: '0 0 16px rgba(245,166,35,0.25)',
+              textShadow: '0 0 18px rgba(245,166,35,0.3)',
             }}
           >
             Safe Trips. Smart Journeys.
           </p>
+        </div>
 
-          {/* Road + truck ── */}
-          <div style={{ position: 'relative', width: 240, height: 28, overflow: 'hidden' }}>
-            {/* Road line */}
-            <div
-              className="cs-road"
-              style={{
-                position: 'absolute',
-                bottom: 8,
-                left: 0,
-                right: 0,
-                height: 2,
-                borderRadius: 1,
-                background:
-                  'linear-gradient(90deg, transparent 0%, rgba(245,166,35,0.15) 20%, rgba(245,166,35,0.4) 50%, rgba(245,166,35,0.15) 80%, transparent 100%)',
-              }}
-            />
-            {/* Road dashes */}
-            <div
-              className="cs-road"
-              style={{
-                position: 'absolute',
-                bottom: 7,
-                left: 0,
-                right: 0,
-                height: 1,
-                background:
-                  'repeating-linear-gradient(90deg, rgba(245,166,35,0.25) 0px, rgba(245,166,35,0.25) 16px, transparent 16px, transparent 28px)',
-              }}
-            />
-            {/* Light sweep on road */}
-            <div
-              className="cs-road"
-              style={{
-                position: 'absolute',
-                bottom: 0,
-                left: 0,
-                right: 0,
-                height: 12,
-                overflow: 'hidden',
-                pointerEvents: 'none',
-              }}
-            >
-              <div
-                className="cs-sweep"
-                style={{
-                  position: 'absolute',
-                  top: 0,
-                  left: 0,
-                  width: '30%',
-                  height: '100%',
-                  background:
-                    'linear-gradient(90deg, transparent 0%, rgba(245,166,35,0.18) 50%, transparent 100%)',
-                }}
-              />
-            </div>
-            {/* Mini truck SVG */}
-            <div className="cs-truck" style={{ position: 'absolute', bottom: 8, left: 0 }}>
-              <svg width="36" height="16" viewBox="0 0 36 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                {/* Headlight glow */}
-                <ellipse cx="33" cy="9" rx="5" ry="2.5" fill="#F5A623" opacity="0.18" />
-                {/* Cabin */}
-                <path d="M20 4 C21 1 27 1 28 4 L28 12 L20 12 Z" fill="#1E2A3A" />
-                <path d="M21 4 C22 2 26 2 27 4 L27 10 L21 10 Z" fill="#1E3A5F" opacity="0.8" />
-                {/* Body */}
-                <rect x="2" y="5" width="18" height="7" rx="1.5" fill="#1C2430" />
-                <rect x="2" y="5" width="18" height="1" rx="0.5" fill="#F5A623" opacity="0.2" />
-                {/* Headlight */}
-                <rect x="28" y="7" width="5" height="2.5" rx="1" fill="#F5A623" opacity="0.9" />
-                {/* Tail */}
-                <rect x="1" y="6.5" width="3" height="2" rx="1" fill="#EF4444" opacity="0.6" />
-                {/* Wheels */}
-                <circle cx="8"  cy="13" r="3" fill="#0F172A" />
-                <circle cx="8"  cy="13" r="1.5" fill="#1E293B" />
-                <circle cx="23" cy="13" r="3" fill="#0F172A" />
-                <circle cx="23" cy="13" r="1.5" fill="#1E293B" />
-              </svg>
-            </div>
+        {/* ── Full-width road + car — absolutely positioned below center ── */}
+        <div
+          style={{
+            position: 'absolute',
+            bottom: '28%',
+            left: 0,
+            right: 0,
+            height: 36,
+          }}
+        >
+          {/* Road base line */}
+          <div
+            className="cs-road"
+            style={{
+              position: 'absolute',
+              bottom: 10,
+              left: '5%',
+              right: '5%',
+              height: 2,
+              borderRadius: 1,
+              background: 'linear-gradient(90deg, transparent 0%, rgba(245,166,35,0.2) 15%, rgba(245,166,35,0.5) 50%, rgba(245,166,35,0.2) 85%, transparent 100%)',
+            }}
+          />
+          {/* Road dashes */}
+          <div
+            className="cs-road"
+            style={{
+              position: 'absolute',
+              bottom: 9,
+              left: '5%',
+              right: '5%',
+              height: 1,
+              background: 'repeating-linear-gradient(90deg, rgba(245,166,35,0.3) 0px, rgba(245,166,35,0.3) 18px, transparent 18px, transparent 32px)',
+            }}
+          />
+
+          {/* Headlight beam ahead of car */}
+          <div
+            className="cs-light"
+            style={{
+              background: 'linear-gradient(90deg, rgba(245,166,35,0.5) 0%, rgba(245,166,35,0.05) 100%)',
+              borderRadius: '0 8px 8px 0',
+              width: 70,
+            }}
+          />
+
+          {/* Car SVG — full size, clearly visible */}
+          <div className="cs-car">
+            <svg width="72" height="28" viewBox="0 0 72 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+              {/* Headlight glow */}
+              <ellipse cx="68" cy="16" rx="8" ry="4" fill="#F5A623" opacity="0.25" />
+              {/* Body lower */}
+              <rect x="4" y="14" width="60" height="10" rx="3" fill="#1C2430" />
+              {/* Cabin roof */}
+              <path d="M18 14 C21 5 51 5 54 14 Z" fill="#1E2A3A" />
+              {/* Windshield front */}
+              <path d="M47 14 C49 7 53 6 54 14 Z" fill="#1E3A5F" opacity="0.9" />
+              {/* Windshield rear */}
+              <path d="M18 14 C19 6 23 5 25 14 Z" fill="#1E3A5F" opacity="0.9" />
+              {/* Side windows */}
+              <path d="M27 14 C27 7 37 6 37 14 Z" fill="#1E3A5F" opacity="0.7" />
+              {/* Window divider */}
+              <line x1="38" y1="6" x2="38" y2="14" stroke="#2D6BE4" strokeWidth="1" opacity="0.4" />
+              <path d="M39 14 C39 6 45 7 46 14 Z" fill="#1E3A5F" opacity="0.7" />
+              {/* Roof accent */}
+              <path d="M22 9 C26 6 46 6 50 9" stroke="#F5A623" strokeWidth="1" opacity="0.15" fill="none" strokeLinecap="round" />
+              {/* Body gold stripe */}
+              <rect x="4" y="14" width="60" height="1.5" rx="0.5" fill="#F5A623" opacity="0.2" />
+              {/* Headlights */}
+              <rect x="62" y="16" width="8" height="4" rx="2" fill="#F5A623" opacity="0.95" />
+              {/* Tail lights */}
+              <rect x="4" y="16" width="5" height="4" rx="2" fill="#EF4444" opacity="0.75" />
+              {/* Wheel front */}
+              <circle cx="54" cy="24" r="5" fill="#0F172A" />
+              <circle cx="54" cy="24" r="3" fill="#1E293B" />
+              <circle cx="54" cy="24" r="1.5" fill="#374151" />
+              {/* Wheel rear */}
+              <circle cx="18" cy="24" r="5" fill="#0F172A" />
+              <circle cx="18" cy="24" r="3" fill="#1E293B" />
+              <circle cx="18" cy="24" r="1.5" fill="#374151" />
+              {/* Speed lines */}
+              <line x1="1" y1="17" x2="8" y2="17" stroke="#F5A623" strokeWidth="1.5" strokeLinecap="round" opacity="0.5" />
+              <line x1="1" y1="20" x2="6" y2="20" stroke="#F5A623" strokeWidth="1" strokeLinecap="round" opacity="0.3" />
+            </svg>
           </div>
         </div>
       </div>
