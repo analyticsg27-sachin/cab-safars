@@ -130,26 +130,13 @@ export default function WelcomePage() {
   const router = useRouter();
   const [splashDone, setSplashDone] = useState(false);
 
-  // All routing waits until splash finishes
+  // Only redirect to onboarding on first-ever launch — welcome page always shows after that
   useEffect(() => {
     if (!splashDone) return;
     if (!localStorage.getItem('cs_onboarding_done')) {
       router.replace('/app/onboarding');
     }
   }, [router, splashDone]);
-
-  useEffect(() => {
-    if (!splashDone) return;
-    if (!state.isAuthenticated) return;
-    const u = state.currentUser!;
-    if (u.status === 'pending') {
-      router.push('/app/pending');
-    } else if (u.role === 'vendor') {
-      router.push('/app/vendor/home');
-    } else {
-      router.push('/app/driver/home');
-    }
-  }, [state.isAuthenticated, state.currentUser, router, splashDone]);
 
   function loginAs(key: keyof typeof demoUsers) {
     dispatch({ type: 'LOGOUT' }); // clear any stale localStorage state
