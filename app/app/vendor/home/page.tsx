@@ -36,6 +36,7 @@ export default function TripProviderHomePage() {
 
   useEffect(() => {
     if (!IS_API_MODE || !state.isAuthenticated) return;
+    if (!localStorage.getItem('access_token')) return; // demo user — no real token, skip API
     setLoading(true);
     TripsService.getMyTrips(1)
       .then((r) => setApiTrips(r.data ?? []))

@@ -101,8 +101,8 @@ async function request<T>(
     if (newToken) {
       return request<T>(method, path, body, true);
     }
-    // Redirect to login if on client
-    if (typeof window !== 'undefined') {
+    // Only redirect to login if there was a real token (not a demo session)
+    if (typeof window !== 'undefined' && localStorage.getItem('access_token')) {
       window.location.href = '/app/login';
     }
   }
