@@ -13,8 +13,7 @@ import LocationAutocomplete, { type LocationValue } from '@/components/app/Locat
 import TripsService from '@/lib/services/trips.service';
 import type { Trip, FeedFilters } from '@/lib/services/trips.service';
 import { useAppState } from '@/lib/app-state';
-
-const IS_API_MODE = process.env.NEXT_PUBLIC_DATA_MODE === 'api';
+import { IS_API_MODE, isApiMode } from '@/lib/services';
 
 const VEHICLE_TYPES = ['Any', 'Sedan', 'SUV', 'Hatchback', 'Tempo Travel', 'Bus', 'Mini Bus', 'Innova Crysta', 'Innova', 'Ecco', 'Luxury Car', 'Parcel Package'];
 
@@ -104,7 +103,7 @@ export default function FindTripsPage() {
   const [error, setError] = useState('');
 
   const fetchTrips = useCallback(async (p = 1) => {
-    if (!IS_API_MODE) return;
+    if (!isApiMode()) return;
     setLoading(true); setError('');
     try {
       const filters: FeedFilters = { page: p, per_page: 20 };
@@ -139,7 +138,7 @@ export default function FindTripsPage() {
     router.push(`/app/driver/trip/${tripId}`);
   }
 
-  const sameCityWarning = !IS_API_MODE && fromLoc.city && toLoc.city &&
+  const sameCityWarning = !isApiMode() && fromLoc.city && toLoc.city &&
     fromLoc.city.trim().toLowerCase() === toLoc.city.trim().toLowerCase();
 
   // In demo mode — show all trips filtered by city + vehicle type
@@ -168,7 +167,7 @@ export default function FindTripsPage() {
     created_at: new Date().toISOString(),
     status: t.status,
   } as unknown as Trip));
-  const displayTrips = IS_API_MODE ? trips : demoTrips;
+  const displayTrips = isApiMode() ? trips : demoTrips;
 
   return (
     <AppShell>
@@ -239,7 +238,7 @@ export default function FindTripsPage() {
         {/* Results count */}
         <div className="px-4 pb-2">
           <p className="text-xs" style={{ color: '#8B949E' }}>
-            {IS_API_MODE ? `${total} trip${total !== 1 ? 's' : ''} found` : `${demoTrips.length} trips (demo)`}
+            {isApiMode() ? `${total} trip${total !== 1 ? 's' : ''} found` : `${demoTrips.length} trips (demo)`}
           </p>
         </div>
 
@@ -271,7 +270,7 @@ export default function FindTripsPage() {
               {displayTrips.map((trip) => (
                 <TripCard key={trip.id} trip={trip} onView={() => viewTrip(trip.id)} />
               ))}
-              {IS_API_MODE && page < totalPages && (
+              {isApiMode() && page < totalPages && (
                 <button onClick={() => fetchTrips(page + 1)} disabled={loading}
                   className="w-full py-3 rounded-xl text-sm font-medium mb-3"
                   style={{ background: '#21262D', color: '#F5A623', border: '1px solid #30363D' }}>

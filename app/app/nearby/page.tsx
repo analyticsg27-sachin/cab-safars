@@ -6,8 +6,7 @@ import { Navigation, MapPin, Calendar, Users, ArrowLeft, AlertCircle } from 'luc
 import AppShell from '@/components/app/AppShell';
 import TripsService from '@/lib/services/trips.service';
 import type { Trip } from '@/lib/services/trips.service';
-
-const IS_API_MODE = process.env.NEXT_PUBLIC_DATA_MODE === 'api';
+import { IS_API_MODE, isApiMode } from '@/lib/services';
 
 const RADII = [5, 10, 20, 30, 50, 100];
 
@@ -75,7 +74,7 @@ export default function NearbyPage() {
   useEffect(() => { getLocation(); }, []);
 
   useEffect(() => {
-    if (!coords || !IS_API_MODE) return;
+    if (!coords || !isApiMode()) return;
     setLoading(true); setError('');
     TripsService.getNearby({ lat: coords.lat, lng: coords.lng, radius })
       .then((res) => setTrips(res.trips as (Trip & { distance_km?: number })[]))
@@ -151,15 +150,15 @@ export default function NearbyPage() {
           </div>
         )}
 
-        {!IS_API_MODE && coords && (
+        {!isApiMode() && coords && (
           <div className="p-4 rounded-xl mb-4" style={{ background: '#161B22', border: '1px dashed #30363D' }}>
             <p className="text-sm text-center" style={{ color: '#8B949E' }}>
-              Nearby search requires API mode. Location: {coords.lat.toFixed(4)}, {coords.lng.toFixed(4)}
+              Nearby search requires a live account. Location: {coords.lat.toFixed(4)}, {coords.lng.toFixed(4)}
             </p>
           </div>
         )}
 
-        {IS_API_MODE && coords && (
+        {isApiMode() && coords && (
           <>
             {loading ? (
               <div className="flex justify-center py-12">

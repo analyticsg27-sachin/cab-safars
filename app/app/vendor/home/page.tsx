@@ -9,8 +9,7 @@ import BottomNav from '@/components/app/BottomNav';
 import AppHeader from '@/components/app/AppHeader';
 import TripsService from '@/lib/services/trips.service';
 import type { Trip } from '@/lib/services/trips.service';
-
-const IS_API_MODE = process.env.NEXT_PUBLIC_DATA_MODE === 'api';
+import { IS_API_MODE, isApiMode } from '@/lib/services';
 
 function StatCard({ label, value, color }: { label: string; value: string | number; color: string }) {
   return (
@@ -36,7 +35,7 @@ export default function TripProviderHomePage() {
 
   useEffect(() => {
     if (!IS_API_MODE || !state.isAuthenticated) return;
-    if (!localStorage.getItem('access_token')) return; // demo user — no real token, skip API
+    if (!isApiMode()) return; // demo user — no real token, skip API
     setLoading(true);
     TripsService.getMyTrips(1)
       .then((r) => setApiTrips(r.data ?? []))
@@ -59,13 +58,13 @@ export default function TripProviderHomePage() {
 
   if (!user) return null;
 
-  const openTrips = IS_API_MODE
+  const openTrips = isApiMode()
     ? apiTrips.filter((t) => t.status === 'active').length
     : state.trips.filter((t) => t.status === 'open').length;
-  const closedTrips = IS_API_MODE
+  const closedTrips = isApiMode()
     ? apiTrips.filter((t) => t.status === 'closed').length
     : state.trips.filter((t) => t.status === 'closed').length;
-  const totalContacts = IS_API_MODE
+  const totalContacts = isApiMode()
     ? apiTrips.reduce((s, t) => s + (t.contacts_count ?? 0), 0)
     : state.trips.reduce((s, t) => s + t.contactsCount, 0);
 
@@ -149,7 +148,7 @@ export default function TripProviderHomePage() {
               </div>
             </div>
 
-            {IS_API_MODE ? (
+            {isApiMode() ? (
               recentApiTrips.length === 0 ? (
                 <EmptyTrips onPost={() => router.push('/app/vendor/post')} />
               ) : (

@@ -11,8 +11,7 @@ import AppShell from '@/components/app/AppShell';
 import BottomNav from '@/components/app/BottomNav';
 import TripsService from '@/lib/services/trips.service';
 import type { Trip } from '@/lib/services/trips.service';
-
-const IS_API_MODE = process.env.NEXT_PUBLIC_DATA_MODE === 'api';
+import { IS_API_MODE, isApiMode } from '@/lib/services';
 
 function formatDate(d: string) {
   return new Date(d).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
@@ -159,7 +158,7 @@ export default function VendorTripsPage() {
   const [error, setError] = useState('');
 
   const fetchTrips = useCallback(async () => {
-    if (!IS_API_MODE) return;
+    if (!isApiMode()) return;
     setLoading(true); setError('');
     try {
       const res = await TripsService.getMyTrips(1);
@@ -195,8 +194,8 @@ export default function VendorTripsPage() {
 
   const displayApiTrips = activeTab === 'active' ? activeApiTrips : closedApiTrips;
   const displayLocalTrips = activeTab === 'active' ? openLocalTrips : closedLocalTrips;
-  const activeCount = IS_API_MODE ? activeApiTrips.length : openLocalTrips.length;
-  const closedCount = IS_API_MODE ? closedApiTrips.length : closedLocalTrips.length;
+  const activeCount = isApiMode() ? activeApiTrips.length : openLocalTrips.length;
+  const closedCount = isApiMode() ? closedApiTrips.length : closedLocalTrips.length;
 
   function handleTab(tab: string) {
     const paths: Record<string, string> = {
@@ -249,7 +248,7 @@ export default function VendorTripsPage() {
           </div>
         )}
 
-        {IS_API_MODE ? (
+        {isApiMode() ? (
           loading && apiTrips.length === 0 ? (
             <div className="flex justify-center py-16">
               <div className="w-8 h-8 border-2 border-[#F5A623] border-t-transparent rounded-full animate-spin" />
