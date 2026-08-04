@@ -139,7 +139,6 @@ export default function WelcomePage() {
   }, [router, splashDone]);
 
   function loginAs(key: keyof typeof demoUsers) {
-    dispatch({ type: 'LOGOUT' }); // clear any stale localStorage state
     const user = demoUsers[key];
     const trips =
       key === 'vendorFree'
@@ -147,13 +146,8 @@ export default function WelcomePage() {
         : key === 'vendorPremium'
         ? vendorPremiumTrips
         : availableTripsForDriver;
-    const notifications = demoNotifications;
-    dispatch({ type: 'SET_USER', payload: { user, trips, notifications } });
-    if (user.role === 'vendor') {
-      router.push('/app/vendor/home');
-    } else {
-      router.push('/app/driver/home');
-    }
+    dispatch({ type: 'SET_USER', payload: { user, trips, notifications: demoNotifications } });
+    router.push(user.role === 'vendor' ? '/app/vendor/home' : '/app/driver/home');
   }
 
   return (
