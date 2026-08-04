@@ -9,6 +9,17 @@ export interface AdminUser {
   role: string;
 }
 
+export interface UserDocument {
+  id: string;
+  document_type: string;
+  original_name: string | null;
+  mime_type: string | null;
+  file_size: number;
+  status: 'pending' | 'approved' | 'rejected';
+  created_at: string;
+  file_url?: string;
+}
+
 const AdminService = {
   async login(username: string, password: string) {
     const res = await adminApiClient.post<{ access_token: string; refresh_token: string; admin: AdminUser }>(
@@ -59,6 +70,19 @@ const AdminService = {
 
   async unsuspendUser(uuid: string) {
     return adminApiClient.post(`/admin/users/${uuid}/unsuspend`);
+  },
+
+  async getUserDocuments(uuid: string) {
+    const res = await adminApiClient.get<UserDocument[]>(`/admin/users/${uuid}/documents`);
+    return res.data ?? [];
+  },
+
+  async approveDocument(docId: string) {
+    return adminApiClient.post(`/admin/documents/${docId}/approve`);
+  },
+
+  async rejectDocument(docId: string) {
+    return adminApiClient.post(`/admin/documents/${docId}/reject`);
   },
 
   async getTrips(params?: { status?: string; search?: string; page?: number }) {
