@@ -141,7 +141,7 @@ export default function WelcomePage() {
   function loginAs(key: keyof typeof demoUsers) {
     const user = demoUsers[key];
     const trips =
-      key === 'vendorFree'
+      key === 'vendorFree' || key === 'vendorPending'
         ? vendorFreeTrips
         : key === 'vendorPremium'
         ? vendorPremiumTrips
@@ -260,7 +260,7 @@ export default function WelcomePage() {
                 Try Demo
               </span>
             </div>
-            <div className="flex gap-2">
+            <div className="flex gap-2 flex-wrap justify-center">
               <DemoButton
                 label="Trip Provider"
                 sublabel="Free"
@@ -272,6 +272,12 @@ export default function WelcomePage() {
                 sublabel="Premium ★"
                 color="#F5A623"
                 onClick={() => loginAs('vendorPremium')}
+              />
+              <DemoButton
+                label="Trip Provider"
+                sublabel="Docs Pending"
+                color="#F5A623"
+                onClick={() => loginAs('vendorPending')}
               />
               <DemoButton
                 label="Driver"
