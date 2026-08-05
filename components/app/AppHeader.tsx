@@ -42,7 +42,7 @@ export default function AppHeader({
       }}
     >
       {/* Left */}
-      <div className="w-10 flex items-center">
+      <div className="flex items-center" style={{ minWidth: '40px' }}>
         {showBack && (
           <button
             onClick={onBack}
@@ -72,7 +72,7 @@ export default function AppHeader({
       </div>
 
       {/* Right */}
-      <div className="w-10 flex items-center justify-end gap-2">
+      <div className="flex items-center justify-end gap-2" style={{ minWidth: '40px' }}>
         {showLangToggle && (
           <button
             onClick={() => {
