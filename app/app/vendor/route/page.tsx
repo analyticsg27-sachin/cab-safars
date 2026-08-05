@@ -11,6 +11,7 @@ import AppHeader from '@/components/app/AppHeader';
 import BottomNav from '@/components/app/BottomNav';
 import LocationAutocomplete, { LocationValue } from '@/components/app/LocationAutocomplete';
 import { useAppState } from '@/lib/app-state';
+import { isFullyActive, LockedFeature } from '@/components/app/AccountStatusBanner';
 
 const EXPIRY_OPTIONS = ['Today only', 'Next 24 hours', 'Next 3 days', 'Next 7 days'];
 
@@ -90,7 +91,19 @@ function MatchedTripCard({
 export default function VendorRoutePage() {
   const router = useRouter();
   const { state } = useAppState();
-  const isPremium = state.currentUser?.isPremium ?? false;
+  const currentUser = state.currentUser;
+  const isPremium = currentUser?.isPremium ?? false;
+
+  if (!currentUser) { router.replace('/app/'); return null; }
+  if (!isFullyActive(currentUser)) {
+    return (
+      <AppShell>
+        <AppHeader title="Smart Route" showBack onBack={() => router.back()} />
+        <LockedFeature user={currentUser} feature="smart route matching" />
+        <BottomNav role="vendor" activeTab="route" onTabChange={(t) => router.push(`/app/vendor/${t === 'home' ? 'home' : t === 'trips' ? 'trips' : t === 'post' ? 'post' : t === 'drivers' ? 'find-drivers' : 'route'}`)} isPremium={isPremium} />
+      </AppShell>
+    );
+  }
 
   const [tab, setTab] = useState<'route' | 'nearby'>('route');
   const [activeRoute, setActiveRoute] = useState<ActiveRoute | null>(null);

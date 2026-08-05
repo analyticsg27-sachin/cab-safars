@@ -12,23 +12,21 @@ import DocumentsService, { type UserDoc } from '@/lib/services/documents.service
 import { isApiMode } from '@/lib/services';
 
 const VENDOR_DOC_TYPES = [
-  'Business Registration Certificate',
-  'GST Certificate',
-  'PAN Card',
   'Aadhar Card',
-  'Bank Account Proof (Cancelled Cheque / Passbook)',
-  'Trade Licence',
+  'PAN Card',
+  'Gumasta (Shop & Establishment)',
+  'GST Certificate',
   'Other',
 ];
 
 const DRIVER_DOC_TYPES = [
-  'Driving Licence (Front & Back)',
   'Aadhar Card',
   'PAN Card',
-  'Vehicle RC (Registration Certificate)',
+  'RC Book (Vehicle Registration)',
   'Vehicle Insurance',
+  'Permit',
   'Fitness Certificate',
-  'Pollution Certificate (PUC)',
+  'Driving Licence',
   'Other',
 ];
 
@@ -325,8 +323,8 @@ export default function DocumentsPage() {
         </button>
         <p className="text-center text-xs mt-3" style={{ color: '#8B949E' }}>
           Required: {role === 'driver'
-            ? 'Licence, Aadhar, RC, Insurance, PAN'
-            : 'Business Reg., GST, PAN, Bank Proof'}
+            ? 'Licence, Aadhar, PAN, RC, Insurance, Permit, Fitness'
+            : 'Aadhar, PAN, Gumasta, GST'}
         </p>
       </main>
     </AppShell>
