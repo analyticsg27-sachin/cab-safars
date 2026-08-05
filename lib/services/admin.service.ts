@@ -16,8 +16,28 @@ export interface UserDocument {
   mime_type: string | null;
   file_size: number;
   status: 'pending' | 'approved' | 'rejected';
+  rejection_reason?: string;
   created_at: string;
+  updated_at?: string;
   file_url?: string;
+}
+
+export interface PendingRegistration {
+  id: string;
+  uuid: string;
+  role: 'vendor' | 'driver';
+  name: string;
+  phone: string;
+  email: string;
+  city: string;
+  state: string;
+  status: string;
+  doc_status?: 'none' | 'pending' | 'partial' | 'approved' | 'rejected';
+  company_name?: string;
+  vehicle_type?: string;
+  vehicle_number?: string;
+  rejection_reason?: string;
+  created_at: string;
 }
 
 const AdminService = {
@@ -60,8 +80,12 @@ const AdminService = {
     return adminApiClient.post(`/admin/users/${uuid}/approve`);
   },
 
-  async rejectUser(uuid: string, reason?: string) {
+  async rejectUser(uuid: string, reason: string) {
     return adminApiClient.post(`/admin/users/${uuid}/reject`, { reason });
+  },
+
+  async directApproveUser(uuid: string, reason: string) {
+    return adminApiClient.post(`/admin/users/${uuid}/direct-approve`, { reason });
   },
 
   async suspendUser(uuid: string, reason?: string) {
@@ -81,8 +105,15 @@ const AdminService = {
     return adminApiClient.post(`/admin/documents/${docId}/approve`);
   },
 
-  async rejectDocument(docId: string) {
-    return adminApiClient.post(`/admin/documents/${docId}/reject`);
+  async rejectDocument(docId: string, reason: string) {
+    return adminApiClient.post(`/admin/documents/${docId}/reject`, { reason });
+  },
+
+  async getUsersWithDocuments(params?: { doc_status?: string; search?: string; page?: number }) {
+    const q = new URLSearchParams();
+    if (params) Object.entries(params).forEach(([k, v]) => v != null && q.set(k, String(v)));
+    const res = await adminApiClient.get<{ items: PendingRegistration[]; pagination: { total: number; total_pages: number } }>(`/admin/users/documents?${q}`);
+    return { data: res.data?.items ?? [], pagination: res.data?.pagination };
   },
 
   async getTrips(params?: { status?: string; search?: string; page?: number }) {

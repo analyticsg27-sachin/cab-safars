@@ -7,7 +7,7 @@ import { usePathname } from "next/navigation";
 import {
   LayoutDashboard, Users, Car, ClipboardCheck, MapPin,
   CreditCard, Star, Bell, BarChart3, Settings,
-  ChevronLeft, ChevronRight, LogOut, Shield, Phone, X,
+  ChevronLeft, ChevronRight, LogOut, Shield, Phone, X, FolderOpen,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -24,6 +24,7 @@ const navGroups = [
       { href: "/admin/vendors", icon: Users, label: "Trip Providers" },
       { href: "/admin/drivers", icon: Car, label: "Drivers" },
       { href: "/admin/approvals", icon: ClipboardCheck, label: "Approvals", badge: 7 },
+      { href: "/admin/documents", icon: FolderOpen, label: "Documents" },
       { href: "/admin/trips", icon: MapPin, label: "Trips" },
     ],
   },
