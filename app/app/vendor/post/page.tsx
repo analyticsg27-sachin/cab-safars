@@ -13,6 +13,7 @@ import LocationAutocomplete, { type LocationValue } from '@/components/app/Locat
 import AppShell from '@/components/app/AppShell';
 import AppHeader from '@/components/app/AppHeader';
 import { isFullyActive, LockedFeature } from '@/components/app/AccountStatusBanner';
+import { useTranslation } from '@/lib/useTranslation';
 
 const IS_API_MODE = process.env.NEXT_PUBLIC_DATA_MODE === 'api';
 
@@ -37,6 +38,8 @@ export default function VendorPostPage() {
 
   const [fromLoc, setFromLoc] = useState<LocationValue>({ name: '', city: '', state: '' });
   const [toLoc, setToLoc]     = useState<LocationValue>({ name: '', city: '', state: '' });
+
+  const { t } = useTranslation();
 
   const [form, setForm] = useState({
     tripDate: '',
@@ -181,7 +184,7 @@ export default function VendorPostPage() {
 
         {/* Route section — LocationAutocomplete */}
         <section>
-          <h2 className="text-sm font-semibold text-[#8B949E] uppercase tracking-wider mb-3">Route</h2>
+          <h2 className="text-sm font-semibold text-[#8B949E] uppercase tracking-wider mb-3">{t('route')}</h2>
           <div className="flex flex-col gap-2">
             <LocationAutocomplete
               value={fromLoc.city}
@@ -202,10 +205,10 @@ export default function VendorPostPage() {
 
         {/* Date & Time */}
         <section>
-          <h2 className="text-sm font-semibold text-[#8B949E] uppercase tracking-wider mb-3">Schedule</h2>
+          <h2 className="text-sm font-semibold text-[#8B949E] uppercase tracking-wider mb-3">{t('schedule')}</h2>
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="text-sm text-[#8B949E] mb-2 block">Trip Date *</label>
+              <label className="text-sm text-[#8B949E] mb-2 block">{t('trip_date_lbl')} *</label>
               <div className="relative">
                 <div className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none">
                   <Calendar size={16} color="#8B949E" />
@@ -219,7 +222,7 @@ export default function VendorPostPage() {
             </div>
 
             <div>
-              <label className="text-sm text-[#8B949E] mb-2 block">Trip Time</label>
+              <label className="text-sm text-[#8B949E] mb-2 block">{t('trip_time_lbl')}</label>
               <div className="relative">
                 <div className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none">
                   <Clock size={16} color="#8B949E" />
@@ -235,7 +238,7 @@ export default function VendorPostPage() {
 
         {/* Trip Type: Free / Premium */}
         <section>
-          <h2 className="text-sm font-semibold text-[#8B949E] uppercase tracking-wider mb-3">Trip Visibility</h2>
+          <h2 className="text-sm font-semibold text-[#8B949E] uppercase tracking-wider mb-3">{t('trip_visibility')}</h2>
           <div className="flex gap-3">
             <button
               type="button"
@@ -247,8 +250,8 @@ export default function VendorPostPage() {
               }}
             >
               <Star size={18} style={{ color: !form.isPremiumTrip ? '#22C55E' : '#8B949E' }} />
-              <span className="text-sm font-bold" style={{ color: !form.isPremiumTrip ? '#22C55E' : '#8B949E' }}>Free Trip</span>
-              <span className="text-[10px] text-center px-2" style={{ color: '#8B949E' }}>Visible to all drivers</span>
+              <span className="text-sm font-bold" style={{ color: !form.isPremiumTrip ? '#22C55E' : '#8B949E' }}>{t('free_trip')}</span>
+              <span className="text-[10px] text-center px-2" style={{ color: '#8B949E' }}>{t('visible_all')}</span>
             </button>
             <button
               type="button"
@@ -260,8 +263,8 @@ export default function VendorPostPage() {
               }}
             >
               <Crown size={18} style={{ color: form.isPremiumTrip ? '#F5A623' : '#8B949E' }} />
-              <span className="text-sm font-bold" style={{ color: form.isPremiumTrip ? '#F5A623' : '#8B949E' }}>Premium Trip</span>
-              <span className="text-[10px] text-center px-2" style={{ color: '#8B949E' }}>Premium drivers only</span>
+              <span className="text-sm font-bold" style={{ color: form.isPremiumTrip ? '#F5A623' : '#8B949E' }}>{t('premium_trip')}</span>
+              <span className="text-[10px] text-center px-2" style={{ color: '#8B949E' }}>{t('premium_drivers')}</span>
             </button>
           </div>
         </section>
@@ -272,7 +275,7 @@ export default function VendorPostPage() {
           <div className="flex flex-col gap-3">
             <div>
               <label className="text-sm text-[#8B949E] mb-2 flex items-center gap-1.5 block">
-                <Truck size={14} /> Vehicle Type
+                <Truck size={14} /> {t('vehicle_type')}
               </label>
               <select value={form.vehicleType} onChange={e => setField('vehicleType', e.target.value)}
                 className="w-full px-4 py-3 rounded-xl text-sm outline-none text-[#F0F6FC]"
@@ -283,7 +286,7 @@ export default function VendorPostPage() {
 
             <div>
               <label className="text-sm text-[#8B949E] mb-2 flex items-center gap-1.5 block">
-                <Package size={14} /> Load Type
+                <Package size={14} /> {t('load_type')}
               </label>
               <select value={form.loadType} onChange={e => setField('loadType', e.target.value)}
                 className="w-full px-4 py-3 rounded-xl text-sm outline-none text-[#F0F6FC]"
@@ -299,7 +302,7 @@ export default function VendorPostPage() {
           <h2 className="text-sm font-semibold text-[#8B949E] uppercase tracking-wider mb-3">Trip Details (Optional)</h2>
           <div>
             <label className="text-sm text-[#8B949E] mb-2 flex items-center gap-1.5 block">
-              <IndianRupee size={14} /> Expected Fare
+              <IndianRupee size={14} /> {t('expected_fare')}
             </label>
             <input type="number" min="0" placeholder="Open to negotiate"
               value={form.expectedFare} onChange={e => setField('expectedFare', e.target.value)}
@@ -312,7 +315,7 @@ export default function VendorPostPage() {
         <section>
           <div>
             <label className="text-sm text-[#8B949E] mb-2 flex items-center gap-1.5 block">
-              <FileText size={14} /> Additional Details
+              <FileText size={14} /> {t('add_details')}
             </label>
             <textarea rows={3} placeholder="Vehicle requirements, special instructions…"
               value={form.additionalDetails} onChange={e => setField('additionalDetails', e.target.value)}
@@ -322,8 +325,8 @@ export default function VendorPostPage() {
 
           <div className="mt-3">
             <label className="text-sm text-[#8B949E] mb-2 flex items-center gap-1.5 block">
-              <StickyNote size={14} /> Internal Notes
-              <span className="ml-auto text-xs text-[#8B949E]">Not shown to drivers</span>
+              <StickyNote size={14} /> {t('internal_notes')}
+              <span className="ml-auto text-xs text-[#8B949E]">{t('not_shown')}</span>
             </label>
             <textarea rows={2} placeholder="Your private notes…"
               value={form.notes} onChange={e => setField('notes', e.target.value)}
@@ -336,9 +339,9 @@ export default function VendorPostPage() {
           className="w-full h-14 rounded-xl font-semibold text-base flex items-center justify-center gap-2 active:scale-[0.98] transition-transform disabled:opacity-70"
           style={{ background: '#F5A623', color: '#0D1117' }}>
           {loading ? (
-            <><span className="w-5 h-5 rounded-full border-2 border-[#0D1117]/30 border-t-[#0D1117] animate-spin" />Posting Trip…</>
+            <><span className="w-5 h-5 rounded-full border-2 border-[#0D1117]/30 border-t-[#0D1117] animate-spin" />{t('posting')}</>
           ) : (
-            <><Truck size={20} />Post Trip</>
+            <><Truck size={20} />{t('post_btn')}</>
           )}
         </button>
 

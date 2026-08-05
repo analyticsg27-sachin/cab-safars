@@ -1,6 +1,7 @@
 'use client';
 
 import { Home, Package, PlusCircle, Search, User, MapPin, Bell, Navigation, Users } from 'lucide-react';
+import { useTranslation } from '@/lib/useTranslation';
 
 interface BottomNavProps {
   role: 'vendor' | 'driver';
@@ -41,6 +42,15 @@ export default function BottomNav({
   unreadNotifications = 0,
   isPremium = false,
 }: BottomNavProps) {
+  const { t } = useTranslation();
+  const tabLabel = (id: string, fallback: string) => {
+    const map: Record<string, Parameters<typeof t>[0]> = {
+      home: 'nav_home', trips: 'nav_trips', post: 'nav_post',
+      route: 'nav_route', profile: 'nav_profile', search: 'nav_search',
+      notifications: 'nav_alerts', drivers: 'nav_drivers',
+    };
+    return map[id] ? t(map[id]) : fallback;
+  };
   const tabs = role === 'vendor'
     ? (isPremium ? vendorTabsPremium : vendorTabsFree)
     : driverTabs;
@@ -121,7 +131,7 @@ export default function BottomNav({
                   lineHeight: 1,
                 }}
               >
-                {tab.label}
+                {tabLabel(tab.id, tab.label)}
               </span>
             </button>
           );
@@ -203,7 +213,7 @@ export default function BottomNav({
                 transition: 'color 0.2s ease',
               }}
             >
-              {tab.label}
+              {tabLabel(tab.id, tab.label)}
             </span>
           </button>
         );

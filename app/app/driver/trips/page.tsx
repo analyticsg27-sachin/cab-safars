@@ -18,9 +18,57 @@ import { Lock } from 'lucide-react';
 import { IS_API_MODE, isApiMode } from '@/lib/services';
 import { isFullyActive, LockedFeature } from '@/components/app/AccountStatusBanner';
 
-function TripCard({ trip }: { trip: Trip }) {
+function TripCard({ trip, isUserPremium }: { trip: Trip; isUserPremium: boolean }) {
   const router = useRouter();
   const fare = trip.expected_fare ? Number(trip.expected_fare) : null;
+  const isLocked = trip.is_premium_trip && !isUserPremium;
+
+  if (isLocked) {
+    return (
+      <div
+        className="rounded-2xl border p-4 mb-3 relative overflow-hidden"
+        style={{ backgroundColor: '#161B22', borderColor: 'rgba(245,166,35,0.3)' }}
+      >
+        {/* Blurred content */}
+        <div style={{ filter: 'blur(4px)', pointerEvents: 'none', userSelect: 'none' }}>
+          <div className="flex items-center justify-between mb-2">
+            <span className="flex items-center gap-1 text-[10px] font-semibold px-2 py-0.5 rounded-full"
+              style={{ backgroundColor: 'rgba(245,166,35,0.12)', color: '#F5A623' }}>
+              <Crown size={9} /> Premium
+            </span>
+            <span className="text-[10px]" style={{ color: '#8B949E' }}>••• ••</span>
+          </div>
+          <div className="flex items-center gap-2 mb-2">
+            <MapPin size={14} style={{ color: '#F5A623' }} />
+            <span className="text-base font-bold" style={{ color: '#F0F6FC' }}>
+              {trip.from_city} → {trip.to_city}
+            </span>
+          </div>
+          <div className="flex gap-3 text-xs mb-3" style={{ color: '#8B949E' }}>
+            <span>{trip.trip_date}</span>
+            <span>{trip.vehicle_type}</span>
+          </div>
+          <div className="h-8 rounded-xl" style={{ background: '#21262D' }} />
+        </div>
+        {/* Lock overlay */}
+        <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 rounded-2xl"
+          style={{ background: 'rgba(11,18,32,0.75)' }}>
+          <div className="w-10 h-10 rounded-full flex items-center justify-center"
+            style={{ background: 'rgba(245,166,35,0.15)', border: '1.5px solid rgba(245,166,35,0.4)' }}>
+            <Lock size={18} style={{ color: '#F5A623' }} />
+          </div>
+          <p className="text-xs font-bold" style={{ color: '#F5A623' }}>Premium Trip</p>
+          <p className="text-[10px] text-center px-6" style={{ color: '#8B949E' }}>Upgrade to Premium to view this trip</p>
+          <button
+            onClick={() => router.push('/app/subscription')}
+            className="mt-1 px-4 py-1.5 rounded-xl text-xs font-bold"
+            style={{ background: '#F5A623', color: '#0D1117' }}>
+            Upgrade Now
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div
@@ -277,7 +325,7 @@ export default function FindTripsPage() {
             </div>
           ) : (
             <>
-              {displayTrips.map((trip) => <TripCard key={trip.id} trip={trip} />)}
+              {displayTrips.map((trip) => <TripCard key={trip.id} trip={trip} isUserPremium={currentUser?.isPremium ?? false} />)}
               {isApiMode() && page < totalPages && (
                 <button onClick={() => fetchTrips(page + 1)} disabled={loading}
                   className="w-full py-3 rounded-xl text-sm font-medium mb-3"

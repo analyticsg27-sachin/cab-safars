@@ -41,6 +41,7 @@ export default function DriverHomePage() {
         <AppHeader
           title="Cab Safars"
           isPremium={user.isPremium}
+          showLangToggle
           rightAction={
             <button
               onClick={() => router.push('/app/notifications')}

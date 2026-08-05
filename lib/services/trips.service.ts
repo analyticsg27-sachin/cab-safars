@@ -20,6 +20,7 @@ export interface Trip {
   vendor_city?: string;
   vendor_phone?: string;
   is_contact_locked?: boolean;
+  is_premium_trip?: boolean;
   created_at: string;
 }
 

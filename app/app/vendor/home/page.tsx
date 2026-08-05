@@ -83,6 +83,7 @@ export default function TripProviderHomePage() {
       <div className="flex flex-col flex-1 overflow-hidden" style={{ backgroundColor: '#0D1117' }}>
         <AppHeader
           title={user.companyName ?? user.name}
+          showLangToggle
           rightAction={
             <button
               onClick={() => router.push('/app/notifications')}
