@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Bell, PlusCircle, MapPin, Package, Search, RefreshCw } from 'lucide-react';
 import { useAppState } from '@/lib/app-state';
+import { useTranslation } from '@/lib/useTranslation';
 import AppShell from '@/components/app/AppShell';
 import BottomNav from '@/components/app/BottomNav';
 import AppHeader from '@/components/app/AppHeader';
@@ -24,6 +25,7 @@ function StatCard({ label, value, color }: { label: string; value: string | numb
 export default function TripProviderHomePage() {
   const { state } = useAppState();
   const router = useRouter();
+  const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState('home');
   const user = state.currentUser;
 
@@ -106,16 +108,16 @@ export default function TripProviderHomePage() {
           <div className="flex items-center gap-2">
             <span className="text-xs font-semibold px-2.5 py-1 rounded-full"
               style={{ background: 'rgba(245,166,35,0.15)', color: '#F5A623', border: '1px solid rgba(245,166,35,0.3)' }}>
-              Trip Provider
+              {t('trip_provider')}
             </span>
             <span className="text-xs" style={{ color: '#8B949E' }}>{user.city}</span>
           </div>
 
           {/* Stats */}
           <div className="flex gap-3">
-            <StatCard label="Active Trips" value={loading ? '…' : openTrips} color="#F5A623" />
-            <StatCard label="Closed" value={loading ? '…' : closedTrips} color="#22C55E" />
-            <StatCard label="Contacts" value={loading ? '…' : totalContacts} color="#2D6BE4" />
+            <StatCard label={t('active_trips')} value={loading ? '…' : openTrips} color="#F5A623" />
+            <StatCard label={t('closed')} value={loading ? '…' : closedTrips} color="#22C55E" />
+            <StatCard label={t('contacts')} value={loading ? '…' : totalContacts} color="#2D6BE4" />
           </div>
 
           {/* Quick actions */}
@@ -124,21 +126,21 @@ export default function TripProviderHomePage() {
               className="flex items-center gap-2 px-4 py-4 rounded-xl transition-all active:scale-95"
               style={{ background: 'linear-gradient(135deg, #F5A623, #D4891E)', boxShadow: '0 4px 20px rgba(245,166,35,0.3)' }}>
               <PlusCircle size={20} color="#0D1117" />
-              <span className="text-sm font-bold" style={{ color: '#0D1117' }}>Post Trip</span>
+              <span className="text-sm font-bold" style={{ color: '#0D1117' }}>{t('post_trip')}</span>
             </button>
 
             <button onClick={() => router.push('/app/vendor/find-trips')}
               className="flex items-center gap-2 px-4 py-4 rounded-xl transition-all active:scale-95"
               style={{ background: '#161B22', border: '1px solid #30363D' }}>
               <Search size={20} style={{ color: '#F5A623' }} />
-              <span className="text-sm font-semibold" style={{ color: '#F0F6FC' }}>Find Trips</span>
+              <span className="text-sm font-semibold" style={{ color: '#F0F6FC' }}>{t('find_trips')}</span>
             </button>
           </div>
 
           {/* Recent trips */}
           <div>
             <div className="flex items-center justify-between mb-3">
-              <p className="text-sm font-semibold" style={{ color: '#F0F6FC' }}>Recent Trips</p>
+              <p className="text-sm font-semibold" style={{ color: '#F0F6FC' }}>{t('recent_trips')}</p>
               <div className="flex items-center gap-2">
                 {IS_API_MODE && (
                   <button onClick={refreshTrips}>
@@ -146,14 +148,14 @@ export default function TripProviderHomePage() {
                   </button>
                 )}
                 <button onClick={() => router.push('/app/vendor/trips')} className="text-xs font-medium" style={{ color: '#F5A623' }}>
-                  View All
+                  {t('view_all')}
                 </button>
               </div>
             </div>
 
             {isApiMode() ? (
               recentApiTrips.length === 0 ? (
-                <EmptyTrips onPost={() => router.push('/app/vendor/post')} />
+                <EmptyTrips onPost={() => router.push('/app/vendor/post')} t={t} />
               ) : (
                 <div className="flex flex-col gap-3">
                   {recentApiTrips.map((trip) => (
@@ -175,7 +177,7 @@ export default function TripProviderHomePage() {
                       <div className="flex items-center gap-3 text-xs" style={{ color: '#8B949E' }}>
                         <span>{trip.vehicle_type}</span><span>•</span>
                         <span>{trip.trip_date}</span><span>•</span>
-                        <span>{trip.contacts_count} contacts</span>
+                        <span>{trip.contacts_count} {t('contacts_count')}</span>
                       </div>
                     </button>
                   ))}
@@ -183,7 +185,7 @@ export default function TripProviderHomePage() {
               )
             ) : (
               recentLocalTrips.length === 0 ? (
-                <EmptyTrips onPost={() => router.push('/app/vendor/post')} />
+                <EmptyTrips onPost={() => router.push('/app/vendor/post')} t={t} />
               ) : (
                 <div className="flex flex-col gap-3">
                   {recentLocalTrips.map((trip) => (
@@ -205,7 +207,7 @@ export default function TripProviderHomePage() {
                       <div className="flex items-center gap-3 text-xs" style={{ color: '#8B949E' }}>
                         <span>{trip.vehicleType}</span><span>•</span>
                         <span>{trip.tripDate}</span><span>•</span>
-                        <span>{trip.contactsCount} contacts</span>
+                        <span>{trip.contactsCount} {t('contacts_count')}</span>
                       </div>
                     </button>
                   ))}
@@ -221,14 +223,14 @@ export default function TripProviderHomePage() {
   );
 }
 
-function EmptyTrips({ onPost }: { onPost: () => void }) {
+function EmptyTrips({ onPost, t }: { onPost: () => void; t: (key: import('@/lib/translations').TKey) => string }) {
   return (
     <div className="flex flex-col items-center justify-center py-10 rounded-2xl"
       style={{ backgroundColor: '#161B22', border: '1px dashed #30363D' }}>
       <Package size={32} style={{ color: '#30363D' }} />
-      <p className="text-sm mt-3" style={{ color: '#8B949E' }}>No trips posted yet</p>
+      <p className="text-sm mt-3" style={{ color: '#8B949E' }}>{t('no_trips_yet')}</p>
       <button onClick={onPost} className="mt-3 text-xs font-semibold" style={{ color: '#F5A623' }}>
-        Post your first trip →
+        {t('post_first')}
       </button>
     </div>
   );

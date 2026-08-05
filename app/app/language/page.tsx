@@ -4,6 +4,8 @@ import { Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useAppState } from '@/lib/app-state';
 import AppShell from '@/components/app/AppShell';
+import { setLanguage } from '@/lib/useTranslation';
+import type { Lang } from '@/lib/translations';
 
 const LANGUAGES = [
   {
@@ -29,8 +31,6 @@ const LANGUAGES = [
   },
 ];
 
-export const LANG_KEY = 'cs_language';
-
 function LanguageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -38,7 +38,7 @@ function LanguageContent() {
   const next = searchParams.get('next') ?? (state.currentUser?.role === 'vendor' ? '/app/vendor/home' : '/app/driver/home');
 
   function select(key: string) {
-    localStorage.setItem(LANG_KEY, key);
+    setLanguage(key as Lang);
     router.replace(next);
   }
 

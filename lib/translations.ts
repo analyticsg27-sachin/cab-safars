@@ -28,6 +28,26 @@ export const T = {
   active_trips:   { en: 'Active Trips',  hi: 'सक्रिय ट्रिप्स', gu: 'સક્રિય ટ્રિપ્સ' },
   quick_actions:  { en: 'Quick Actions', hi: 'त्वरित क्रियाएं', gu: 'ઝડપી ક્રિયાઓ' },
   welcome_back:   { en: 'Welcome back',  hi: 'वापस स्वागत है', gu: 'પાછા સ્વાગત છે' },
+  latest_trips:   { en: 'Latest Trips',  hi: 'ताज़ा ट्रिप्स', gu: 'તાજી ટ્રિપ્સ' },
+  see_all:        { en: 'See All',       hi: 'सब देखें',    gu: 'બધું જુઓ' },
+  view_all:       { en: 'View All',      hi: 'सब देखें',    gu: 'બધું જુઓ' },
+  upgrade_premium:{ en: 'Upgrade to Premium', hi: 'प्रीमियम में अपग्रेड करें', gu: 'પ્રીમિયમ માં અપગ્રેડ કરો' },
+  upgrade_subtext:{ en: 'See vendor contact details & apply faster', hi: 'वेंडर संपर्क देखें और जल्दी अप्लाई करें', gu: 'વેન્ડર સંપર્ક જુઓ અને ઝડપી અરજી કરો' },
+  browse_trips:   { en: 'Browse Available Trips', hi: 'उपलब्ध ट्रिप्स देखें', gu: 'ઉપલ્બ્ધ ટ્રિપ્સ જુઓ' },
+  recent_trips:   { en: 'Recent Trips',  hi: 'हाल की ट्रिप्स', gu: 'તાજી ટ્રિપ્સ' },
+  no_trips_yet:   { en: 'No trips posted yet', hi: 'अभी तक कोई ट्रिप पोस्ट नहीं', gu: 'હજી કોઈ ટ્રિપ પોસ્ટ નથી' },
+  post_first:     { en: 'Post your first trip →', hi: 'अपनी पहली ट्रिप पोस्ट करें →', gu: 'તમારી પ્રથમ ટ્રિપ પોસ્ટ કરો →' },
+  active:         { en: 'Active',        hi: 'सक्रिय',     gu: 'સક્રિય' },
+  closed:         { en: 'Closed',        hi: 'बंद',         gu: 'બંધ' },
+  contacts:       { en: 'Contacts',      hi: 'संपर्क',     gu: 'સંપર્ક' },
+  contacts_count: { en: 'contacts',      hi: 'संपर्क',     gu: 'સંપર્ક' },
+  find_trips:     { en: 'Find Trips',    hi: 'ट्रिप्स खोजें', gu: 'ટ્રિપ્સ શોધો' },
+  negotiable:     { en: 'Negotiable',    hi: 'बातचीत योग्य', gu: 'વાટાઘાટ યોગ્ય' },
+  view_btn:       { en: 'View',          hi: 'देखें',       gu: 'જુઓ' },
+  by_vendor:      { en: 'by',            hi: 'द्वारा',      gu: 'દ્વારા' },
+  premium_trip_label: { en: 'Premium Trip', hi: 'प्रीमियम ट्रिप', gu: 'પ્રીમિયમ ટ્રિપ' },
+  upgrade_to_see: { en: 'Upgrade to Premium to view this trip', hi: 'इस ट्रिप को देखने के लिए प्रीमियम अपग्रेड करें', gu: 'આ ટ્રિપ જોવા પ્રીમિયમ અપગ્રેડ કરો' },
+  upgrade_now:    { en: 'Upgrade Now',   hi: 'अभी अपग्रेड करें', gu: 'હવે અપગ્રેડ કરો' },
 
   // Trip card
   trip_date:      { en: 'Trip Date',     hi: 'ट्रिप तारीख', gu: 'ટ્રિપ તારીખ' },
@@ -59,7 +79,6 @@ export const T = {
   posting:        { en: 'Posting Trip…', hi: 'पोस्ट हो रहा है…', gu: 'પોસ્ટ થઈ રહ્યું છે…' },
 
   // Find trips
-  find_trips:     { en: 'Find Trips',    hi: 'ट्रिप्स खोजें', gu: 'ટ્રિપ્સ શોધો' },
   search_trips:   { en: 'Search Trips',  hi: 'ट्रिप्स खोजें', gu: 'ટ્રિપ્સ શોધો' },
   no_trips_found: { en: 'No trips found', hi: 'कोई ट्रिप नहीं मिली', gu: 'કોઈ ટ્રિપ મળી નથી' },
   all_trips:      { en: 'All Trips',     hi: 'सभी ट्रिप्स', gu: 'બધી ટ્રિપ્સ' },
@@ -88,6 +107,16 @@ export const T = {
   loading:        { en: 'Loading…',      hi: 'लोड हो रहा है…', gu: 'લોડ થઈ રહ્યું છે…' },
   trip_provider:  { en: 'Trip Provider', hi: 'ट्रिप प्रदाता', gu: 'ટ્રિપ પ્રોવાઇડર' },
   driver:         { en: 'Driver',        hi: 'ड्राइवर', gu: 'ડ્રાઇવર' },
+
+  // Profile extras
+  danger_zone:    { en: 'Danger Zone',   hi: 'खतरे का क्षेत्र', gu: 'ખતરાનો ઝોન' },
+  personal_info:  { en: 'Personal Info', hi: 'व्यक्तिगत जानकारी', gu: 'વ્યક્તિગત માહિતી' },
+  full_name:      { en: 'Full Name',     hi: 'पूरा नाम',    gu: 'પૂરું નામ' },
+  phone:          { en: 'Phone',         hi: 'फोन',         gu: 'ફોન' },
+  city:           { en: 'City',          hi: 'शहर',         gu: 'શહેર' },
+  account_info:   { en: 'Account Info',  hi: 'खाता जानकारी', gu: 'ખાતા માહિতી' },
+  edit_details:   { en: 'Edit Details',  hi: 'विवरण संपादित करें', gu: 'વિગત સંપાદિત કરો' },
+  save_changes:   { en: 'Save Changes',  hi: 'बदलाव सहेजें', gu: 'ફેરફાર સાચવો' },
 
   // Language screen
   choose_language:{ en: 'Choose Language', hi: 'भाषा चुनें', gu: 'ભાષા પસંદ કરો' },

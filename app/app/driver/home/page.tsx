@@ -9,10 +9,12 @@ import BottomNav from '@/components/app/BottomNav';
 import AppHeader from '@/components/app/AppHeader';
 import TripAlertBanner from '@/components/app/TripAlertBanner';
 import AccountStatusBanner from '@/components/app/AccountStatusBanner';
+import { useTranslation } from '@/lib/useTranslation';
 
 export default function DriverHomePage() {
   const { state } = useAppState();
   const router = useRouter();
+  const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState('home');
   const user = state.currentUser;
 
@@ -67,7 +69,7 @@ export default function DriverHomePage() {
             className="rounded-2xl p-4"
             style={{ background: 'linear-gradient(135deg, #1C2128, #161B22)', border: '1px solid #30363D' }}
           >
-            <p className="text-xs mb-0.5" style={{ color: '#8B949E' }}>Welcome back,</p>
+            <p className="text-xs mb-0.5" style={{ color: '#8B949E' }}>{t('welcome_back')},</p>
             <p className="text-lg font-bold" style={{ color: '#F0F6FC' }}>{user.name}</p>
             <p className="text-xs mt-1" style={{ color: '#8B949E' }}>
               {user.vehicleType} · {user.city}
@@ -83,8 +85,8 @@ export default function DriverHomePage() {
             >
               <Crown size={20} style={{ color: '#F5A623' }} />
               <div className="flex-1 text-left">
-                <p className="text-sm font-semibold" style={{ color: '#F5A623' }}>Upgrade to Premium</p>
-                <p className="text-xs" style={{ color: '#8B949E' }}>See vendor contact details &amp; apply faster</p>
+                <p className="text-sm font-semibold" style={{ color: '#F5A623' }}>{t('upgrade_premium')}</p>
+                <p className="text-xs" style={{ color: '#8B949E' }}>{t('upgrade_subtext')}</p>
               </div>
               <ChevronRight size={16} style={{ color: '#F5A623' }} />
             </button>
@@ -100,7 +102,7 @@ export default function DriverHomePage() {
             }}
           >
             <Search size={22} color="#fff" />
-            <span className="text-base font-bold text-white">Browse Available Trips</span>
+            <span className="text-base font-bold text-white">{t('browse_trips')}</span>
             <span
               className="ml-auto text-xs font-bold px-2 py-0.5 rounded-full"
               style={{ backgroundColor: '#ffffff22', color: '#fff' }}
@@ -112,13 +114,13 @@ export default function DriverHomePage() {
           {/* Nearby trips */}
           <div>
             <div className="flex items-center justify-between mb-3">
-              <p className="text-sm font-semibold" style={{ color: '#F0F6FC' }}>Latest Trips</p>
+              <p className="text-sm font-semibold" style={{ color: '#F0F6FC' }}>{t('latest_trips')}</p>
               <button
                 onClick={() => router.push('/app/driver/trips')}
                 className="text-xs font-medium"
                 style={{ color: '#F5A623' }}
               >
-                See All
+                {t('see_all')}
               </button>
             </div>
 
@@ -145,7 +147,7 @@ export default function DriverHomePage() {
                         className="text-[10px] font-bold px-1.5 py-0.5 rounded"
                         style={{ backgroundColor: '#F5A62322', color: '#F5A623' }}
                       >
-                        PREMIUM
+                        {t('premium')}
                       </span>
                     )}
                   </div>
@@ -161,7 +163,7 @@ export default function DriverHomePage() {
                     )}
                   </div>
                   <p className="text-xs mt-1.5" style={{ color: '#8B949E' }}>
-                    by {trip.vendorName}
+                    {t('by_vendor')} {trip.vendorName}
                   </p>
                 </button>
               ))}

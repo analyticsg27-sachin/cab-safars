@@ -17,8 +17,9 @@ import { vendorFreeTrips, vendorPremiumTrips } from '@/lib/demo-users';
 import { Lock } from 'lucide-react';
 import { IS_API_MODE, isApiMode } from '@/lib/services';
 import { isFullyActive, LockedFeature } from '@/components/app/AccountStatusBanner';
+import { useTranslation } from '@/lib/useTranslation';
 
-function TripCard({ trip, isUserPremium }: { trip: Trip; isUserPremium: boolean }) {
+function TripCard({ trip, isUserPremium, t }: { trip: Trip; isUserPremium: boolean; t: (key: import('@/lib/translations').TKey) => string }) {
   const router = useRouter();
   const fare = trip.expected_fare ? Number(trip.expected_fare) : null;
   const isLocked = trip.is_premium_trip && !isUserPremium;
@@ -57,13 +58,13 @@ function TripCard({ trip, isUserPremium }: { trip: Trip; isUserPremium: boolean 
             style={{ background: 'rgba(245,166,35,0.15)', border: '1.5px solid rgba(245,166,35,0.4)' }}>
             <Lock size={18} style={{ color: '#F5A623' }} />
           </div>
-          <p className="text-xs font-bold" style={{ color: '#F5A623' }}>Premium Trip</p>
-          <p className="text-[10px] text-center px-6" style={{ color: '#8B949E' }}>Upgrade to Premium to view this trip</p>
+          <p className="text-xs font-bold" style={{ color: '#F5A623' }}>{t('premium_trip_label')}</p>
+          <p className="text-[10px] text-center px-6" style={{ color: '#8B949E' }}>{t('upgrade_to_see')}</p>
           <button
             onClick={() => router.push('/app/subscription')}
             className="mt-1 px-4 py-1.5 rounded-xl text-xs font-bold"
             style={{ background: '#F5A623', color: '#0D1117' }}>
-            Upgrade Now
+            {t('upgrade_now')}
           </button>
         </div>
       </div>
@@ -109,7 +110,7 @@ function TripCard({ trip, isUserPremium }: { trip: Trip; isUserPremium: boolean 
           {fare ? (
             <span className="text-lg font-bold" style={{ color: '#F5A623' }}>₹{fare.toLocaleString('en-IN')}</span>
           ) : (
-            <span className="text-sm" style={{ color: '#8B949E' }}>Negotiable</span>
+            <span className="text-sm" style={{ color: '#8B949E' }}>{t('negotiable')}</span>
           )}
           {trip.contacts_count > 0 && (
             <span className="flex items-center gap-1 text-xs" style={{ color: '#8B949E' }}>
@@ -122,12 +123,12 @@ function TripCard({ trip, isUserPremium }: { trip: Trip; isUserPremium: boolean 
           style={{ backgroundColor: '#F5A623', color: '#0D1117' }}
           onClick={(e) => { e.stopPropagation(); router.push(`/app/driver/trip/${trip.id}`); }}
         >
-          View <ChevronRight size={12} />
+          {t('view_btn')} <ChevronRight size={12} />
         </button>
       </div>
 
       <p className="text-xs mt-2" style={{ color: '#8B949E' }}>
-        by {trip.vendor_name} · {trip.vendor_city}
+        {t('by_vendor')} {trip.vendor_name} · {trip.vendor_city}
       </p>
     </div>
   );
@@ -136,6 +137,7 @@ function TripCard({ trip, isUserPremium }: { trip: Trip; isUserPremium: boolean 
 export default function FindTripsPage() {
   const router = useRouter();
   const { state } = useAppState();
+  const { t } = useTranslation();
 
   const [fromLoc, setFromLoc] = useState<LocationValue>({ name: '', city: '', state: '' });
   const [toLoc, setToLoc]     = useState<LocationValue>({ name: '', city: '', state: '' });
@@ -222,7 +224,7 @@ export default function FindTripsPage() {
   if (currentUser && !isFullyActive(currentUser)) {
     return (
       <AppShell>
-        <AppHeader title="Available Trips" />
+        <AppHeader title={t('available_trips')} />
         <LockedFeature user={currentUser} feature="find available trips" />
         <BottomNav activeTab="trips" onTabChange={() => {}} role="driver" />
       </AppShell>
@@ -231,7 +233,7 @@ export default function FindTripsPage() {
 
   return (
     <AppShell>
-      <AppHeader title="Available Trips" />
+      <AppHeader title={t('available_trips')} />
 
       <main className="flex-1 overflow-y-auto pb-24">
         {/* Search & Filters */}
@@ -325,7 +327,7 @@ export default function FindTripsPage() {
             </div>
           ) : (
             <>
-              {displayTrips.map((trip) => <TripCard key={trip.id} trip={trip} isUserPremium={currentUser?.isPremium ?? false} />)}
+              {displayTrips.map((trip) => <TripCard key={trip.id} trip={trip} isUserPremium={currentUser?.isPremium ?? false} t={t} />)}
               {isApiMode() && page < totalPages && (
                 <button onClick={() => fetchTrips(page + 1)} disabled={loading}
                   className="w-full py-3 rounded-xl text-sm font-medium mb-3"
