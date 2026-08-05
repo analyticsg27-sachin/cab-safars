@@ -319,6 +319,7 @@ export default function LoginPage() {
                 [
                   { key: 'vendorFree', label: 'Vendor Free', color: '#F5A623' },
                   { key: 'vendorPremium', label: 'Vendor Premium ★', color: '#F5A623' },
+                  { key: 'vendorPending', label: 'Vendor (Docs Pending)', color: '#F5A623' },
                   { key: 'driverFree', label: 'Driver Free', color: '#60A5FA' },
                   { key: 'driverPremium', label: 'Driver Premium ★', color: '#60A5FA' },
                 ] as const

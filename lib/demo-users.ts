@@ -47,6 +47,18 @@ export const demoUsers: Record<string, AppUser> = {
     city: 'Ahmedabad',
     vehicleType: 'Sedan (Toyota Etios)',
   },
+  vendorPending: {
+    id: 'v004',
+    name: 'Suresh Mehta',
+    phone: '+91 94260 55123',
+    email: 'suresh@mehtatransport.in',
+    role: 'vendor',
+    status: 'active',
+    isPremium: false,
+    city: 'Rajkot',
+    companyName: 'Mehta Transport',
+    docStatus: 'none',
+  },
 };
 
 export const vendorFreeTrips: AppTrip[] = [

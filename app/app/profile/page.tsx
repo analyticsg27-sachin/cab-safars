@@ -8,6 +8,7 @@ import {
 import AppShell from '@/components/app/AppShell';
 import AppHeader from '@/components/app/AppHeader';
 import { useAppState } from '@/lib/app-state';
+import { isFullyActive } from '@/components/app/AccountStatusBanner';
 
 const DEMO_PAYMENTS = [
   { date: 'Jun 20, 2026', amount: 'â‚¹199.00', txnId: 'CS74628193' },
@@ -86,6 +87,7 @@ export default function ProfilePage() {
     totalContacts: state.trips.reduce((s, t) => s + t.contactsCount, 0),
   };
   const isDriver = user.role === 'driver';
+  const fullyActive = currentUser ? isFullyActive(currentUser) : false;
 
   const initials = user.name
     .split(' ')
@@ -163,27 +165,29 @@ export default function ProfilePage() {
         {/* Account section */}
         <MenuSection title="Account">
           <MenuRow icon={User} label="My Details" onClick={() => router.push('/app/my-details')} />
-          <MenuRow icon={Lock} label="Change Password" onClick={() => router.push('/app/change-password')} />
+          {fullyActive && <MenuRow icon={Lock} label="Change Password" onClick={() => router.push('/app/change-password')} />}
           <MenuRow icon={FileText} label="Documents" onClick={() => router.push('/app/documents')} isLast />
         </MenuSection>
 
-        {/* Subscription section */}
-        <MenuSection title="Subscription">
-          <MenuRow
-            icon={Crown}
-            label="Current Plan"
-            value={user.isPremium ? 'Premium' : 'Free'}
-            iconColor={user.isPremium ? '#F5A623' : '#8B949E'}
-            onClick={() => router.push('/app/subscription')}
-          />
-          <MenuRow
-            icon={CreditCard}
-            label="Payment History"
-            value={user.isPremium ? `${DEMO_PAYMENTS.length} payments` : 'No payments'}
-            onClick={() => router.push('/app/payment-history')}
-            isLast
-          />
-        </MenuSection>
+        {/* Subscription section — only when fully active */}
+        {fullyActive && (
+          <MenuSection title="Subscription">
+            <MenuRow
+              icon={Crown}
+              label="Current Plan"
+              value={user.isPremium ? 'Premium' : 'Free'}
+              iconColor={user.isPremium ? '#F5A623' : '#8B949E'}
+              onClick={() => router.push('/app/subscription')}
+            />
+            <MenuRow
+              icon={CreditCard}
+              label="Payment History"
+              value={user.isPremium ? `${DEMO_PAYMENTS.length} payments` : 'No payments'}
+              onClick={() => router.push('/app/payment-history')}
+              isLast
+            />
+          </MenuSection>
+        )}
 
         {/* Support section */}
         <MenuSection title="Support">
