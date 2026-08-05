@@ -40,7 +40,7 @@ function todayISO() {
 export default function VendorPostPage() {
   const router = useRouter();
   const { state, dispatch } = useAppState();
-  const vendor = state.currentUser!;
+  const vendor = state.currentUser;
 
   const [fromLoc, setFromLoc] = useState<LocationValue>({ name: '', city: '', state: '' });
   const [toLoc, setToLoc]     = useState<LocationValue>({ name: '', city: '', state: '' });
@@ -81,7 +81,7 @@ export default function VendorPostPage() {
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
-    if (!validate()) return;
+    if (!validate() || !vendor) return;
     setLoading(true);
     setApiError('');
 
@@ -142,6 +142,8 @@ export default function VendorPostPage() {
       setTimeout(() => router.push('/app/vendor/trips'), 900);
     }
   }
+
+  if (!vendor) { router.replace('/app/'); return null; }
 
   if (!isFullyActive(vendor)) {
     return (
