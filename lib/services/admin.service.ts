@@ -116,6 +116,19 @@ const AdminService = {
     return { data: res.data?.items ?? [], pagination: res.data?.pagination };
   },
 
+  async getPendingCount(): Promise<number> {
+    try {
+      const res = await adminApiClient.get<{ count: number }>('/admin/users/pending-count');
+      return res.data?.count ?? 0;
+    } catch {
+      return 0;
+    }
+  },
+
+  async sendWhatsAppNotification(uuid: string, type: 'registration_approved' | 'registration_rejected' | 'docs_approved' | 'doc_rejected' | 'all_docs_approved') {
+    return adminApiClient.post(`/admin/users/${uuid}/notify-whatsapp`, { type });
+  },
+
   async getTrips(params?: { status?: string; search?: string; page?: number }) {
     const q = new URLSearchParams();
     if (params) Object.entries(params).forEach(([k, v]) => v != null && q.set(k, String(v)));

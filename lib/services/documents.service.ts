@@ -1,0 +1,43 @@
+import { apiClient } from './api-client';
+
+export interface UserDoc {
+  id: string;
+  document_type: string;
+  original_name: string | null;
+  mime_type: string | null;
+  file_size: number;
+  status: 'pending' | 'approved' | 'rejected';
+  rejection_reason?: string;
+  file_url?: string;
+  created_at: string;
+}
+
+const DocumentsService = {
+  async getMyDocuments(): Promise<UserDoc[]> {
+    const res = await apiClient.get<UserDoc[]>('/user/documents');
+    return res.data ?? [];
+  },
+
+  async uploadDocument(file: File, documentType: string): Promise<UserDoc> {
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('document_type', documentType);
+
+    const token = typeof window !== 'undefined' ? localStorage.getItem('access_token') : null;
+    const headers: Record<string, string> = {};
+    if (token) headers['Authorization'] = `Bearer ${token}`;
+
+    const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost/cab-safars/backend/api';
+    const res = await fetch(`${BASE_URL}/user/documents`, {
+      method: 'POST',
+      headers,
+      body: formData,
+    });
+
+    const json = await res.json();
+    if (!res.ok) throw new Error(json.message || 'Upload failed');
+    return json.data as UserDoc;
+  },
+};
+
+export default DocumentsService;

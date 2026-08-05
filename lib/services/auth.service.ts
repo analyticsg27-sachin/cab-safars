@@ -10,6 +10,8 @@ export interface AuthUser {
   city: string;
   state: string;
   status: 'pending' | 'approved' | 'rejected' | 'suspended';
+  doc_status?: 'none' | 'pending' | 'approved' | 'rejected' | 'direct';
+  rejection_reason?: string;
   is_premium: boolean;
   premium_expires_at: string | null;
   company_name?: string;

@@ -1,6 +1,7 @@
 ﻿"use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import AdminService from "@/lib/services/admin.service";
 import Link from "next/link";
 import { asset } from "@/lib/basepath";
 import { usePathname } from "next/navigation";
@@ -23,7 +24,7 @@ const navGroups = [
     items: [
       { href: "/admin/vendors", icon: Users, label: "Trip Providers" },
       { href: "/admin/drivers", icon: Car, label: "Drivers" },
-      { href: "/admin/approvals", icon: ClipboardCheck, label: "Approvals", badge: 7 },
+      { href: "/admin/approvals", icon: ClipboardCheck, label: "Approvals", badge: null as number | null },
       { href: "/admin/documents", icon: FolderOpen, label: "Documents" },
       { href: "/admin/trips", icon: MapPin, label: "Trips" },
     ],
@@ -53,7 +54,16 @@ interface SidebarProps {
 
 export default function Sidebar({ mobileOpen = false, onMobileClose }: SidebarProps) {
   const [collapsed, setCollapsed] = useState(false);
+  const [pendingCount, setPendingCount] = useState<number | null>(null);
   const pathname = usePathname();
+
+  useEffect(() => {
+    AdminService.getPendingCount().then(setPendingCount).catch(() => {});
+    const interval = setInterval(() => {
+      AdminService.getPendingCount().then(setPendingCount).catch(() => {});
+    }, 60_000);
+    return () => clearInterval(interval);
+  }, []);
 
   const sidebarContent = (
     <aside
@@ -96,10 +106,11 @@ export default function Sidebar({ mobileOpen = false, onMobileClose }: SidebarPr
             )}
             {collapsed && <div className="my-1 mx-2 border-t border-[#243042]/60" />}
             <div className="flex flex-col gap-0.5 px-2">
-              {group.items.map(({ href, icon: Icon, label, badge }) => {
+              {group.items.map(({ href, icon: Icon, label }) => {
                 const active =
                   pathname === href ||
                   (href !== "/admin" && pathname.startsWith(href));
+                const dynamicBadge = href === "/admin/approvals" ? pendingCount : null;
                 return (
                   <Link
                     key={href}
@@ -115,12 +126,12 @@ export default function Sidebar({ mobileOpen = false, onMobileClose }: SidebarPr
                   >
                     <Icon className="w-4 h-4 shrink-0" />
                     {!collapsed && <span className="flex-1 truncate">{label}</span>}
-                    {!collapsed && badge != null && (
+                    {!collapsed && dynamicBadge != null && dynamicBadge > 0 && (
                       <span className="text-[10px] font-bold bg-[#EF4444]/15 text-[#EF4444] border border-[#EF4444]/25 rounded-full px-1.5 py-0.5 leading-none">
-                        {badge}
+                        {dynamicBadge}
                       </span>
                     )}
-                    {collapsed && badge != null && (
+                    {collapsed && dynamicBadge != null && dynamicBadge > 0 && (
                       <span className="absolute top-1 right-1 w-2 h-2 rounded-full bg-[#EF4444]" />
                     )}
                   </Link>

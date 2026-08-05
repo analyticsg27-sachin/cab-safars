@@ -14,6 +14,7 @@ import TripsService from '@/lib/services/trips.service';
 import type { Trip, FeedFilters } from '@/lib/services/trips.service';
 import { useAppState } from '@/lib/app-state';
 import { IS_API_MODE, isApiMode } from '@/lib/services';
+import { isFullyActive, LockedFeature } from '@/components/app/AccountStatusBanner';
 
 const VEHICLE_TYPES = ['Any', 'Sedan', 'SUV', 'Hatchback', 'Tempo Travel', 'Bus', 'Mini Bus', 'Innova Crysta', 'Innova', 'Ecco', 'Luxury Car', 'Parcel Package'];
 
@@ -168,6 +169,17 @@ export default function FindTripsPage() {
     status: t.status,
   } as unknown as Trip));
   const displayTrips = isApiMode() ? trips : demoTrips;
+
+  const currentUser = state.currentUser;
+  if (currentUser && !isFullyActive(currentUser)) {
+    return (
+      <AppShell>
+        <AppHeader title="Find Trips" />
+        <LockedFeature user={currentUser} feature="find trips" />
+        <BottomNav activeTab={activeTab} onTabChange={setActiveTab} role="vendor" />
+      </AppShell>
+    );
+  }
 
   return (
     <AppShell>

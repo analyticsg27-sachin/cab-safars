@@ -64,8 +64,24 @@ export default function LoginPage() {
           router.push('/app/pending');
           return;
         }
+        if (res.user.status === 'rejected') {
+          const user: AppUser = {
+            id: res.user.uuid,
+            name: res.user.name,
+            phone: res.user.phone,
+            email: res.user.email ?? '',
+            role: res.user.role,
+            status: 'rejected',
+            isPremium: false,
+            city: res.user.city,
+            rejectionReason: res.user.rejection_reason,
+          };
+          dispatch({ type: 'SET_USER', payload: { user, trips: [], notifications: [] } });
+          router.push(user.role === 'vendor' ? '/app/vendor/home' : '/app/driver/home');
+          return;
+        }
         if (res.user.status !== 'approved') {
-          setError('Your account is not approved yet.');
+          setError('Your account is not approved yet. Please wait for admin review.');
           setLoading(false);
           return;
         }
@@ -76,6 +92,8 @@ export default function LoginPage() {
           email: res.user.email ?? '',
           role: res.user.role,
           status: 'active',
+          docStatus: res.user.doc_status ?? 'none',
+          rejectionReason: res.user.rejection_reason,
           isPremium: res.user.is_premium,
           premiumExpiry: res.user.premium_expires_at ?? undefined,
           city: res.user.city,

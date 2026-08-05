@@ -10,6 +10,7 @@ import AppHeader from '@/components/app/AppHeader';
 import TripsService from '@/lib/services/trips.service';
 import type { Trip } from '@/lib/services/trips.service';
 import { IS_API_MODE, isApiMode } from '@/lib/services';
+import AccountStatusBanner from '@/components/app/AccountStatusBanner';
 
 function StatCard({ label, value, color }: { label: string; value: string | number; color: string }) {
   return (
@@ -78,6 +79,7 @@ export default function TripProviderHomePage() {
 
   return (
     <AppShell>
+      <AccountStatusBanner user={user} />
       <div className="flex flex-col flex-1 overflow-hidden" style={{ backgroundColor: '#0D1117' }}>
         <AppHeader
           title={user.companyName ?? user.name}

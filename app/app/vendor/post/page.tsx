@@ -12,6 +12,7 @@ import TripsService from '@/lib/services/trips.service';
 import LocationAutocomplete, { type LocationValue } from '@/components/app/LocationAutocomplete';
 import AppShell from '@/components/app/AppShell';
 import AppHeader from '@/components/app/AppHeader';
+import { isFullyActive, LockedFeature } from '@/components/app/AccountStatusBanner';
 
 const IS_API_MODE = process.env.NEXT_PUBLIC_DATA_MODE === 'api';
 
@@ -140,6 +141,15 @@ export default function VendorPostPage() {
       setSuccess(true);
       setTimeout(() => router.push('/app/vendor/trips'), 900);
     }
+  }
+
+  if (!isFullyActive(vendor)) {
+    return (
+      <AppShell>
+        <AppHeader title="Post a Trip" showBack onBack={() => router.back()} />
+        <LockedFeature user={vendor} feature="post trips" />
+      </AppShell>
+    );
   }
 
   if (success) {

@@ -41,12 +41,24 @@ function DocModal({ user, onClose }: { user: ApiUser; onClose: () => void }) {
   }, [user.id]);
 
   async function handleDoc(docId: string, action: 'approve' | 'reject') {
+    if (action === 'reject') {
+      const reason = window.prompt('Enter rejection reason for the user:');
+      if (!reason?.trim()) return;
+      setActioning(docId);
+      try {
+        await AdminService.rejectDocument(docId, reason.trim());
+        setDocs(prev => prev.map(d => d.id === docId ? { ...d, status: 'rejected' as const, rejection_reason: reason.trim() } : d));
+        showToast('Document rejected');
+      } catch (e: unknown) {
+        showToast(e instanceof Error ? e.message : 'Action failed');
+      } finally { setActioning(null); }
+      return;
+    }
     setActioning(docId);
     try {
-      if (action === 'approve') await AdminService.approveDocument(docId);
-      else await AdminService.rejectDocument(docId);
-      setDocs(prev => prev.map(d => d.id === docId ? { ...d, status: action === 'approve' ? 'approved' : 'rejected' } : d));
-      showToast(`Document ${action}d`);
+      await AdminService.approveDocument(docId);
+      setDocs(prev => prev.map(d => d.id === docId ? { ...d, status: 'approved' as const } : d));
+      showToast('Document approved');
     } catch (e: unknown) {
       showToast(e instanceof Error ? e.message : 'Action failed');
     } finally { setActioning(null); }
@@ -163,7 +175,7 @@ export default function VendorsPage() {
   async function handleAction(id: string, action: 'approve' | 'reject' | 'suspend') {
     try {
       if (action === 'approve') await AdminService.approveUser(id);
-      else if (action === 'reject') await AdminService.rejectUser(id);
+      else if (action === 'reject') await AdminService.rejectUser(id, 'Rejected by admin');
       else await AdminService.suspendUser(id);
       showToast(`User ${action}d`);
       fetchVendors();

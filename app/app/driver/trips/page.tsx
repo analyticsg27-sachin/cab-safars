@@ -16,6 +16,7 @@ import { useAppState } from '@/lib/app-state';
 import { vendorFreeTrips, vendorPremiumTrips } from '@/lib/demo-users';
 import { Lock } from 'lucide-react';
 import { IS_API_MODE, isApiMode } from '@/lib/services';
+import { isFullyActive, LockedFeature } from '@/components/app/AccountStatusBanner';
 
 function TripCard({ trip }: { trip: Trip }) {
   const router = useRouter();
@@ -168,6 +169,17 @@ export default function FindTripsPage() {
     ...vendorFreeTrips.filter(t => t.status === 'closed'),
     ...vendorPremiumTrips.filter(t => t.status === 'closed'),
   ];
+
+  const currentUser = state.currentUser;
+  if (currentUser && !isFullyActive(currentUser)) {
+    return (
+      <AppShell>
+        <AppHeader title="Available Trips" />
+        <LockedFeature user={currentUser} feature="find available trips" />
+        <BottomNav activeTab="trips" onTabChange={() => {}} role="driver" />
+      </AppShell>
+    );
+  }
 
   return (
     <AppShell>
