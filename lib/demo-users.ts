@@ -11,6 +11,7 @@ export const demoUsers: Record<string, AppUser> = {
     isPremium: false,
     city: 'Vadodara',
     companyName: 'Verma Travels',
+    docStatus: 'approved',
   },
   vendorPremium: {
     id: 'v001',
@@ -23,6 +24,7 @@ export const demoUsers: Record<string, AppUser> = {
     premiumExpiry: '2026-08-15',
     city: 'Ahmedabad',
     companyName: 'Patel Travels',
+    docStatus: 'approved',
   },
   driverFree: {
     id: 'd003',
@@ -34,6 +36,7 @@ export const demoUsers: Record<string, AppUser> = {
     isPremium: false,
     city: 'Surat',
     vehicleType: 'Hatchback (Swift)',
+    docStatus: 'approved',
   },
   driverPremium: {
     id: 'd001',
@@ -46,6 +49,7 @@ export const demoUsers: Record<string, AppUser> = {
     premiumExpiry: '2026-08-20',
     city: 'Ahmedabad',
     vehicleType: 'Sedan (Toyota Etios)',
+    docStatus: 'approved',
   },
   vendorPending: {
     id: 'v004',

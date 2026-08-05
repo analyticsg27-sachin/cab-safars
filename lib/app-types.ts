@@ -30,6 +30,7 @@ export interface AppTrip {
   // Expiry
   expiryHours?: number;
   expiresAt?: string;
+  isPremiumTrip?: boolean;
 }
 
 export interface ContactedDriver {

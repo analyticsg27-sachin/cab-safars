@@ -61,6 +61,7 @@ export interface PostTripPayload {
   expected_fare?: number;
   notes?: string;
   expiry_hours?: number;
+  is_premium_trip?: boolean;
   lat_from?: number;
   lng_from?: number;
   lat_to?: number;

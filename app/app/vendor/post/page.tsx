@@ -3,8 +3,8 @@
 import { useState, FormEvent } from 'react';
 import { useRouter } from 'next/navigation';
 import {
-  Calendar, Clock, Truck, Package, Users,
-  IndianRupee, FileText, StickyNote, CheckCircle, AlertCircle, Timer,
+  Calendar, Clock, Truck, Package,
+  IndianRupee, FileText, StickyNote, CheckCircle, AlertCircle, Crown, Star,
 } from 'lucide-react';
 import type { AppTrip } from '@/lib/app-types';
 import { useAppState } from '@/lib/app-state';
@@ -26,13 +26,6 @@ const LOAD_TYPES = [
   'Group Outstation', 'Wedding / Event', 'Pilgrimage Tour', 'Parcel Package', 'Other',
 ];
 
-const EXPIRY_OPTIONS = [
-  { label: '6 Hours', value: 6 },
-  { label: '12 Hours', value: 12 },
-  { label: '24 Hours', value: 24 },
-  { label: '48 Hours', value: 48 },
-];
-
 function todayISO() {
   return new Date().toISOString().split('T')[0];
 }
@@ -50,11 +43,10 @@ export default function VendorPostPage() {
     tripTime: '',
     vehicleType: 'Any Vehicle',
     loadType: 'City to City',
-    weightTons: '',
     expectedFare: '',
     additionalDetails: '',
     notes: '',
-    expiryHours: 24,
+    isPremiumTrip: false,
   });
 
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -62,7 +54,7 @@ export default function VendorPostPage() {
   const [success, setSuccess] = useState(false);
   const [apiError, setApiError] = useState('');
 
-  function setField(key: keyof typeof form, value: string | number) {
+  function setField(key: keyof typeof form, value: string | number | boolean) {
     setForm(prev => ({ ...prev, [key]: value }));
     if (errors[key]) setErrors(prev => { const e = { ...prev }; delete e[key]; return e; });
   }
@@ -96,10 +88,9 @@ export default function VendorPostPage() {
           trip_time:    form.tripTime || undefined,
           vehicle_type: form.vehicleType,
           load_type:    form.loadType,
-          weight_tons:  form.weightTons ? Number(form.weightTons) : undefined,
           expected_fare:form.expectedFare ? Number(form.expectedFare) : undefined,
           notes:        form.additionalDetails || undefined,
-          expiry_hours: form.expiryHours,
+          is_premium_trip: form.isPremiumTrip,
           lat_from:     fromLoc.lat,
           lng_from:     fromLoc.lng,
           lat_to:       toLoc.lat,
@@ -127,8 +118,8 @@ export default function VendorPostPage() {
         tripDate: form.tripDate,
         tripTime: form.tripTime || '09:00',
         expectedFare: form.expectedFare ? Number(form.expectedFare) : undefined,
-        weightTons: form.weightTons ? Number(form.weightTons) : undefined,
         notes: form.additionalDetails || undefined,
+        isPremiumTrip: form.isPremiumTrip,
         status: 'open',
         isPremiumVendor: vendor.isPremium,
         contactsCount: 0,
@@ -242,31 +233,37 @@ export default function VendorPostPage() {
           </div>
         </section>
 
-        {/* Trip expiry */}
+        {/* Trip Type: Free / Premium */}
         <section>
-          <h2 className="text-sm font-semibold text-[#8B949E] uppercase tracking-wider mb-3">
-            <Timer size={13} className="inline mr-1" /> Trip Expires In
-          </h2>
-          <div className="flex gap-2 flex-wrap">
-            {EXPIRY_OPTIONS.map((opt) => (
-              <button
-                key={opt.value}
-                type="button"
-                onClick={() => setField('expiryHours', opt.value)}
-                className="px-3 py-2 rounded-xl text-xs font-medium transition-all"
-                style={{
-                  background: form.expiryHours === opt.value ? '#F5A623' : '#21262D',
-                  color: form.expiryHours === opt.value ? '#0D1117' : '#8B949E',
-                  border: form.expiryHours === opt.value ? 'none' : '1px solid #30363D',
-                }}
-              >
-                {opt.label}
-              </button>
-            ))}
+          <h2 className="text-sm font-semibold text-[#8B949E] uppercase tracking-wider mb-3">Trip Visibility</h2>
+          <div className="flex gap-3">
+            <button
+              type="button"
+              onClick={() => setField('isPremiumTrip', false)}
+              className="flex-1 flex flex-col items-center gap-1.5 py-4 rounded-xl transition-all"
+              style={{
+                background: !form.isPremiumTrip ? 'rgba(34,197,94,0.12)' : '#21262D',
+                border: !form.isPremiumTrip ? '1.5px solid rgba(34,197,94,0.5)' : '1px solid #30363D',
+              }}
+            >
+              <Star size={18} style={{ color: !form.isPremiumTrip ? '#22C55E' : '#8B949E' }} />
+              <span className="text-sm font-bold" style={{ color: !form.isPremiumTrip ? '#22C55E' : '#8B949E' }}>Free Trip</span>
+              <span className="text-[10px] text-center px-2" style={{ color: '#8B949E' }}>Visible to all drivers</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setField('isPremiumTrip', true)}
+              className="flex-1 flex flex-col items-center gap-1.5 py-4 rounded-xl transition-all"
+              style={{
+                background: form.isPremiumTrip ? 'rgba(245,166,35,0.12)' : '#21262D',
+                border: form.isPremiumTrip ? '1.5px solid rgba(245,166,35,0.5)' : '1px solid #30363D',
+              }}
+            >
+              <Crown size={18} style={{ color: form.isPremiumTrip ? '#F5A623' : '#8B949E' }} />
+              <span className="text-sm font-bold" style={{ color: form.isPremiumTrip ? '#F5A623' : '#8B949E' }}>Premium Trip</span>
+              <span className="text-[10px] text-center px-2" style={{ color: '#8B949E' }}>Premium drivers only</span>
+            </button>
           </div>
-          <p className="text-xs mt-2" style={{ color: '#8B949E' }}>
-            Trip will auto-expire and disappear from the feed after this time
-          </p>
         </section>
 
         {/* Vehicle & Load */}
@@ -297,28 +294,17 @@ export default function VendorPostPage() {
           </div>
         </section>
 
-        {/* Weight & Fare */}
+        {/* Fare */}
         <section>
           <h2 className="text-sm font-semibold text-[#8B949E] uppercase tracking-wider mb-3">Trip Details (Optional)</h2>
-          <div className="grid grid-cols-2 gap-3">
-            <div>
-              <label className="text-sm text-[#8B949E] mb-2 flex items-center gap-1.5 block">
-                <Users size={14} /> Passengers
-              </label>
-              <input type="number" min="1" step="1" placeholder="e.g. 4"
-                value={form.weightTons} onChange={e => setField('weightTons', e.target.value)}
-                className="w-full px-4 py-3 rounded-xl text-sm outline-none text-[#F0F6FC] placeholder-[#8B949E]"
-                style={{ background: '#21262D', border: '1px solid #30363D' }} />
-            </div>
-            <div>
-              <label className="text-sm text-[#8B949E] mb-2 flex items-center gap-1.5 block">
-                <IndianRupee size={14} /> Expected Fare
-              </label>
-              <input type="number" min="0" placeholder="Open to negotiate"
-                value={form.expectedFare} onChange={e => setField('expectedFare', e.target.value)}
-                className="w-full px-4 py-3 rounded-xl text-sm outline-none text-[#F0F6FC] placeholder-[#8B949E]"
-                style={{ background: '#21262D', border: '1px solid #30363D' }} />
-            </div>
+          <div>
+            <label className="text-sm text-[#8B949E] mb-2 flex items-center gap-1.5 block">
+              <IndianRupee size={14} /> Expected Fare
+            </label>
+            <input type="number" min="0" placeholder="Open to negotiate"
+              value={form.expectedFare} onChange={e => setField('expectedFare', e.target.value)}
+              className="w-full px-4 py-3 rounded-xl text-sm outline-none text-[#F0F6FC] placeholder-[#8B949E]"
+              style={{ background: '#21262D', border: '1px solid #30363D' }} />
           </div>
         </section>
 

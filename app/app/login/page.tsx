@@ -101,7 +101,8 @@ export default function LoginPage() {
           vehicleType: res.user.vehicle_type,
         };
         dispatch({ type: 'SET_USER', payload: { user, trips: [], notifications: [] } });
-        router.push(user.role === 'vendor' ? '/app/vendor/home' : '/app/driver/home');
+        const home = user.role === 'vendor' ? '/app/vendor/home' : '/app/driver/home';
+        router.push(`/app/language?next=${encodeURIComponent(home)}`);
       } catch (err: unknown) {
         const msg = err instanceof Error ? err.message : 'Login failed';
         setError(msg);
@@ -116,7 +117,8 @@ export default function LoginPage() {
           : user.id === 'v001' ? vendorPremiumTrips
           : availableTripsForDriver;
         dispatch({ type: 'SET_USER', payload: { user, trips, notifications: demoNotifications } });
-        router.push(user.role === 'vendor' ? '/app/vendor/home' : '/app/driver/home');
+        const home = user.role === 'vendor' ? '/app/vendor/home' : '/app/driver/home';
+        router.push(`/app/language?next=${encodeURIComponent(home)}`);
       }, 600);
     }
   }
@@ -128,7 +130,9 @@ export default function LoginPage() {
       : key === 'vendorPremium' ? vendorPremiumTrips
       : availableTripsForDriver;
     dispatch({ type: 'SET_USER', payload: { user, trips, notifications: demoNotifications } });
-    router.push(user.role === 'vendor' ? '/app/vendor/home' : '/app/driver/home');
+    const home = user.role === 'vendor' ? '/app/vendor/home' : '/app/driver/home';
+    const lang = localStorage.getItem('cs_language');
+    router.push(lang ? home : `/app/language?next=${encodeURIComponent(home)}`);
   }
 
   return (

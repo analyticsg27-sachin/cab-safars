@@ -2,6 +2,7 @@
 
 import React, { createContext, useContext, useReducer, useEffect } from 'react';
 import type { AppUser, AppTrip, AppNotification } from './app-types';
+import { demoUsers } from './demo-users';
 
 const STORAGE_KEY = 'app_auth_state';
 
@@ -42,7 +43,10 @@ function loadPersistedState(): AppState {
     if (!raw) return initialState;
     const parsed = JSON.parse(raw) as Partial<AppState>;
     if (parsed.currentUser && parsed.isAuthenticated) {
-      return { ...initialState, ...parsed };
+      // Merge latest demo-user fields so stale localStorage never blocks features
+      const demoMatch = Object.values(demoUsers).find(d => d.id === parsed.currentUser!.id);
+      const currentUser = demoMatch ? { ...parsed.currentUser, ...demoMatch } : parsed.currentUser;
+      return { ...initialState, ...parsed, currentUser };
     }
   } catch { /* ignore */ }
   return initialState;

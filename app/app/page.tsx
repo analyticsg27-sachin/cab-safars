@@ -147,7 +147,8 @@ export default function WelcomePage() {
         ? vendorPremiumTrips
         : availableTripsForDriver;
     dispatch({ type: 'SET_USER', payload: { user, trips, notifications: demoNotifications } });
-    router.push(user.role === 'vendor' ? '/app/vendor/home' : '/app/driver/home');
+    const home = user.role === 'vendor' ? '/app/vendor/home' : '/app/driver/home';
+    router.push(`/app/language?next=${encodeURIComponent(home)}`);
   }
 
   return (
