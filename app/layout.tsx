@@ -51,8 +51,10 @@ export default function RootLayout({
       <head>
         <link rel="apple-touch-icon" href={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ''}/icons/icon-192.png`} />
       </head>
-      <body className="min-h-full antialiased bg-[#0D1117] text-[#F0F6FC]">
-        {children}
+      <body className="min-h-full antialiased bg-[#070B10] text-[#F0F6FC] flex justify-center">
+        <div className="relative w-full bg-[#0D1117]" style={{ maxWidth: 430, minHeight: '100dvh', boxShadow: '0 0 0 1px #21262D' }}>
+          {children}
+        </div>
       </body>
     </html>
   );
