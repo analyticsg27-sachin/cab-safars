@@ -274,12 +274,12 @@ export default function DriversPage() {
                         </Button>
                         {d.status === 'pending' && (
                           <>
-                            <Button variant="success" size="xs" onClick={() => handleAction(d.id, 'approve')}><CheckCircle className="w-3 h-3" /></Button>
-                            <Button variant="danger" size="xs" onClick={() => handleAction(d.id, 'reject')}><XCircle className="w-3 h-3" /></Button>
+                            <Button variant="success" size="xs" onClick={() => handleAction(d.id, 'approve')}><CheckCircle className="w-3 h-3" /> Approve</Button>
+                            <Button variant="danger" size="xs" onClick={() => handleAction(d.id, 'reject')}><XCircle className="w-3 h-3" /> Reject</Button>
                           </>
                         )}
                         {d.status === 'approved' && (
-                          <Button variant="secondary" size="xs" onClick={() => handleAction(d.id, 'suspend')}><Ban className="w-3 h-3" /></Button>
+                          <Button variant="secondary" size="xs" onClick={() => handleAction(d.id, 'suspend')}><Ban className="w-3 h-3" /> Suspend</Button>
                         )}
                       </div>
                     </td>

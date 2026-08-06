@@ -94,7 +94,7 @@ export default function SubscriptionsPage() {
                     <Badge variant={plan.role === 'vendor' ? 'vendor' : 'driver'}>{plan.role}</Badge>
                   </div>
                   <p className="text-xl font-bold text-[#F5A623] mb-1">
-                    {formatCurrency(plan.price_paise / 100)}
+                    {plan.price_paise ? formatCurrency(Number(plan.price_paise) / 100) : '—'}
                   </p>
                   <p className="text-xs text-[#8B949E] mb-3">{plan.duration_days} days</p>
                   {Array.isArray(plan.features) && plan.features.map((f, i) => (

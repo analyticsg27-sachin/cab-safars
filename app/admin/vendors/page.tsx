@@ -267,18 +267,12 @@ export default function VendorsPage() {
                         </Button>
                         {v.status === 'pending' && (
                           <>
-                            <Button variant="success" size="xs" onClick={() => handleAction(v.id, 'approve')}>
-                              <CheckCircle className="w-3 h-3" />
-                            </Button>
-                            <Button variant="danger" size="xs" onClick={() => handleAction(v.id, 'reject')}>
-                              <XCircle className="w-3 h-3" />
-                            </Button>
+                            <Button variant="success" size="xs" onClick={() => handleAction(v.id, 'approve')}><CheckCircle className="w-3 h-3" /> Approve</Button>
+                            <Button variant="danger" size="xs" onClick={() => handleAction(v.id, 'reject')}><XCircle className="w-3 h-3" /> Reject</Button>
                           </>
                         )}
                         {v.status === 'approved' && (
-                          <Button variant="secondary" size="xs" onClick={() => handleAction(v.id, 'suspend')}>
-                            <Ban className="w-3 h-3" />
-                          </Button>
+                          <Button variant="secondary" size="xs" onClick={() => handleAction(v.id, 'suspend')}><Ban className="w-3 h-3" /> Suspend</Button>
                         )}
                       </div>
                     </td>
