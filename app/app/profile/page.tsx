@@ -9,6 +9,7 @@ import AppShell from '@/components/app/AppShell';
 import AppHeader from '@/components/app/AppHeader';
 import { useAppState } from '@/lib/app-state';
 import { isFullyActive } from '@/components/app/AccountStatusBanner';
+import { useTranslation } from '@/lib/useTranslation';
 
 const DEMO_PAYMENTS = [
   { date: 'Jun 20, 2026', amount: 'â‚¹199.00', txnId: 'CS74628193' },
@@ -71,6 +72,7 @@ function MenuSection({ title, children }: { title: string; children: React.React
 export default function ProfilePage() {
   const router = useRouter();
   const { state, dispatch } = useAppState();
+  const { t } = useTranslation();
   const currentUser = state.currentUser;
 
   const user = {
@@ -98,7 +100,7 @@ export default function ProfilePage() {
 
   return (
     <AppShell>
-      <AppHeader title="Profile" showBack onBack={() => router.back()} />
+      <AppHeader title={t('nav_profile')} showBack onBack={() => router.back()} />
 
       <main className="flex-1 overflow-y-auto pb-10 pt-5 px-4">
         {/* Avatar + name */}
@@ -121,14 +123,14 @@ export default function ProfilePage() {
               className="text-xs font-semibold px-2.5 py-1 rounded-full capitalize"
               style={{ backgroundColor: '#21262D', color: '#8B949E', border: '1px solid #30363D' }}
             >
-              {user.role === 'vendor' ? 'Trip Provider' : 'Driver'}
+              {user.role === 'vendor' ? t('trip_provider') : t('driver')}
             </span>
             {user.isPremium && (
               <span
                 className="flex items-center gap-1 text-xs font-semibold px-2.5 py-1 rounded-full"
                 style={{ backgroundColor: 'rgba(245,166,35,0.12)', color: '#F5A623', border: '1px solid rgba(245,166,35,0.3)' }}
               >
-                <Crown size={10} /> Premium Member
+                <Crown size={10} /> {t('premium_member')}
               </span>
             )}
           </div>
@@ -142,13 +144,13 @@ export default function ProfilePage() {
         {/* Stats row */}
         <div className="grid grid-cols-3 gap-3 mb-6">
           {(isDriver ? [
-            { label: 'Applied', value: user.tripsApplied, icon: Truck },
-            { label: 'Completed', value: user.tripsCompleted, icon: Package },
-            { label: 'Member', value: user.memberSince, icon: Calendar },
+            { label: t('stat_applied'), value: user.tripsApplied, icon: Truck },
+            { label: t('stat_completed'), value: user.tripsCompleted, icon: Package },
+            { label: t('stat_member'), value: user.memberSince, icon: Calendar },
           ] : [
-            { label: 'Posted', value: user.tripsPosted, icon: Truck },
-            { label: 'Contacts', value: user.totalContacts, icon: User },
-            { label: 'Member', value: user.memberSince, icon: Calendar },
+            { label: t('stat_posted'), value: user.tripsPosted, icon: Truck },
+            { label: t('contacts'), value: user.totalContacts, icon: User },
+            { label: t('stat_member'), value: user.memberSince, icon: Calendar },
           ]).map(({ label, value, icon: Icon }) => (
             <div
               key={label}
@@ -163,26 +165,26 @@ export default function ProfilePage() {
         </div>
 
         {/* Account section */}
-        <MenuSection title="Account">
-          <MenuRow icon={User} label="My Details" onClick={() => router.push('/app/my-details')} />
-          {fullyActive && <MenuRow icon={Lock} label="Change Password" onClick={() => router.push('/app/change-password')} />}
-          <MenuRow icon={FileText} label="Documents" onClick={() => router.push('/app/documents')} isLast />
+        <MenuSection title={t('account')}>
+          <MenuRow icon={User} label={t('my_details')} onClick={() => router.push('/app/my-details')} />
+          {fullyActive && <MenuRow icon={Lock} label={t('change_password')} onClick={() => router.push('/app/change-password')} />}
+          <MenuRow icon={FileText} label={t('documents')} onClick={() => router.push('/app/documents')} isLast />
         </MenuSection>
 
         {/* Subscription section — only when fully active */}
         {fullyActive && (
-          <MenuSection title="Subscription">
+          <MenuSection title={t('subscription')}>
             <MenuRow
               icon={Crown}
-              label="Current Plan"
-              value={user.isPremium ? 'Premium' : 'Free'}
+              label={t('current_plan')}
+              value={user.isPremium ? t('premium') : t('free')}
               iconColor={user.isPremium ? '#F5A623' : '#8B949E'}
               onClick={() => router.push('/app/subscription')}
             />
             <MenuRow
               icon={CreditCard}
-              label="Payment History"
-              value={user.isPremium ? `${DEMO_PAYMENTS.length} payments` : 'No payments'}
+              label={t('payment_history')}
+              value={user.isPremium ? `${DEMO_PAYMENTS.length} ${t('payments_suffix')}` : t('no_payments')}
               onClick={() => router.push('/app/payment-history')}
               isLast
             />
@@ -190,18 +192,18 @@ export default function ProfilePage() {
         )}
 
         {/* Support section */}
-        <MenuSection title="Support">
-          <MenuRow icon={HelpCircle} label="Help & FAQ" onClick={() => router.push('/app/help')} />
-          <MenuRow icon={Phone} label="Contact Support" onClick={() => router.push('/app/support')} />
-          <MenuRow icon={FileText} label="Terms & Privacy Policy" onClick={() => router.push('/app/terms')} />
-          <MenuRow icon={Star} label="Rate the App" onClick={() => router.push('/app/rate')} isLast />
+        <MenuSection title={t('support')}>
+          <MenuRow icon={HelpCircle} label={t('help_faq')} onClick={() => router.push('/app/help')} />
+          <MenuRow icon={Phone} label={t('contact_support')} onClick={() => router.push('/app/support')} />
+          <MenuRow icon={FileText} label={t('terms_privacy')} onClick={() => router.push('/app/terms')} />
+          <MenuRow icon={Star} label={t('rate_app')} onClick={() => router.push('/app/rate')} isLast />
         </MenuSection>
 
         {/* Danger zone */}
-        <MenuSection title="Danger Zone">
+        <MenuSection title={t('danger_zone')}>
           <MenuRow
             icon={LogOut}
-            label="Logout"
+            label={t('logout')}
             labelColor="#EF4444"
             iconColor="#EF4444"
             isLast
@@ -211,7 +213,7 @@ export default function ProfilePage() {
 
         {/* Version */}
         <p className="text-center text-xs mt-2" style={{ color: '#8B949E' }}>
-          Cab Safars v1.0.0 · Built with care
+          {t('app_version')}
         </p>
       </main>
     </AppShell>

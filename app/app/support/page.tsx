@@ -4,26 +4,28 @@ import { useRouter } from 'next/navigation';
 import { Phone, Mail, MessageCircle, Clock, MapPin } from 'lucide-react';
 import AppShell from '@/components/app/AppShell';
 import AppHeader from '@/components/app/AppHeader';
+import { useTranslation } from '@/lib/useTranslation';
 
 const SUPPORT_PHONE = '9574816765';
 const SUPPORT_ADDRESS = 'F-18, Janki Apartment, Opp Fojdar Ni Chali, Saijpur Bogha, Naroda, Ahmedabad';
 
 export default function SupportPage() {
   const router = useRouter();
+  const { t } = useTranslation();
 
   const options = [
-    { icon: Phone, label: 'Call Support', sub: `+91 ${SUPPORT_PHONE}`, color: '#22C55E', href: `tel:+91${SUPPORT_PHONE}` },
-    { icon: MessageCircle, label: 'WhatsApp Us', sub: 'Quick response on WhatsApp', color: '#25D366', href: `https://wa.me/91${SUPPORT_PHONE}` },
-    { icon: Mail, label: 'Email Support', sub: 'support@cabsafars.in', color: '#3B82F6', href: 'mailto:support@cabsafars.in' },
+    { icon: Phone, label: t('call_support'), sub: `+91 ${SUPPORT_PHONE}`, color: '#22C55E', href: `tel:+91${SUPPORT_PHONE}` },
+    { icon: MessageCircle, label: t('whatsapp_us'), sub: t('whatsapp_quick'), color: '#25D366', href: `https://wa.me/91${SUPPORT_PHONE}` },
+    { icon: Mail, label: t('email_support_lbl'), sub: 'support@cabsafars.in', color: '#3B82F6', href: 'mailto:support@cabsafars.in' },
   ];
 
   return (
     <AppShell>
-      <AppHeader title="Contact Support" showBack onBack={() => router.back()} />
+      <AppHeader title={t('contact_support')} showBack onBack={() => router.back()} />
       <main className="flex-1 overflow-y-auto px-4 pb-10 pt-6">
         <div className="flex items-center gap-2 rounded-xl px-4 py-3 mb-6" style={{ backgroundColor: 'rgba(245,166,35,0.08)', border: '1px solid rgba(245,166,35,0.2)' }}>
           <Clock size={14} style={{ color: '#F5A623' }} />
-          <p className="text-xs" style={{ color: '#F5A623' }}>Support hours: Mon–Sat, 9 AM – 6 PM IST</p>
+          <p className="text-xs" style={{ color: '#F5A623' }}>{t('support_hours')}</p>
         </div>
 
         <div className="flex flex-col gap-3 mb-6">
@@ -54,7 +56,7 @@ export default function SupportPage() {
               <MapPin size={16} style={{ color: '#F5A623' }} />
             </div>
             <div>
-              <p className="text-sm font-semibold mb-1" style={{ color: '#F0F6FC' }}>Office Address</p>
+              <p className="text-sm font-semibold mb-1" style={{ color: '#F0F6FC' }}>{t('office_address')}</p>
               <p className="text-xs leading-relaxed" style={{ color: '#8B949E' }}>{SUPPORT_ADDRESS}</p>
             </div>
           </div>
@@ -65,7 +67,7 @@ export default function SupportPage() {
           style={{ backgroundColor: '#21262D', color: '#8B949E', border: '1px solid #30363D' }}
           onClick={() => router.push('/app/terms')}
         >
-          View Terms &amp; Privacy Policy
+          {t('view_terms_privacy')}
         </button>
       </main>
     </AppShell>

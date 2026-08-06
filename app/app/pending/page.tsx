@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useAppState } from '@/lib/app-state';
 import AppShell from '@/components/app/AppShell';
 import { availableTripsForDriver, vendorFreeTrips, demoNotifications } from '@/lib/demo-users';
+import { useTranslation } from '@/lib/useTranslation';
 
 function HourglassIcon() {
   return (
@@ -75,6 +76,7 @@ function InfoRow({ label, value }: { label: string; value: string }) {
 export default function PendingPage() {
   const router = useRouter();
   const { state, dispatch } = useAppState();
+  const { t } = useTranslation();
   const user = state.currentUser;
 
   useEffect(() => {
@@ -106,10 +108,10 @@ export default function PendingPage() {
 
         {/* Heading */}
         <h1 className="text-2xl font-bold text-center mb-2" style={{ color: '#F0F6FC' }}>
-          Account Under Review
+          {t('account_under_review')}
         </h1>
         <p className="text-sm text-center mb-8 leading-relaxed max-w-[280px]" style={{ color: '#8B949E' }}>
-          Your account is being reviewed by our team. You&apos;ll receive a notification once approved.
+          {t('account_being_reviewed')}
         </p>
 
         {/* Info card */}
@@ -118,24 +120,24 @@ export default function PendingPage() {
           style={{ backgroundColor: '#161B22', border: '1px solid #30363D' }}
         >
           <p className="text-xs font-semibold uppercase tracking-wider mb-3" style={{ color: '#8B949E' }}>
-            Your Details
+            {t('your_details')}
           </p>
-          <InfoRow label="Name" value={user.name} />
-          <InfoRow label="Role" value={user.role.charAt(0).toUpperCase() + user.role.slice(1)} />
-          <InfoRow label="City" value={user.city} />
+          <InfoRow label={t('label_name')} value={user.name} />
+          <InfoRow label={t('label_role')} value={user.role.charAt(0).toUpperCase() + user.role.slice(1)} />
+          <InfoRow label={t('city')} value={user.city} />
           {user.role === 'vendor' && user.companyName && (
-            <InfoRow label="Company" value={user.companyName} />
+            <InfoRow label={t('label_company')} value={user.companyName} />
           )}
           {user.role === 'driver' && user.vehicleType && (
-            <InfoRow label="Vehicle" value={user.vehicleType} />
+            <InfoRow label={t('label_vehicle')} value={user.vehicleType} />
           )}
           <div className="flex justify-between items-center pt-2.5">
-            <span className="text-sm" style={{ color: '#8B949E' }}>Status</span>
+            <span className="text-sm" style={{ color: '#8B949E' }}>{t('label_status')}</span>
             <span
               className="text-xs font-bold px-2.5 py-1 rounded-full"
               style={{ backgroundColor: '#F59E0B22', color: '#F59E0B' }}
             >
-              Pending Review
+              {t('pending_review')}
             </span>
           </div>
         </div>
@@ -147,7 +149,7 @@ export default function PendingPage() {
         >
           <span style={{ color: '#22C55E' }}>⏱</span>
           <span className="text-sm" style={{ color: '#8B949E' }}>
-            Usually takes <strong style={{ color: '#F0F6FC' }}>24–48 hours</strong>
+            {t('usually_takes')} <strong style={{ color: '#F0F6FC' }}>{t('hours_48')}</strong>
           </span>
         </div>
 
@@ -157,7 +159,7 @@ export default function PendingPage() {
           className="text-sm mb-6"
           style={{ color: '#F5A623' }}
         >
-          Contact Support →
+          {t('contact_support_link')}
         </a>
 
         {/* Demo bypass */}
@@ -170,7 +172,7 @@ export default function PendingPage() {
             color: '#8B949E',
           }}
         >
-          Skip for Demo (Approve Now)
+          {t('skip_demo')}
         </button>
       </div>
     </AppShell>

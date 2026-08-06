@@ -7,6 +7,7 @@ import {
 } from 'lucide-react';
 import AppShell from '@/components/app/AppShell';
 import AppHeader from '@/components/app/AppHeader';
+import { useTranslation } from '@/lib/useTranslation';
 
 // â”€â”€â”€ Types â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 type NotifType =
@@ -128,6 +129,7 @@ function NotifCard({
 // â”€â”€â”€ Page â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 export default function NotificationsPage() {
   const router = useRouter();
+  const { t } = useTranslation();
   const [notifications, setNotifications] = useState<Notification[]>(INITIAL_NOTIFICATIONS);
   const [activeTab, setActiveTab] = useState<'all' | 'unread'>('all');
 
@@ -145,7 +147,7 @@ export default function NotificationsPage() {
   return (
     <AppShell>
       <AppHeader
-        title="Notifications"
+        title={t('notifications')}
         showBack
         onBack={() => router.back()}
         rightAction={
@@ -155,7 +157,7 @@ export default function NotificationsPage() {
               style={{ color: '#F5A623' }}
               onClick={markAllRead}
             >
-              All read
+              {t('mark_all_read')}
             </button>
           ) : undefined
         }
@@ -174,7 +176,7 @@ export default function NotificationsPage() {
               }}
               onClick={() => setActiveTab(tab)}
             >
-              {tab === 'all' ? 'All' : 'Unread'}
+              {tab === 'all' ? t('tab_all') : t('tab_unread')}
               {tab === 'unread' && unreadCount > 0 && (
                 <span
                   className="text-xs font-bold px-1.5 py-0.5 rounded-full"
@@ -200,12 +202,10 @@ export default function NotificationsPage() {
               <Bell size={28} style={{ color: '#8B949E' }} />
             </div>
             <p className="font-semibold mb-1" style={{ color: '#F0F6FC' }}>
-              {activeTab === 'unread' ? 'No unread notifications' : 'No notifications'}
+              {activeTab === 'unread' ? t('no_unread_notifs') : t('no_notifs')}
             </p>
             <p className="text-sm" style={{ color: '#8B949E' }}>
-              {activeTab === 'unread'
-                ? 'You\'re all caught up!'
-                : 'Notifications will appear here when there\'s activity.'}
+              {activeTab === 'unread' ? t('all_caught_up') : t('notifs_appear_here')}
             </p>
           </div>
         ) : (

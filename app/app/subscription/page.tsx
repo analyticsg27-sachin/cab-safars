@@ -6,6 +6,7 @@ import { Crown, Lock, Check, X, ChevronRight, Calendar, Shield } from 'lucide-re
 import AppShell from '@/components/app/AppShell';
 import AppHeader from '@/components/app/AppHeader';
 import { useAppState } from '@/lib/app-state';
+import { useTranslation } from '@/lib/useTranslation';
 
 type PaymentState = 'idle' | 'processing' | 'success' | 'failed';
 
@@ -44,6 +45,7 @@ function addDays(days: number) {
 
 // â"€â"€â"€ Spinner â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€
 function GoldSpinner() {
+  const { t } = useTranslation();
   return (
     <div className="flex flex-col items-center justify-center gap-6">
       <div
@@ -54,8 +56,8 @@ function GoldSpinner() {
         }}
       />
       <div className="text-center">
-        <p className="text-lg font-bold mb-1" style={{ color: '#F0F6FC' }}>Processing Payment...</p>
-        <p className="text-sm" style={{ color: '#8B949E' }}>Please don't close this screen</p>
+        <p className="text-lg font-bold mb-1" style={{ color: '#F0F6FC' }}>{t('processing_payment')}</p>
+        <p className="text-sm" style={{ color: '#8B949E' }}>{t('dont_close_screen')}</p>
       </div>
     </div>
   );
@@ -63,6 +65,7 @@ function GoldSpinner() {
 
 // â"€â"€â"€ Success â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€
 function PaymentSuccess({ txnId, onContinue }: { txnId: string; onContinue: () => void }) {
+  const { t } = useTranslation();
   return (
     <div className="flex flex-col items-center justify-center gap-6 px-6 text-center">
       {/* Animated check */}
@@ -84,8 +87,8 @@ function PaymentSuccess({ txnId, onContinue }: { txnId: string; onContinue: () =
       `}</style>
 
       <div>
-        <h2 className="text-2xl font-bold mb-1" style={{ color: '#F0F6FC' }}>Payment Successful!</h2>
-        <p className="text-sm" style={{ color: '#8B949E' }}>Your Premium subscription is now active</p>
+        <h2 className="text-2xl font-bold mb-1" style={{ color: '#F0F6FC' }}>{t('payment_successful')}</h2>
+        <p className="text-sm" style={{ color: '#8B949E' }}>{t('premium_now_active')}</p>
       </div>
 
       {/* Transaction details */}
@@ -94,11 +97,11 @@ function PaymentSuccess({ txnId, onContinue }: { txnId: string; onContinue: () =
         style={{ backgroundColor: '#161B22', borderColor: '#30363D' }}
       >
         {[
-          { label: 'Amount', value: '₹199.00' },
-          { label: 'Plan', value: 'Premium Monthly' },
-          { label: 'Valid till', value: addDays(30) },
-          { label: 'Transaction ID', value: txnId },
-          { label: 'Status', value: 'PAID' },
+          { label: t('label_amount'), value: '₹199.00' },
+          { label: t('label_plan'), value: t('premium_monthly') },
+          { label: t('label_valid_till'), value: addDays(30) },
+          { label: t('label_txn_id'), value: txnId },
+          { label: t('label_status'), value: 'PAID' },
         ].map(({ label, value }) => (
           <div key={label} className="flex justify-between py-2.5" style={{ borderBottom: '1px solid #30363D' }}>
             <span className="text-sm" style={{ color: '#8B949E' }}>{label}</span>
@@ -117,7 +120,7 @@ function PaymentSuccess({ txnId, onContinue }: { txnId: string; onContinue: () =
         style={{ backgroundColor: '#F5A623', color: '#0D1117' }}
         onClick={onContinue}
       >
-        Continue to App
+        {t('continue_to_app')}
       </button>
     </div>
   );
@@ -125,6 +128,7 @@ function PaymentSuccess({ txnId, onContinue }: { txnId: string; onContinue: () =
 
 // â"€â"€â"€ Failed â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€
 function PaymentFailed({ onRetry, onContact }: { onRetry: () => void; onContact: () => void }) {
+  const { t } = useTranslation();
   return (
     <div className="flex flex-col items-center justify-center gap-6 px-6 text-center">
       <div
@@ -134,9 +138,9 @@ function PaymentFailed({ onRetry, onContact }: { onRetry: () => void; onContact:
         <X size={40} style={{ color: '#EF4444' }} strokeWidth={3} />
       </div>
       <div>
-        <h2 className="text-2xl font-bold mb-1" style={{ color: '#F0F6FC' }}>Payment Failed</h2>
+        <h2 className="text-2xl font-bold mb-1" style={{ color: '#F0F6FC' }}>{t('payment_failed_title')}</h2>
         <p className="text-sm" style={{ color: '#8B949E' }}>
-          Your payment could not be processed. No amount was deducted.
+          {t('payment_failed_desc')}
         </p>
       </div>
       <div className="w-full space-y-3">
@@ -145,18 +149,18 @@ function PaymentFailed({ onRetry, onContact }: { onRetry: () => void; onContact:
           style={{ backgroundColor: '#F5A623', color: '#0D1117' }}
           onClick={onRetry}
         >
-          Try Again
+          {t('try_again')}
         </button>
         <button
           className="w-full h-14 rounded-xl font-semibold text-base"
           style={{ backgroundColor: '#21262D', color: '#F0F6FC', border: '1px solid #30363D' }}
           onClick={onContact}
         >
-          Contact Support
+          {t('contact_support')}
         </button>
       </div>
       <p className="text-xs" style={{ color: '#8B949E' }}>
-        Demo: payment was simulated as failed for testing
+        {t('test_payment_failure')}
       </p>
     </div>
   );
@@ -169,6 +173,7 @@ export default function SubscriptionPage() {
   const currentUser = state.currentUser;
   const isDriver = currentUser?.role === 'driver';
 
+  const { t } = useTranslation();
   const [paymentState, setPaymentState] = useState<PaymentState>('idle');
   const [txnId, setTxnId] = useState('');
 
@@ -215,7 +220,7 @@ export default function SubscriptionPage() {
   if (paymentState === 'success') {
     return (
       <AppShell>
-        <AppHeader title="Payment Successful" />
+        <AppHeader title={t('payment_successful')} />
         <main className="flex-1 flex items-center overflow-y-auto px-4 py-8">
           <PaymentSuccess txnId={txnId} onContinue={handleSuccess} />
         </main>
@@ -227,7 +232,7 @@ export default function SubscriptionPage() {
   if (paymentState === 'failed') {
     return (
       <AppShell>
-        <AppHeader title="Payment Failed" showBack onBack={() => setPaymentState('idle')} />
+        <AppHeader title={t('payment_failed_title')} showBack onBack={() => setPaymentState('idle')} />
         <main className="flex-1 flex items-center overflow-y-auto px-4 py-8">
           <PaymentFailed
             onRetry={() => setPaymentState('idle')}
@@ -240,7 +245,7 @@ export default function SubscriptionPage() {
 
   return (
     <AppShell>
-      <AppHeader title="Premium Subscription" showBack onBack={() => router.back()} />
+      <AppHeader title={t('premium_subscription')} showBack onBack={() => router.back()} />
 
       <main className="flex-1 overflow-y-auto px-4 pb-10 pt-5">
         {!isPremium ? (
@@ -256,8 +261,8 @@ export default function SubscriptionPage() {
               >
                 <Crown size={36} style={{ color: '#F5A623' }} />
               </div>
-              <h1 className="text-2xl font-bold mb-1" style={{ color: '#F0F6FC' }}>Go Premium</h1>
-              <p className="text-sm" style={{ color: '#8B949E' }}>Unlock the full Cab Safars experience</p>
+              <h1 className="text-2xl font-bold mb-1" style={{ color: '#F0F6FC' }}>{t('go_premium')}</h1>
+              <p className="text-sm" style={{ color: '#8B949E' }}>{t('unlock_experience')}</p>
             </div>
 
             {/* Plan card */}
@@ -270,7 +275,7 @@ export default function SubscriptionPage() {
               }}
             >
               <div className="flex items-center justify-between mb-4">
-                <span className="font-bold text-base" style={{ color: '#F0F6FC' }}>Premium Plan</span>
+                <span className="font-bold text-base" style={{ color: '#F0F6FC' }}>{t('premium_trip')}</span>
                 <div className="text-right">
                   <span className="text-3xl font-bold" style={{ color: '#F5A623' }}>₹199</span>
                   <span className="text-sm" style={{ color: '#8B949E' }}>/month</span>
@@ -298,16 +303,16 @@ export default function SubscriptionPage() {
                 style={{ backgroundColor: '#F5A623', color: '#0D1117' }}
                 onClick={() => handleSubscribe(false)}
               >
-                Subscribe Now
+                {t('subscribe_now')}
               </button>
 
               {/* Razorpay note */}
               <div className="flex items-center justify-center gap-1.5 mb-2">
                 <Lock size={11} style={{ color: '#8B949E' }} />
-                <span className="text-xs" style={{ color: '#8B949E' }}>Secure payment via Razorpay</span>
+                <span className="text-xs" style={{ color: '#8B949E' }}>{t('secure_razorpay')}</span>
               </div>
               <p className="text-center text-xs" style={{ color: '#8B949E' }}>
-                Auto-renews monthly. Cancel anytime.
+                {t('auto_renews')}
               </p>
             </div>
 
@@ -318,7 +323,7 @@ export default function SubscriptionPage() {
                 style={{ color: '#8B949E' }}
                 onClick={() => handleSubscribe(true)}
               >
-                Test Payment Failure (demo)
+                {t('test_payment_failure')}
               </button>
             </div>
           </>
@@ -340,10 +345,10 @@ export default function SubscriptionPage() {
                 className="text-xs font-bold px-3 py-1 rounded-full mb-2"
                 style={{ backgroundColor: 'rgba(34,197,94,0.15)', color: '#22C55E' }}
               >
-                ACTIVE
+                {t('active_status_badge')}
               </span>
-              <h1 className="text-xl font-bold" style={{ color: '#F0F6FC' }}>Premium Member</h1>
-              <p className="text-sm" style={{ color: '#8B949E' }}>You have full access to all features</p>
+              <h1 className="text-xl font-bold" style={{ color: '#F0F6FC' }}>{t('premium_member')}</h1>
+              <p className="text-sm" style={{ color: '#8B949E' }}>{t('you_have_full_access')}</p>
             </div>
 
             {/* Current plan info — real dates from state */}
@@ -353,7 +358,7 @@ export default function SubscriptionPage() {
             >
               <div className="flex items-center gap-2 mb-3">
                 <Shield size={14} style={{ color: '#22C55E' }} />
-                <p className="text-xs font-semibold uppercase tracking-wider" style={{ color: '#8B949E' }}>Current Plan</p>
+                <p className="text-xs font-semibold uppercase tracking-wider" style={{ color: '#8B949E' }}>{t('current_plan')}</p>
               </div>
               {(() => {
                 const expiry = currentUser?.premiumExpiry ?? addDays(30);
@@ -364,11 +369,11 @@ export default function SubscriptionPage() {
                 startDate.setDate(startDate.getDate() - 30);
                 const fmtDate = (d: Date) => d.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
                 return [
-                  { label: 'Plan', value: 'Premium Monthly' },
-                  { label: 'Price', value: '₹199/month' },
-                  { label: 'Started on', value: fmtDate(startDate) },
-                  { label: 'Valid till', value: fmtDate(expiryDate) },
-                  { label: 'Days remaining', value: `${daysLeft} day${daysLeft !== 1 ? 's' : ''}` },
+                  { label: t('label_plan'), value: t('premium_monthly') },
+                  { label: t('label_price'), value: '₹199/month' },
+                  { label: t('label_started_on'), value: fmtDate(startDate) },
+                  { label: t('label_valid_till'), value: fmtDate(expiryDate) },
+                  { label: t('label_days_remaining'), value: `${daysLeft} day${daysLeft !== 1 ? 's' : ''}` },
                 ].map(({ label, value }) => (
                   <div key={label} className="flex justify-between py-2.5" style={{ borderBottom: '1px solid #30363D' }}>
                     <span className="text-sm" style={{ color: '#8B949E' }}>{label}</span>
@@ -377,7 +382,7 @@ export default function SubscriptionPage() {
                 ));
               })()}
               <div className="flex justify-between items-center py-2.5">
-                <span className="text-sm" style={{ color: '#8B949E' }}>Auto-Renew</span>
+                <span className="text-sm" style={{ color: '#8B949E' }}>{t('auto_renew')}</span>
                 <div className="w-11 h-6 rounded-full relative" style={{ backgroundColor: '#22C55E' }}>
                   <div className="absolute w-5 h-5 rounded-full top-0.5 right-0.5" style={{ backgroundColor: '#fff' }} />
                 </div>
@@ -390,7 +395,7 @@ export default function SubscriptionPage() {
               style={{ backgroundColor: '#161B22', borderColor: '#30363D' }}
             >
               <p className="text-xs font-semibold uppercase tracking-wider mb-3" style={{ color: '#8B949E' }}>
-                Payment History
+                {t('payment_history')}
               </p>
               {DEMO_PAYMENT_HISTORY.map((p, i) => (
                 <div

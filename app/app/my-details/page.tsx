@@ -9,12 +9,14 @@ import {
 import AppShell from '@/components/app/AppShell';
 import AppHeader from '@/components/app/AppHeader';
 import { useAppState } from '@/lib/app-state';
+import { useTranslation } from '@/lib/useTranslation';
 
 export default function MyDetailsPage() {
   const router = useRouter();
   const { state, dispatch } = useAppState();
   const user = state.currentUser;
 
+  const { t } = useTranslation();
   const [editing, setEditing] = useState(false);
   const [draftName, setDraftName] = useState('');
   const [draftPhone, setDraftPhone] = useState('');
@@ -22,7 +24,7 @@ export default function MyDetailsPage() {
 
   if (!user) { router.replace('/app/'); return null; }
 
-  const roleLabel = user.role === 'vendor' ? 'Trip Provider' : 'Driver';
+  const roleLabel = user.role === 'vendor' ? t('trip_provider') : t('driver');
   const isVendor = user.role === 'vendor';
 
   function startEdit() {
@@ -42,16 +44,16 @@ export default function MyDetailsPage() {
   // Demo stats per role
   const stats = isVendor
     ? [
-        { label: 'Trips Posted', value: '12', icon: TrendingUp, color: '#F5A623' },
-        { label: 'Drivers Hired', value: '8', icon: User, color: '#2D6BE4' },
-        { label: 'Avg. Rating', value: '4.7★', icon: Star, color: '#22C55E' },
-        { label: 'Member Since', value: 'Jan 2024', icon: Calendar, color: '#8B949E' },
+        { label: t('trips_posted_stat'), value: '12', icon: TrendingUp, color: '#F5A623' },
+        { label: t('drivers_hired'), value: '8', icon: User, color: '#2D6BE4' },
+        { label: t('avg_rating'), value: '4.7★', icon: Star, color: '#22C55E' },
+        { label: t('member_since_stat'), value: 'Jan 2024', icon: Calendar, color: '#8B949E' },
       ]
     : [
-        { label: 'Trips Done', value: '34', icon: TrendingUp, color: '#F5A623' },
-        { label: 'Trips Upcoming', value: '2', icon: Clock, color: '#2D6BE4' },
-        { label: 'Avg. Rating', value: '4.8★', icon: Star, color: '#22C55E' },
-        { label: 'Member Since', value: 'Mar 2024', icon: Calendar, color: '#8B949E' },
+        { label: t('trips_done'), value: '34', icon: TrendingUp, color: '#F5A623' },
+        { label: t('trips_upcoming'), value: '2', icon: Clock, color: '#2D6BE4' },
+        { label: t('avg_rating'), value: '4.8★', icon: Star, color: '#22C55E' },
+        { label: t('member_since_stat'), value: 'Mar 2024', icon: Calendar, color: '#8B949E' },
       ];
 
   const planColor = user.isPremium ? '#F5A623' : '#8B949E';
@@ -60,7 +62,7 @@ export default function MyDetailsPage() {
 
   return (
     <AppShell>
-      <AppHeader title="My Details" showBack onBack={() => router.back()} />
+      <AppHeader title={t('my_details')} showBack onBack={() => router.back()} />
       <main className="flex-1 overflow-y-auto pb-10">
 
         {/* Hero profile header */}
@@ -120,12 +122,12 @@ export default function MyDetailsPage() {
           </div>
           <div className="flex-1">
             <p className="text-sm font-bold" style={{ color: planColor }}>
-              {user.isPremium ? 'Premium Plan Active' : 'Free Plan'}
+              {user.isPremium ? t('premium_plan_active') : t('free_plan')}
             </p>
             <p className="text-xs" style={{ color: '#8B949E' }}>
               {user.isPremium
-                ? `Expires: ${user.premiumExpiry ?? 'N/A'} · Direct contact unlocked`
-                : 'Upgrade to call & WhatsApp directly'}
+                ? `Expires: ${user.premiumExpiry ?? 'N/A'} · ${t('contact_unlocked')}`
+                : t('upgrade_contact_prompt')}
             </p>
           </div>
           {!user.isPremium && (
@@ -134,20 +136,20 @@ export default function MyDetailsPage() {
               className="text-xs font-bold px-3 py-2 rounded-xl shrink-0"
               style={{ backgroundColor: '#F5A623', color: '#0D1117' }}
             >
-              Upgrade
+              {t('upgrade')}
             </button>
           )}
         </div>
 
         {/* Editable fields */}
         <div className="px-4 mb-1">
-          <p className="text-xs font-semibold uppercase tracking-widest mb-2" style={{ color: '#8B949E' }}>Personal Info</p>
+          <p className="text-xs font-semibold uppercase tracking-widest mb-2" style={{ color: '#8B949E' }}>{t('personal_info')}</p>
         </div>
         <div className="mx-4 rounded-2xl border overflow-hidden mb-3" style={{ backgroundColor: '#161B22', borderColor: '#30363D' }}>
           {[
-            { icon: User, label: 'Full Name', key: 'name', value: user.name, draft: draftName, set: setDraftName, type: 'text' },
-            { icon: Phone, label: 'Phone', key: 'phone', value: user.phone, draft: draftPhone, set: setDraftPhone, type: 'tel' },
-            { icon: MapPin, label: 'City', key: 'city', value: user.city || '—', draft: draftCity, set: setDraftCity, type: 'text' },
+            { icon: User, label: t('full_name'), key: 'name', value: user.name, draft: draftName, set: setDraftName, type: 'text' },
+            { icon: Phone, label: t('phone'), key: 'phone', value: user.phone, draft: draftPhone, set: setDraftPhone, type: 'tel' },
+            { icon: MapPin, label: t('city'), key: 'city', value: user.city || '—', draft: draftCity, set: setDraftCity, type: 'text' },
           ].map(({ icon: Icon, label, value, draft, set, type }, i, arr) => (
             <div key={label} className="flex items-center gap-3 px-4 py-3.5" style={{ borderBottom: i < arr.length - 1 ? '1px solid #30363D' : 'none' }}>
               <div className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0" style={{ backgroundColor: 'rgba(139,148,158,0.1)' }}>
@@ -176,29 +178,29 @@ export default function MyDetailsPage() {
           {editing ? (
             <div className="flex gap-3">
               <button onClick={saveEdit} className="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-bold" style={{ backgroundColor: '#F5A623', color: '#0D1117' }}>
-                <Check size={14} /> Save Changes
+                <Check size={14} /> {t('save_changes')}
               </button>
               <button onClick={() => setEditing(false)} className="flex items-center justify-center gap-2 px-4 py-3 rounded-xl text-sm font-medium" style={{ backgroundColor: '#21262D', color: '#8B949E', border: '1px solid #30363D' }}>
-                <X size={14} /> Cancel
+                <X size={14} /> {t('cancel')}
               </button>
             </div>
           ) : (
             <button onClick={startEdit} className="w-full flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-medium" style={{ backgroundColor: '#21262D', color: '#F0F6FC', border: '1px solid #30363D' }}>
-              <Pencil size={14} /> Edit Details
+              <Pencil size={14} /> {t('edit_details')}
             </button>
           )}
         </div>
 
         {/* Account details (read-only) */}
         <div className="px-4 mb-1">
-          <p className="text-xs font-semibold uppercase tracking-widest mb-2" style={{ color: '#8B949E' }}>Account Info</p>
+          <p className="text-xs font-semibold uppercase tracking-widest mb-2" style={{ color: '#8B949E' }}>{t('account_info')}</p>
         </div>
         <div className="mx-4 rounded-2xl border overflow-hidden mb-4" style={{ backgroundColor: '#161B22', borderColor: '#30363D' }}>
           {[
-            { icon: Mail, label: 'Email', value: user.email || '—' },
-            { icon: isVendor ? Building2 : Truck, label: isVendor ? 'Company' : 'Vehicle Type', value: isVendor ? (user.companyName || '—') : (user.vehicleType || '—') },
-            { icon: ShieldCheck, label: 'Documents', value: 'Verified', valueColor: '#22C55E' },
-            { icon: Calendar, label: 'Account ID', value: `CS-${user.id?.toString().padStart(5, '0') ?? '00001'}` },
+            { icon: Mail, label: t('email'), value: user.email || '—' },
+            { icon: isVendor ? Building2 : Truck, label: isVendor ? t('company') : t('vehicle_type'), value: isVendor ? (user.companyName || '—') : (user.vehicleType || '—') },
+            { icon: ShieldCheck, label: t('documents'), value: t('verified'), valueColor: '#22C55E' },
+            { icon: Calendar, label: t('account_id'), value: `CS-${user.id?.toString().padStart(5, '0') ?? '00001'}` },
           ].map(({ icon: Icon, label, value, valueColor }, i, arr) => (
             <div key={label} className="flex items-center gap-3 px-4 py-3.5" style={{ borderBottom: i < arr.length - 1 ? '1px solid #30363D' : 'none' }}>
               <div className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0" style={{ backgroundColor: 'rgba(139,148,158,0.1)' }}>
@@ -214,13 +216,13 @@ export default function MyDetailsPage() {
 
         {/* Quick links */}
         <div className="px-4 mb-1">
-          <p className="text-xs font-semibold uppercase tracking-widest mb-2" style={{ color: '#8B949E' }}>Quick Actions</p>
+          <p className="text-xs font-semibold uppercase tracking-widest mb-2" style={{ color: '#8B949E' }}>{t('quick_actions')}</p>
         </div>
         <div className="mx-4 rounded-2xl border overflow-hidden mb-6" style={{ backgroundColor: '#161B22', borderColor: '#30363D' }}>
           {[
-            { icon: FileText, label: 'My Documents', sub: 'View & upload documents', path: '/app/documents' },
-            { icon: Crown, label: 'Subscription & Payments', sub: 'Plan, billing history', path: '/app/payment-history' },
-            { icon: ShieldCheck, label: 'Change Password', sub: 'Update your password', path: '/app/change-password' },
+            { icon: FileText, label: t('my_documents'), sub: t('view_upload_docs'), path: '/app/documents' },
+            { icon: Crown, label: t('subscription_payments_lbl'), sub: t('plan_billing_lbl'), path: '/app/payment-history' },
+            { icon: ShieldCheck, label: t('change_password'), sub: t('update_password_lbl'), path: '/app/change-password' },
           ].map(({ icon: Icon, label, sub, path }, i, arr) => (
             <button
               key={label}
@@ -241,7 +243,7 @@ export default function MyDetailsPage() {
         </div>
 
         <p className="text-center text-xs px-6" style={{ color: '#8B949E' }}>
-          Email and account details can only be changed via support.
+          {t('email_change_note')}
         </p>
       </main>
     </AppShell>
