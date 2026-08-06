@@ -326,7 +326,7 @@ export default function VendorTripDetailPage() {
                     </div>
                   ))}
                   <button
-                    onClick={() => router.push('/app/premium')}
+                    onClick={() => router.push('/app/subscription')}
                     className="w-full flex items-center justify-between mt-3 p-4 rounded-2xl transition-all active:scale-95"
                     style={{ background: 'linear-gradient(135deg,rgba(245,166,35,0.1),rgba(245,166,35,0.05))', border: '1px solid rgba(245,166,35,0.3)' }}>
                     <div className="flex items-center gap-3">
