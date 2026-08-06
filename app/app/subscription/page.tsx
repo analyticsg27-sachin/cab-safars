@@ -7,6 +7,7 @@ import AppShell from '@/components/app/AppShell';
 import AppHeader from '@/components/app/AppHeader';
 import { useAppState } from '@/lib/app-state';
 import { useTranslation } from '@/lib/useTranslation';
+import { isFullyActive, LockedFeature } from '@/components/app/AccountStatusBanner';
 
 type PaymentState = 'idle' | 'processing' | 'success' | 'failed';
 
@@ -175,6 +176,15 @@ export default function SubscriptionPage() {
 
   const { t } = useTranslation();
   const [paymentState, setPaymentState] = useState<PaymentState>('idle');
+
+  if (currentUser && !isFullyActive(currentUser)) {
+    return (
+      <AppShell>
+        <AppHeader title={t('subscription')} showBack onBack={() => router.back()} />
+        <LockedFeature user={currentUser} feature="subscribe to Premium" />
+      </AppShell>
+    );
+  }
   const [txnId, setTxnId] = useState('');
 
   // Read real premium status from app state

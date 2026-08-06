@@ -11,7 +11,7 @@ import AppHeader from '@/components/app/AppHeader';
 import TripsService from '@/lib/services/trips.service';
 import type { Trip } from '@/lib/services/trips.service';
 import { IS_API_MODE, isApiMode } from '@/lib/services';
-import AccountStatusBanner from '@/components/app/AccountStatusBanner';
+import AccountStatusBanner, { isFullyActive, LockedFeature } from '@/components/app/AccountStatusBanner';
 
 function StatCard({ label, value, color }: { label: string; value: string | number; color: string }) {
   return (
@@ -120,8 +120,12 @@ export default function TripProviderHomePage() {
             <StatCard label={t('contacts')} value={loading ? '…' : totalContacts} color="#2D6BE4" />
           </div>
 
-          {/* Quick actions */}
-          <div className="grid grid-cols-2 gap-3">
+          {/* Quick actions — locked for doc-pending users */}
+          {!isFullyActive(user) ? (
+            <LockedFeature user={user} feature="post trips and manage your dashboard" />
+          ) : null}
+
+          {isFullyActive(user) && <><div className="grid grid-cols-2 gap-3">
             <button onClick={() => router.push('/app/vendor/post')}
               className="flex items-center gap-2 px-4 py-4 rounded-xl transition-all active:scale-95"
               style={{ background: 'linear-gradient(135deg, #F5A623, #D4891E)', boxShadow: '0 4px 20px rgba(245,166,35,0.3)' }}>
@@ -215,6 +219,7 @@ export default function TripProviderHomePage() {
               )
             )}
           </div>
+          </>}
         </div>
 
         <BottomNav role="vendor" activeTab={activeTab} onTabChange={handleTab} unreadNotifications={state.unreadNotifications} isPremium={user.isPremium} />

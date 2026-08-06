@@ -8,7 +8,7 @@ import AppShell from '@/components/app/AppShell';
 import BottomNav from '@/components/app/BottomNav';
 import AppHeader from '@/components/app/AppHeader';
 import TripAlertBanner from '@/components/app/TripAlertBanner';
-import AccountStatusBanner from '@/components/app/AccountStatusBanner';
+import AccountStatusBanner, { isFullyActive, LockedFeature } from '@/components/app/AccountStatusBanner';
 import { useTranslation } from '@/lib/useTranslation';
 
 export default function DriverHomePage() {
@@ -92,6 +92,9 @@ export default function DriverHomePage() {
             </button>
           )}
 
+          {/* Find trips + recent trips — locked for doc-pending users */}
+          {!isFullyActive(user) ? <LockedFeature user={user} feature="browse and find trips" /> : <>
+
           {/* Find trips CTA */}
           <button
             onClick={() => router.push('/app/driver/trips')}
@@ -169,6 +172,7 @@ export default function DriverHomePage() {
               ))}
             </div>
           </div>
+          </>}
         </div>
 
         <BottomNav

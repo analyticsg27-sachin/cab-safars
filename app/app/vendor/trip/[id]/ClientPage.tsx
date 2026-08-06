@@ -8,6 +8,8 @@ import {
 } from 'lucide-react';
 import type { AppTrip, ContactedDriver } from '@/lib/app-types';
 import { useAppState } from '@/lib/app-state';
+import { isFullyActive } from '@/components/app/AccountStatusBanner';
+import { useTranslation } from '@/lib/useTranslation';
 
 const DEMO_CONTACTS: Record<string, ContactedDriver[]> = {
   'tr-v003-001': [
@@ -57,23 +59,24 @@ function avatarBg(name: string) {
 // ─── Components ───────────────────────────────────────────────────────────────
 
 function StatusBadge({ status }: { status: AppTrip['status'] }) {
+  const { t } = useTranslation();
   if (status === 'open') return (
     <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold"
       style={{ background: 'rgba(34,197,94,0.15)', color: '#22C55E', border: '1px solid rgba(34,197,94,0.2)' }}>
       <span className="w-1.5 h-1.5 rounded-full bg-[#22C55E] animate-pulse" />
-      Open
+      {t('status_open')}
     </span>
   );
   if (status === 'closed') return (
     <span className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-semibold"
       style={{ background: 'rgba(139,148,158,0.15)', color: '#8B949E', border: '1px solid rgba(139,148,158,0.2)' }}>
-      Closed
+      {t('closed')}
     </span>
   );
   return (
     <span className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-semibold"
       style={{ background: 'rgba(239,68,68,0.15)', color: '#EF4444', border: '1px solid rgba(239,68,68,0.2)' }}>
-      Cancelled
+      {t('status_cancelled')}
     </span>
   );
 }
@@ -142,6 +145,7 @@ export default function VendorTripDetailPage() {
   const params = useParams();
   const tripId = params?.id as string;
   const { state, dispatch } = useAppState();
+  const { t } = useTranslation();
   const [closing, setClosing] = useState(false);
 
   const trip = state.trips.find((t: AppTrip) => t.id === tripId);
@@ -156,15 +160,15 @@ export default function VendorTripDetailPage() {
           <X size={28} color="#EF4444" />
         </div>
         <div>
-          <h2 className="text-lg font-bold text-[#F0F6FC]">Trip Not Found</h2>
-          <p className="text-sm text-[#8B949E] mt-1">This trip may have been deleted or the link is invalid.</p>
+          <h2 className="text-lg font-bold text-[#F0F6FC]">{t('trip_not_found')}</h2>
+          <p className="text-sm text-[#8B949E] mt-1">{t('trip_not_found_v_desc')}</p>
         </div>
         <button
           onClick={() => router.push('/app/vendor/trips')}
           className="px-5 py-3 rounded-xl font-semibold text-sm"
           style={{ background: '#F5A623', color: '#0D1117' }}
         >
-          Back to Trips
+          {t('back_to_trips')}
         </button>
       </div>
     );
@@ -185,7 +189,7 @@ export default function VendorTripDetailPage() {
           <ArrowLeft size={20} color="#F0F6FC" />
         </button>
         <div className="flex-1">
-          <h1 className="text-base font-semibold text-[#F0F6FC]">Trip Details</h1>
+          <h1 className="text-base font-semibold text-[#F0F6FC]">{t('trip_details')}</h1>
         </div>
         <StatusBadge status={trip.status} />
       </header>
@@ -224,15 +228,15 @@ export default function VendorTripDetailPage() {
 
         {/* Info rows */}
         <div className="rounded-2xl px-4" style={{ background: '#161B22', border: '1px solid #30363D' }}>
-          <InfoRow icon={<Calendar size={16} color="#F5A623" />} label="Trip Date" value={formatDate(trip.tripDate)} />
-          <InfoRow icon={<Clock size={16} color="#F5A623" />} label="Departure Time" value={formatTime(trip.tripTime)} />
-          <InfoRow icon={<Truck size={16} color="#8B949E" />} label="Vehicle Type" value={trip.vehicleType} />
-          <InfoRow icon={<Package size={16} color="#8B949E" />} label="Load Type" value={trip.loadType} />
+          <InfoRow icon={<Calendar size={16} color="#F5A623" />} label={t('trip_date_lbl')} value={formatDate(trip.tripDate)} />
+          <InfoRow icon={<Clock size={16} color="#F5A623" />} label={t('departure_time')} value={formatTime(trip.tripTime)} />
+          <InfoRow icon={<Truck size={16} color="#8B949E" />} label={t('vehicle_type')} value={trip.vehicleType} />
+          <InfoRow icon={<Package size={16} color="#8B949E" />} label={t('load_type')} value={trip.loadType} />
           {trip.weightTons !== undefined && (
-            <InfoRow icon={<Weight size={16} color="#8B949E" />} label="Weight" value={`${trip.weightTons} Tons`} />
+            <InfoRow icon={<Weight size={16} color="#8B949E" />} label={t('weight')} value={`${trip.weightTons} Tons`} />
           )}
           {trip.expectedFare !== undefined && (
-            <InfoRow icon={<IndianRupee size={16} color="#22C55E" />} label="Expected Fare" value={`₹${trip.expectedFare.toLocaleString('en-IN')}`} />
+            <InfoRow icon={<IndianRupee size={16} color="#22C55E" />} label={t('expected_fare')} value={`₹${trip.expectedFare.toLocaleString('en-IN')}`} />
           )}
           {trip.notes && (
             <div className="py-3">
@@ -241,7 +245,7 @@ export default function VendorTripDetailPage() {
                   style={{ background: '#1C2128' }}>
                   <FileText size={16} color="#8B949E" />
                 </div>
-                <p className="text-xs text-[#8B949E]">Notes</p>
+                <p className="text-xs text-[#8B949E]">{t('notes')}</p>
               </div>
               <p className="text-sm text-[#F0F6FC] leading-relaxed ml-11">{trip.notes}</p>
             </div>
@@ -251,7 +255,7 @@ export default function VendorTripDetailPage() {
         {/* Closure info (if closed) */}
         {trip.status === 'closed' && trip.closureType && (
           <div className="rounded-2xl p-4" style={{ background: '#161B22', border: '1px solid #30363D' }}>
-            <h3 className="text-sm font-semibold text-[#F0F6FC] mb-3">Closure Details</h3>
+            <h3 className="text-sm font-semibold text-[#F0F6FC] mb-3">{t('closure_details')}</h3>
             <div className="flex items-center gap-3">
               <div className="w-9 h-9 rounded-xl flex items-center justify-center"
                 style={{ background: trip.closureType === 'app_driver' ? 'rgba(34,197,94,0.15)' : 'rgba(139,148,158,0.15)' }}>
@@ -261,7 +265,7 @@ export default function VendorTripDetailPage() {
               </div>
               <div>
                 <p className="text-sm font-medium text-[#F0F6FC]">
-                  {trip.closureType === 'app_driver' ? 'Closed via App Driver' : 'Closed via Outside Driver'}
+                  {trip.closureType === 'app_driver' ? t('closed_app_driver') : t('closed_outside_driver')}
                 </p>
                 {trip.closureNotes && (
                   <p className="text-xs text-[#8B949E] mt-0.5">{trip.closureNotes}</p>
@@ -274,7 +278,7 @@ export default function VendorTripDetailPage() {
         {/* Contacted Drivers */}
         <div className="rounded-2xl p-4" style={{ background: '#161B22', border: '1px solid #30363D' }}>
           <div className="flex items-center justify-between mb-3">
-            <h3 className="text-base font-semibold text-[#F0F6FC]">Contacted Drivers</h3>
+            <h3 className="text-base font-semibold text-[#F0F6FC]">{t('contacted_drivers')}</h3>
             <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full"
               style={{ background: 'rgba(245,166,35,0.1)', border: '1px solid rgba(245,166,35,0.2)' }}>
               <Users size={12} color="#F5A623" />
@@ -295,12 +299,10 @@ export default function VendorTripDetailPage() {
                     <Users size={22} color="#8B949E" />
                   </div>
                   <p className="text-sm font-medium text-[#F0F6FC]">
-                    {trip.status === 'open' ? 'No drivers yet' : 'No contact records'}
+                    {trip.status === 'open' ? t('no_drivers_yet') : t('no_contact_records')}
                   </p>
                   <p className="text-xs text-[#8B949E] leading-relaxed">
-                    {trip.status === 'open'
-                      ? 'Drivers matching your route will appear here once they contact you'
-                      : 'No drivers were recorded for this trip'}
+                    {trip.status === 'open' ? t('drivers_appear_here') : t('no_drivers_recorded')}
                   </p>
                 </div>
               );
@@ -333,8 +335,8 @@ export default function VendorTripDetailPage() {
                         <Crown size={18} color="#F5A623" />
                       </div>
                       <div className="text-left">
-                        <p className="text-sm font-bold" style={{ color: '#F5A623' }}>Unlock All Contacts</p>
-                        <p className="text-xs text-[#8B949E]">Upgrade to Premium — ₹199/month</p>
+                        <p className="text-sm font-bold" style={{ color: '#F5A623' }}>{t('unlock_all_contacts')}</p>
+                        <p className="text-xs text-[#8B949E]">{t('upgrade_premium_price')}</p>
                       </div>
                     </div>
                     <ChevronRight size={16} color="#F5A623" />
@@ -351,8 +353,8 @@ export default function VendorTripDetailPage() {
           })()}
         </div>
 
-        {/* Close / Reopen Trip */}
-        {trip.status === 'open' ? (
+        {/* Close / Reopen Trip — only for fully active users */}
+        {state.currentUser && !isFullyActive(state.currentUser) ? null : trip.status === 'open' ? (
           <button
             onClick={() => {
               setClosing(true);
@@ -363,7 +365,7 @@ export default function VendorTripDetailPage() {
             className="w-full h-14 rounded-xl font-semibold text-base flex items-center justify-center gap-2 active:scale-[0.98] transition-transform"
             style={{ background: closing ? '#0D1117' : '#161B22', border: '1px solid rgba(239,68,68,0.4)', color: '#EF4444' }}
           >
-            {closing ? 'Closing…' : 'Mark as Closed'}
+            {closing ? t('closing') : t('mark_as_closed')}
           </button>
         ) : (
           <button
@@ -374,7 +376,7 @@ export default function VendorTripDetailPage() {
             className="w-full h-14 rounded-xl font-semibold text-base flex items-center justify-center gap-2 active:scale-[0.98] transition-transform"
             style={{ background: 'rgba(34,197,94,0.08)', border: '1px solid rgba(34,197,94,0.3)', color: '#22C55E' }}
           >
-            Reopen This Trip
+            {t('reopen_trip')}
           </button>
         )}
       </main>
