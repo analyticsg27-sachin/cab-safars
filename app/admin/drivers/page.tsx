@@ -17,10 +17,24 @@ interface ApiUser {
   status: string;
   is_premium: boolean;
   vehicle_type?: string;
+  profile_image?: string;
   created_at: string;
 }
 
-const STATUS_FILTERS = ['all', 'pending', 'approved', 'rejected', 'suspended'];
+function UserAvatar({ name, src }: { name: string; src?: string }) {
+  const initials = name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2);
+  if (src) {
+    return <img src={src} alt={name} className="w-8 h-8 rounded-full object-cover flex-shrink-0" style={{ border: '1px solid #30363D' }} />;
+  }
+  return (
+    <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 text-xs font-bold"
+      style={{ background: 'rgba(245,166,35,0.15)', color: '#F5A623', border: '1px solid rgba(245,166,35,0.3)' }}>
+      {initials}
+    </div>
+  );
+}
+
+const STATUS_FILTERS = ['all', 'approved', 'rejected', 'suspended'];
 
 function DocModal({ user, onClose }: { user: ApiUser; onClose: () => void }) {
   const [docs, setDocs] = useState<UserDocument[]>([]);
@@ -168,7 +182,7 @@ export default function DriversPage() {
         page,
       });
       const r = res as unknown as { data?: ApiUser[]; pagination?: { total: number; total_pages: number } };
-      setDrivers(r.data ?? []);
+      setDrivers((r.data ?? []).filter(d => d.status !== 'pending'));
       setTotal(r.pagination?.total ?? 0);
       setTotalPages(r.pagination?.total_pages ?? 1);
     } catch (e: unknown) {
@@ -254,7 +268,12 @@ export default function DriversPage() {
               <tbody>
                 {drivers.map((d) => (
                   <tr key={d.id} className="border-b border-[#30363D]/50 hover:bg-[#1C2128]/50">
-                    <td className="px-4 py-3 text-xs font-medium text-[#F0F6FC]">{d.name}</td>
+                    <td className="px-4 py-3 whitespace-nowrap">
+                      <div className="flex items-center gap-2">
+                        <UserAvatar name={d.name} src={d.profile_image} />
+                        <span className="text-xs font-medium text-[#F0F6FC]">{d.name}</span>
+                      </div>
+                    </td>
                     <td className="px-4 py-3 text-xs text-[#8B949E]">{d.phone}</td>
                     <td className="px-4 py-3 text-xs text-[#8B949E]">{d.city}</td>
                     <td className="px-4 py-3 text-xs text-[#8B949E]">{d.vehicle_type || '—'}</td>

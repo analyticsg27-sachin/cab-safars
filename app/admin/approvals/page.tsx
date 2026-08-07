@@ -320,9 +320,16 @@ export default function ApprovalsPage() {
                 <div className="flex flex-col sm:flex-row sm:items-start gap-4">
                   {/* Avatar + full registration details */}
                   <div className="flex items-start gap-3 flex-1 min-w-0">
-                    <div className="w-12 h-12 rounded-xl bg-[#21262D] flex items-center justify-center text-[#8B949E] font-bold text-lg shrink-0">
-                      {user.name.charAt(0)}
-                    </div>
+                    {user.profile_image ? (
+                      <img src={user.profile_image} alt={user.name}
+                        className="w-12 h-12 rounded-xl object-cover shrink-0"
+                        style={{ border: '1px solid #30363D' }} />
+                    ) : (
+                      <div className="w-12 h-12 rounded-xl flex items-center justify-center text-lg font-bold shrink-0"
+                        style={{ background: 'rgba(245,166,35,0.15)', color: '#F5A623', border: '1px solid rgba(245,166,35,0.25)' }}>
+                        {user.name.split(' ').map((w: string) => w[0]).join('').toUpperCase().slice(0, 2)}
+                      </div>
+                    )}
                     <div className="flex-1 min-w-0">
                       <div className="flex flex-wrap items-center gap-2 mb-1">
                         <h3 className="text-base font-semibold text-[#F0F6FC]">{user.name}</h3>

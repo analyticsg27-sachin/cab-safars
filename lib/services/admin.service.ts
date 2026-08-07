@@ -37,6 +37,7 @@ export interface PendingRegistration {
   vehicle_type?: string;
   vehicle_number?: string;
   rejection_reason?: string;
+  profile_image?: string;
   created_at: string;
 }
 
