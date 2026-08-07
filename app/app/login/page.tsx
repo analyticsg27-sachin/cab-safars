@@ -1,5 +1,6 @@
 ﻿'use client';
 
+import { Suspense } from 'react';
 import { useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Eye, EyeOff, ArrowLeft, X, CheckCircle } from 'lucide-react';
@@ -29,7 +30,7 @@ function mockLogin(identifier: string, role: Role) {
   return Object.values(demoUsers).find((u) => u.role === role) ?? null;
 }
 
-export default function LoginPage() {
+function LoginPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { dispatch } = useAppState();
@@ -341,6 +342,14 @@ export default function LoginPage() {
         )}
       </div>
     </AppShell>
+  );
+}
+
+export default function LoginPageWrapper() {
+  return (
+    <Suspense>
+      <LoginPage />
+    </Suspense>
   );
 }
 
