@@ -113,13 +113,6 @@ export default function ProfilePage() {
   const isDriver = user.role === 'driver';
   const fullyActive = currentUser ? isFullyActive(currentUser) : false;
 
-  const initials = user.name
-    .split(' ')
-    .map((n) => n[0])
-    .join('')
-    .toUpperCase()
-    .slice(0, 2);
-
   return (
     <AppShell>
       <AppHeader title={t('nav_profile')} showBack onBack={() => router.back()} />
@@ -137,14 +130,20 @@ export default function ProfilePage() {
               />
             ) : (
               <div
-                className="w-20 h-20 rounded-full flex items-center justify-center text-2xl font-bold"
+                className="w-20 h-20 rounded-full flex items-center justify-center overflow-hidden"
                 style={{
-                  backgroundColor: user.isPremium ? 'rgba(245,166,35,0.2)' : '#21262D',
+                  backgroundColor: user.isPremium ? 'rgba(245,166,35,0.15)' : '#1C2128',
                   border: user.isPremium ? '2px solid rgba(245,166,35,0.4)' : '2px solid #30363D',
-                  color: user.isPremium ? '#F5A623' : '#8B949E',
                 }}
               >
-                {initials}
+                <svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  {/* background gradient */}
+                  <circle cx="40" cy="40" r="40" fill={user.isPremium ? 'rgba(245,166,35,0.12)' : '#1C2128'} />
+                  {/* head */}
+                  <circle cx="40" cy="30" r="13" fill={user.isPremium ? '#F5A623' : '#8B949E'} opacity="0.9" />
+                  {/* body / shoulders */}
+                  <path d="M14 72 C14 55 66 55 66 72" fill={user.isPremium ? '#F5A623' : '#8B949E'} opacity="0.7" />
+                </svg>
               </div>
             )}
             <button
