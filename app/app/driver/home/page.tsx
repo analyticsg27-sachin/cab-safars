@@ -10,17 +10,27 @@ import AppHeader from '@/components/app/AppHeader';
 import TripAlertBanner from '@/components/app/TripAlertBanner';
 import AccountStatusBanner, { isFullyActive, LockedFeature } from '@/components/app/AccountStatusBanner';
 import { useTranslation } from '@/lib/useTranslation';
+import TripsService, { type Trip } from '@/lib/services/trips.service';
+import { isApiMode } from '@/lib/services';
 
 export default function DriverHomePage() {
   const { state } = useAppState();
   const router = useRouter();
   const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState('home');
+  const [apiTrips, setApiTrips] = useState<Trip[]>([]);
   const user = state.currentUser;
 
   useEffect(() => {
     if (!state.isAuthenticated) router.push('/app');
   }, [state.isAuthenticated, router]);
+
+  useEffect(() => {
+    if (!state.isAuthenticated || !isApiMode()) return;
+    TripsService.getFeed({ page: 1, per_page: 5 })
+      .then((r) => setApiTrips(r.data ?? []))
+      .catch(() => {});
+  }, [state.isAuthenticated]);
 
   function handleTab(tab: string) {
     setActiveTab(tab);
@@ -32,8 +42,8 @@ export default function DriverHomePage() {
 
   if (!user) return null;
 
-  const openTrips = state.trips.filter((t) => t.status === 'open');
-  const nearbyTrips = openTrips.slice(0, 3);
+  const openTrips = isApiMode() ? apiTrips : state.trips.filter((t) => t.status === 'open');
+  const nearbyTrips = isApiMode() ? apiTrips.slice(0, 3) : (openTrips as typeof state.trips).slice(0, 3);
 
   return (
     <AppShell>
@@ -128,24 +138,32 @@ export default function DriverHomePage() {
             </div>
 
             <div className="flex flex-col gap-3">
-              {nearbyTrips.map((trip) => (
+              {nearbyTrips.map((trip) => {
+                const isPremium = isApiMode() ? (trip as Trip).is_premium_vendor : (trip as typeof state.trips[0]).isPremiumVendor;
+                const fromCity  = isApiMode() ? (trip as Trip).from_city        : (trip as typeof state.trips[0]).fromCity;
+                const toCity    = isApiMode() ? (trip as Trip).to_city          : (trip as typeof state.trips[0]).toCity;
+                const vehicle   = isApiMode() ? (trip as Trip).vehicle_type     : (trip as typeof state.trips[0]).vehicleType;
+                const date      = isApiMode() ? (trip as Trip).trip_date        : (trip as typeof state.trips[0]).tripDate;
+                const fare      = isApiMode() ? (trip as Trip).expected_fare    : (trip as typeof state.trips[0]).expectedFare;
+                const vendor    = isApiMode() ? (trip as Trip).vendor_name      : (trip as typeof state.trips[0]).vendorName;
+                return (
                 <button
                   key={trip.id}
                   onClick={() => router.push(`/app/driver/trip/${trip.id}`)}
                   className="w-full text-left p-4 rounded-xl transition-all active:scale-95"
                   style={{
                     backgroundColor: '#161B22',
-                    border: `1px solid ${trip.isPremiumVendor ? '#F5A62333' : '#30363D'}`,
+                    border: `1px solid ${isPremium ? '#F5A62333' : '#30363D'}`,
                   }}
                 >
                   <div className="flex items-center justify-between mb-2">
                     <div className="flex items-center gap-2">
                       <MapPin size={14} style={{ color: '#F5A623' }} />
                       <span className="text-sm font-semibold" style={{ color: '#F0F6FC' }}>
-                        {trip.fromCity} → {trip.toCity}
+                        {fromCity} → {toCity}
                       </span>
                     </div>
-                    {trip.isPremiumVendor && (
+                    {isPremium && (
                       <span
                         className="text-[10px] font-bold px-1.5 py-0.5 rounded"
                         style={{ backgroundColor: '#F5A62322', color: '#F5A623' }}
@@ -155,21 +173,22 @@ export default function DriverHomePage() {
                     )}
                   </div>
                   <div className="flex items-center gap-3 text-xs" style={{ color: '#8B949E' }}>
-                    <span>{trip.vehicleType}</span>
+                    <span>{vehicle}</span>
                     <span>•</span>
-                    <span>{trip.tripDate}</span>
-                    {trip.expectedFare && (
+                    <span>{date}</span>
+                    {fare != null && (
                       <>
                         <span>•</span>
-                        <span style={{ color: '#22C55E' }}>₹{trip.expectedFare.toLocaleString()}</span>
+                        <span style={{ color: '#22C55E' }}>₹{Number(fare).toLocaleString()}</span>
                       </>
                     )}
                   </div>
                   <p className="text-xs mt-1.5" style={{ color: '#8B949E' }}>
-                    {t('by_vendor')} {trip.vendorName}
+                    {t('by_vendor')} {vendor}
                   </p>
                 </button>
-              ))}
+                );
+              })}
             </div>
           </div>
           </>}
