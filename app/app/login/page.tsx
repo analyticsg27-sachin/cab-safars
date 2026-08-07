@@ -1,8 +1,8 @@
 ﻿'use client';
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { Eye, EyeOff, ArrowLeft, X } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { Eye, EyeOff, ArrowLeft, X, CheckCircle } from 'lucide-react';
 import { asset } from '@/lib/basepath';
 import { useAppState } from '@/lib/app-state';
 import { IS_API_MODE } from '@/lib/services';
@@ -31,6 +31,7 @@ function mockLogin(identifier: string, role: Role) {
 
 export default function LoginPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { dispatch } = useAppState();
   const [role, setRole] = useState<Role>('vendor');
   const [identifier, setIdentifier] = useState('');
@@ -38,6 +39,11 @@ export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [registered, setRegistered] = useState(false);
+
+  useEffect(() => {
+    if (searchParams.get('registered') === '1') setRegistered(true);
+  }, [searchParams]);
 
   async function handleLogin(e: React.FormEvent) {
     e.preventDefault();
@@ -49,21 +55,6 @@ export default function LoginPage() {
     if (IS_API_MODE) {
       try {
         const res = await AuthService.login(identifier.trim(), password);
-        if (res.status === 'pending') {
-          const user: AppUser = {
-            id: res.user.uuid,
-            name: res.user.name,
-            phone: res.user.phone,
-            email: res.user.email ?? '',
-            role: res.user.role,
-            status: 'pending',
-            isPremium: false,
-            city: res.user.city,
-          };
-          dispatch({ type: 'SET_USER', payload: { user, trips: [], notifications: [] } });
-          router.push('/app/pending');
-          return;
-        }
         if (res.user.status === 'rejected') {
           const user: AppUser = {
             id: res.user.uuid,
@@ -78,11 +69,6 @@ export default function LoginPage() {
           };
           dispatch({ type: 'SET_USER', payload: { user, trips: [], notifications: [] } });
           router.push(user.role === 'vendor' ? '/app/vendor/home' : '/app/driver/home');
-          return;
-        }
-        if (res.user.status !== 'approved') {
-          setError('Your account is not approved yet. Please wait for admin review.');
-          setLoading(false);
           return;
         }
         const user: AppUser = {
@@ -172,6 +158,17 @@ export default function LoginPage() {
           className="mx-4 mt-6 mb-4 rounded-3xl p-6 shadow-2xl"
           style={{ backgroundColor: '#111827', border: '1px solid #243042' }}
         >
+          {/* Registration success banner */}
+          {registered && (
+            <div
+              className="flex items-center gap-3 rounded-2xl px-4 py-3 mb-5"
+              style={{ backgroundColor: 'rgba(34,197,94,0.12)', border: '1px solid rgba(34,197,94,0.3)' }}
+            >
+              <CheckCircle size={16} style={{ color: '#22C55E', flexShrink: 0 }} />
+              <p className="text-sm flex-1" style={{ color: '#86EFAC' }}>Registration successful! Please log in to continue.</p>
+            </div>
+          )}
+
           {/* Error banner */}
           {error && (
             <div

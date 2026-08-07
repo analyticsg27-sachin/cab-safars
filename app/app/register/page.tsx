@@ -3,10 +3,8 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { ArrowLeft, Eye, EyeOff, X } from 'lucide-react';
-import { useAppState } from '@/lib/app-state';
 import { IS_API_MODE } from '@/lib/services';
 import AuthService from '@/lib/services/auth.service';
-import type { AppUser } from '@/lib/app-types';
 import { asset } from '@/lib/basepath';
 import AppShell from '@/components/app/AppShell';
 
@@ -101,7 +99,6 @@ function SelectField({
 
 export default function RegisterPage() {
   const router = useRouter();
-  const { dispatch } = useAppState();
 
   const [role, setRole] = useState<Role>('vendor');
   const [name, setName] = useState('');
@@ -150,20 +147,7 @@ export default function RegisterPage() {
           vehicle_type: role === 'driver' ? vehicleType : undefined,
           vehicle_number: role === 'driver' && vehicleNumber ? vehicleNumber.trim() : undefined,
         });
-        const newUser: AppUser = {
-          id: `pending-${Date.now()}`,
-          name: name.trim(),
-          phone: phone.trim(),
-          email: email.trim(),
-          role,
-          status: 'pending',
-          isPremium: false,
-          city,
-          ...(role === 'vendor' && companyName ? { companyName: companyName.trim() } : {}),
-          ...(role === 'driver' ? { vehicleType } : {}),
-        };
-        dispatch({ type: 'SET_USER', payload: { user: newUser, trips: [], notifications: [] } });
-        router.push('/app/pending');
+        router.push('/app/login?registered=1');
       } catch (err: unknown) {
         const msg = err instanceof Error ? err.message : 'Registration failed';
         setError(msg);
@@ -171,15 +155,7 @@ export default function RegisterPage() {
       }
     } else {
       setTimeout(() => {
-        const newUser: AppUser = {
-          id: `user-${Date.now()}`,
-          name: name.trim(), phone: phone.trim(), email: email.trim(), role,
-          status: 'pending', isPremium: false, city,
-          ...(role === 'vendor' && companyName ? { companyName: companyName.trim() } : {}),
-          ...(role === 'driver' ? { vehicleType } : {}),
-        };
-        dispatch({ type: 'SET_USER', payload: { user: newUser, trips: [], notifications: [] } });
-        router.push('/app/pending');
+        router.push('/app/login?registered=1');
       }, 700);
     }
   }

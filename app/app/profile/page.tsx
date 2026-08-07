@@ -1,9 +1,10 @@
 ﻿'use client';
 
+import { useRef, useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import {
   Crown, User, MapPin, ChevronRight, FileText, Lock, HelpCircle,
-  Phone, Star, LogOut, Truck, Package, Calendar, CreditCard, Shield,
+  Phone, Star, LogOut, Truck, Package, Calendar, CreditCard, Camera,
 } from 'lucide-react';
 import AppShell from '@/components/app/AppShell';
 import AppHeader from '@/components/app/AppHeader';
@@ -74,6 +75,27 @@ export default function ProfilePage() {
   const { state, dispatch } = useAppState();
   const { t } = useTranslation();
   const currentUser = state.currentUser;
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [photoUrl, setPhotoUrl] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (currentUser?.id) {
+      const saved = localStorage.getItem(`cs_photo_${currentUser.id}`);
+      if (saved) setPhotoUrl(saved);
+    }
+  }, [currentUser?.id]);
+
+  function handlePhotoChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file || !currentUser?.id) return;
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      const url = ev.target?.result as string;
+      localStorage.setItem(`cs_photo_${currentUser.id}`, url);
+      setPhotoUrl(url);
+    };
+    reader.readAsDataURL(file);
+  }
 
   const user = {
     name: currentUser?.name ?? 'Guest',
@@ -105,15 +127,41 @@ export default function ProfilePage() {
       <main className="flex-1 overflow-y-auto pb-10 pt-5 px-4">
         {/* Avatar + name */}
         <div className="flex flex-col items-center mb-6">
-          <div
-            className="w-20 h-20 rounded-full flex items-center justify-center text-2xl font-bold mb-3"
-            style={{
-              backgroundColor: user.isPremium ? 'rgba(245,166,35,0.2)' : '#21262D',
-              border: user.isPremium ? '2px solid rgba(245,166,35,0.4)' : '2px solid #30363D',
-              color: user.isPremium ? '#F5A623' : '#8B949E',
-            }}
-          >
-            {initials}
+          <div className="relative mb-3">
+            {photoUrl ? (
+              <img
+                src={photoUrl}
+                alt={user.name}
+                className="w-20 h-20 rounded-full object-cover"
+                style={{ border: user.isPremium ? '2px solid rgba(245,166,35,0.4)' : '2px solid #30363D' }}
+              />
+            ) : (
+              <div
+                className="w-20 h-20 rounded-full flex items-center justify-center text-2xl font-bold"
+                style={{
+                  backgroundColor: user.isPremium ? 'rgba(245,166,35,0.2)' : '#21262D',
+                  border: user.isPremium ? '2px solid rgba(245,166,35,0.4)' : '2px solid #30363D',
+                  color: user.isPremium ? '#F5A623' : '#8B949E',
+                }}
+              >
+                {initials}
+              </div>
+            )}
+            <button
+              onClick={() => fileInputRef.current?.click()}
+              className="absolute bottom-0 right-0 w-7 h-7 rounded-full flex items-center justify-center transition-all active:scale-90"
+              style={{ backgroundColor: '#F5A623', border: '2px solid #0D1117' }}
+            >
+              <Camera size={13} style={{ color: '#000' }} />
+            </button>
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              capture="user"
+              className="hidden"
+              onChange={handlePhotoChange}
+            />
           </div>
 
           <h2 className="text-xl font-bold mb-1" style={{ color: '#F0F6FC' }}>{user.name}</h2>
