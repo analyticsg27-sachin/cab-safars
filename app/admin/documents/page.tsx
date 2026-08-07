@@ -108,10 +108,11 @@ function RejectDocModal({ doc, onConfirm, onCancel, loading }: RejectDocModalPro
 
 interface DocumentsPanelProps {
   user: PendingRegistration;
-  onDocsChange?: () => void;
+  onDocsLoaded?: (userId: string, docs: UserDocument[]) => void;
+  onDocsChange?: (userId: string, docs: UserDocument[]) => void;
 }
 
-function DocumentsPanel({ user, onDocsChange }: DocumentsPanelProps) {
+function DocumentsPanel({ user, onDocsLoaded, onDocsChange }: DocumentsPanelProps) {
   const [docs, setDocs] = useState<UserDocument[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -128,18 +129,19 @@ function DocumentsPanel({ user, onDocsChange }: DocumentsPanelProps) {
   useEffect(() => {
     setLoading(true);
     AdminService.getUserDocuments(user.id)
-      .then(setDocs)
+      .then(d => { setDocs(d); onDocsLoaded?.(user.id, d); })
       .catch((e: unknown) => setError(e instanceof Error ? e.message : "Failed to load"))
       .finally(() => setLoading(false));
-  }, [user.id]);
+  }, [user.id]); // eslint-disable-line react-hooks/exhaustive-deps
 
   async function handleApprove(docId: string) {
     setApprovingId(docId);
     try {
       await AdminService.approveDocument(docId);
-      setDocs(prev => prev.map(d => d.id === docId ? { ...d, status: "approved" as const } : d));
-      showToast("Document approved");
-      onDocsChange?.();
+      const next = docs.map(d => d.id === docId ? { ...d, status: "approved" as const } : d);
+      setDocs(next);
+      showToast("✓ Document approved");
+      onDocsChange?.(user.id, next);
     } catch (e: unknown) {
       showToast(e instanceof Error ? e.message : "Action failed");
     } finally {
@@ -152,14 +154,15 @@ function DocumentsPanel({ user, onDocsChange }: DocumentsPanelProps) {
     setRejectLoading(true);
     try {
       await AdminService.rejectDocument(rejectingDoc.id, reason);
-      setDocs(prev => prev.map(d =>
+      const next = docs.map(d =>
         d.id === rejectingDoc.id
           ? { ...d, status: "rejected" as const, rejection_reason: reason }
           : d
-      ));
-      showToast("Document rejected — user will be notified");
+      );
+      setDocs(next);
+      showToast("Document rejected — user notified");
       setRejectingDoc(null);
-      onDocsChange?.();
+      onDocsChange?.(user.id, next);
     } catch (e: unknown) {
       showToast(e instanceof Error ? e.message : "Action failed");
     } finally {
@@ -302,8 +305,7 @@ export default function DocumentsPage() {
     setLoading(true);
     setError("");
     try {
-      // Get approved users (registration done) — they can upload docs
-      const res = await AdminService.getUsers({ status: "approved" });
+      const res = await AdminService.getUsers({ status: "active" });
       setUsers((res.data as unknown as PendingRegistration[]) ?? []);
     } catch (e: unknown) {
       setError(e instanceof Error ? e.message : "Failed to load users");
@@ -323,10 +325,16 @@ export default function DocumentsPage() {
     });
   }
 
-  function handleDocCounts(userId: string, pending: number, rejected: number, approved: number) {
-    setDocCounts(prev => ({ ...prev, [userId]: { pending, rejected, approved } }));
+  function handleDocsLoaded(userId: string, docs: UserDocument[]) {
+    setDocCounts(prev => ({
+      ...prev,
+      [userId]: {
+        pending:  docs.filter(d => d.status === "pending").length,
+        rejected: docs.filter(d => d.status === "rejected").length,
+        approved: docs.filter(d => d.status === "approved").length,
+      },
+    }));
   }
-  void handleDocCounts; // used via context — suppress lint
 
   const filtered = users.filter(u => {
     const matchSearch = search.trim() === ""
@@ -477,7 +485,8 @@ export default function DocumentsPage() {
                 <div className="px-5 pb-5 pt-1" style={{ borderTop: "1px solid #30363D" }}>
                   <DocumentsPanel
                     user={user}
-                    onDocsChange={() => showToast("Document updated")}
+                    onDocsLoaded={handleDocsLoaded}
+                    onDocsChange={(userId, docs) => { handleDocsLoaded(userId, docs); showToast("Document updated"); }}
                   />
                 </div>
               )}

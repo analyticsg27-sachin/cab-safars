@@ -79,6 +79,8 @@ export default function LoginPage() {
           role: res.user.role,
           status: 'active',
           docStatus: res.user.doc_status ?? 'none',
+          docApprovedCount: res.user.doc_approved_count ?? 0,
+          docTotalCount: res.user.doc_total_count ?? 0,
           rejectionReason: res.user.rejection_reason,
           isPremium: res.user.is_premium,
           premiumExpiry: res.user.premium_expires_at ?? undefined,

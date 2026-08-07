@@ -70,6 +70,8 @@ export default function AccountStatusBanner({ user }: Props) {
 
   // Docs pending review
   if (user.status === 'active' && user.docStatus === 'pending') {
+    const approved = user.docApprovedCount ?? 0;
+    const total    = user.docTotalCount ?? 0;
     return (
       <button
         onClick={() => router.push('/app/documents')}
@@ -77,7 +79,15 @@ export default function AccountStatusBanner({ user }: Props) {
         style={{ background: 'rgba(245,166,35,0.06)', border: '1px solid rgba(245,166,35,0.2)' }}>
         <Clock size={16} style={{ color: '#F5A623', flexShrink: 0, marginTop: 1 }} />
         <div className="flex-1">
-          <p className="text-xs font-semibold" style={{ color: '#F5A623' }}>{t('docs_under_review')}</p>
+          <div className="flex items-center justify-between">
+            <p className="text-xs font-semibold" style={{ color: '#F5A623' }}>{t('docs_under_review')}</p>
+            {total > 0 && (
+              <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-full"
+                style={{ background: 'rgba(245,166,35,0.15)', color: '#F5A623' }}>
+                {approved}/{total} verified
+              </span>
+            )}
+          </div>
           <p className="text-xs mt-0.5" style={{ color: '#8B949E' }}>{t('docs_review_desc')}</p>
           <p className="text-xs mt-1 font-semibold" style={{ color: '#F5A623' }}>{t('view_status_arrow')}</p>
         </div>

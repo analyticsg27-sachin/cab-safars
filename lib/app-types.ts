@@ -81,6 +81,8 @@ export interface AppUser {
   status: 'pending' | 'active' | 'rejected';
   /** null = not yet uploaded, 'pending' = under review, 'approved' = verified, 'rejected' = needs re-upload, 'direct' = waived by admin */
   docStatus?: 'none' | 'pending' | 'approved' | 'rejected' | 'direct';
+  docApprovedCount?: number;
+  docTotalCount?: number;
   rejectionReason?: string;
   isPremium: boolean;
   premiumExpiry?: string;
