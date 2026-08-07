@@ -32,10 +32,10 @@ const DRIVER_DOC_TYPES = [
 ];
 
 const DEMO_DOCS: UserDoc[] = [
-  { id: 'demo-1', document_type: 'Aadhar Card',      original_name: 'aadhar.pdf',    file_size: 512000, status: 'approved', created_at: '2026-07-01T10:00:00Z' },
-  { id: 'demo-2', document_type: 'PAN Card',          original_name: 'pan_card.pdf',  file_size: 310000, status: 'approved', created_at: '2026-07-01T10:05:00Z' },
-  { id: 'demo-3', document_type: 'Driving Licence',   original_name: 'licence.pdf',   file_size: 480000, status: 'pending',  created_at: '2026-07-02T09:00:00Z' },
-  { id: 'demo-4', document_type: 'Vehicle Insurance', original_name: 'insurance.pdf', file_size: 220000, status: 'rejected', rejection_reason: 'Insurance document appears expired. Please upload a valid certificate dated 2026.', created_at: '2026-07-02T09:10:00Z' },
+  { id: 'demo-1', document_type: 'Aadhar Card',      original_name: 'aadhar.pdf',    mime_type: 'application/pdf', file_size: 512000, status: 'approved', created_at: '2026-07-01T10:00:00Z' },
+  { id: 'demo-2', document_type: 'PAN Card',          original_name: 'pan_card.pdf',  mime_type: 'application/pdf', file_size: 310000, status: 'approved', created_at: '2026-07-01T10:05:00Z' },
+  { id: 'demo-3', document_type: 'Driving Licence',   original_name: 'licence.pdf',   mime_type: 'application/pdf', file_size: 480000, status: 'pending',  created_at: '2026-07-02T09:00:00Z' },
+  { id: 'demo-4', document_type: 'Vehicle Insurance', original_name: 'insurance.pdf', mime_type: 'application/pdf', file_size: 220000, status: 'rejected', rejection_reason: 'Insurance document appears expired. Please upload a valid certificate dated 2026.', created_at: '2026-07-02T09:10:00Z' },
 ];
 
 // ── Upload Sheet ──────────────────────────────────────────────────────────────
@@ -220,9 +220,9 @@ export default function DocumentsPage() {
         id: `demo-${Date.now()}`,
         document_type: name,
         original_name: name.toLowerCase().replace(/ /g, '_') + '.pdf',
+        mime_type: 'application/pdf',
         file_size: 300000,
         status: 'pending',
-        rejection_reason: null,
         created_at: new Date().toISOString(),
       }]);
     }
