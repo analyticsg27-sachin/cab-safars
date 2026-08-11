@@ -15,6 +15,8 @@ const nextConfig: NextConfig = {
   },
   env: {
     NEXT_PUBLIC_BASE_PATH: basePath,
+    NEXT_PUBLIC_DATA_MODE: 'api',
+    NEXT_PUBLIC_API_URL: 'https://pg.gnikhil.in/cabsafars/api/v1',
   },
 };
 
