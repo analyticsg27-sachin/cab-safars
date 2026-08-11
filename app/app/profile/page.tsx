@@ -78,6 +78,8 @@ export default function ProfilePage() {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [photoUrl, setPhotoUrl] = useState<string | null>(null);
 
+  const [uploading, setUploading] = useState(false);
+
   useEffect(() => {
     if (currentUser?.id) {
       const saved = localStorage.getItem(`cs_photo_${currentUser.id}`);
@@ -85,16 +87,47 @@ export default function ProfilePage() {
     }
   }, [currentUser?.id]);
 
-  function handlePhotoChange(e: React.ChangeEvent<HTMLInputElement>) {
+  async function handlePhotoChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     if (!file || !currentUser?.id) return;
-    const reader = new FileReader();
-    reader.onload = (ev) => {
-      const url = ev.target?.result as string;
-      localStorage.setItem(`cs_photo_${currentUser.id}`, url);
-      setPhotoUrl(url);
-    };
-    reader.readAsDataURL(file);
+
+    setUploading(true);
+    try {
+      const formData = new FormData();
+      formData.append('image', file);
+      const token = typeof window !== 'undefined' ? localStorage.getItem('cs_access_token') : null;
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL ?? '';
+      const res = await fetch(`${apiUrl}/upload/profile-image`, {
+        method: 'POST',
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+        body: formData,
+      });
+      if (res.ok) {
+        const data = await res.json();
+        const fullUrl = `${apiUrl.replace('/api/v1', '')}/${data.data?.path}`;
+        setPhotoUrl(fullUrl);
+        localStorage.setItem(`cs_photo_${currentUser.id}`, fullUrl);
+      } else {
+        // fallback: show locally only
+        const reader = new FileReader();
+        reader.onload = (ev) => {
+          const url = ev.target?.result as string;
+          localStorage.setItem(`cs_photo_${currentUser.id}`, url);
+          setPhotoUrl(url);
+        };
+        reader.readAsDataURL(file);
+      }
+    } catch {
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        const url = ev.target?.result as string;
+        localStorage.setItem(`cs_photo_${currentUser.id}`, url);
+        setPhotoUrl(url);
+      };
+      reader.readAsDataURL(file);
+    } finally {
+      setUploading(false);
+    }
   }
 
   const user = {
@@ -147,11 +180,13 @@ export default function ProfilePage() {
               </div>
             )}
             <button
-              onClick={() => fileInputRef.current?.click()}
+              onClick={() => !uploading && fileInputRef.current?.click()}
               className="absolute bottom-0 right-0 w-7 h-7 rounded-full flex items-center justify-center transition-all active:scale-90"
-              style={{ backgroundColor: '#F5A623', border: '2px solid #0D1117' }}
+              style={{ backgroundColor: '#F5A623', border: '2px solid #0D1117', opacity: uploading ? 0.6 : 1 }}
             >
-              <Camera size={13} style={{ color: '#000' }} />
+              {uploading
+                ? <div className="w-3 h-3 border border-black border-t-transparent rounded-full animate-spin" />
+                : <Camera size={13} style={{ color: '#000' }} />}
             </button>
             <input
               ref={fileInputRef}
