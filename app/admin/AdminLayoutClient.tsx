@@ -50,7 +50,7 @@ export default function AdminLayoutClient({ children }: { children: React.ReactN
   return (
     <AdminAuthGuard>
       <div className="flex h-screen bg-[#0B1220] overflow-hidden">
-        <Sidebar mobileOpen={mobileSidebarOpen} onMobileClose={() => setMobileSidebarOpen(false)} />
+        <Sidebar mobileOpen={mobileSidebarOpen} onMobileClose={() => setMobileSidebarOpen(false)} onLogout={handleLogout} />
 
         <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
           {/* Header */}
@@ -139,7 +139,7 @@ export default function AdminLayoutClient({ children }: { children: React.ReactN
           </header>
 
           {/* Page content */}
-          <main className="flex-1 overflow-y-auto p-6">
+          <main className="flex-1 overflow-y-auto p-3 sm:p-4 md:p-6">
             {children}
           </main>
         </div>

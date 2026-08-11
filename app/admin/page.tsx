@@ -98,19 +98,19 @@ export default function AdminDashboard() {
   const pendingUsers = recent_users.filter((u) => u.status === 'pending').slice(0, 4);
 
   return (
-    <div className="flex flex-col gap-6 max-w-[1400px]">
+    <div className="flex flex-col gap-4 md:gap-6 max-w-[1400px]">
       {toast && (
         <div className="fixed top-4 right-4 z-50 px-4 py-2.5 rounded-xl text-sm font-medium text-[#0D1117] bg-[#22C55E] shadow-lg">
           {toast}
         </div>
       )}
       <div>
-        <h1 className="text-2xl font-bold text-[#F0F6FC]">Dashboard</h1>
-        <p className="text-sm text-[#8B949E] mt-0.5">Live overview of platform activity</p>
+        <h1 className="text-xl md:text-2xl font-bold text-[#F0F6FC]">Dashboard</h1>
+        <p className="text-xs md:text-sm text-[#8B949E] mt-0.5">Live overview of platform activity</p>
       </div>
 
-      {/* KPI row 1 */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      {/* KPI grid — 2 cols on mobile, 4 on desktop */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 md:gap-4">
         <StatCard title="Trip Providers" value={stats.users.vendors}
           icon={<Users className="w-4.5 h-4.5" />} iconColor="text-[#2D6BE4]" />
         <StatCard title="Total Drivers" value={stats.users.drivers}
@@ -119,10 +119,6 @@ export default function AdminDashboard() {
           icon={<MapPin className="w-4.5 h-4.5" />} iconColor="text-[#22C55E]" />
         <StatCard title="Revenue Total" value={formatCurrency(stats.subscriptions.total_revenue)}
           icon={<DollarSign className="w-4.5 h-4.5" />} iconColor="text-[#F5A623]" />
-      </div>
-
-      {/* KPI row 2 */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <StatCard title="Premium Users" value={stats.subscriptions.active}
           icon={<Star className="w-4.5 h-4.5" />} iconColor="text-[#F5A623]" />
         <StatCard title="Pending Approvals" value={stats.pending_approvals}
@@ -134,11 +130,11 @@ export default function AdminDashboard() {
       </div>
 
       {/* Recent Users + Stats */}
-      <div className="grid lg:grid-cols-2 gap-4">
+      <div className="grid lg:grid-cols-2 gap-3 md:gap-4">
         {/* Trips summary */}
-        <div className="bg-[#161B22] border border-[#30363D] rounded-xl p-5">
-          <h3 className="text-sm font-semibold text-[#F0F6FC] mb-5">Trips Overview</h3>
-          <ResponsiveContainer width="100%" height={220}>
+        <div className="bg-[#161B22] border border-[#30363D] rounded-xl p-4 md:p-5">
+          <h3 className="text-sm font-semibold text-[#F0F6FC] mb-4">Trips Overview</h3>
+          <ResponsiveContainer width="100%" height={180}>
             <BarChart
               data={[
                 { name: 'Active', value: stats.trips.active, fill: '#22C55E' },
@@ -157,9 +153,9 @@ export default function AdminDashboard() {
         </div>
 
         {/* Users breakdown */}
-        <div className="bg-[#161B22] border border-[#30363D] rounded-xl p-5">
-          <h3 className="text-sm font-semibold text-[#F0F6FC] mb-5">Users Breakdown</h3>
-          <ResponsiveContainer width="100%" height={220}>
+        <div className="bg-[#161B22] border border-[#30363D] rounded-xl p-4 md:p-5">
+          <h3 className="text-sm font-semibold text-[#F0F6FC] mb-4">Users Breakdown</h3>
+          <ResponsiveContainer width="100%" height={180}>
             <BarChart
               data={[
                 { name: 'Trip Providers', value: stats.users.vendors },
@@ -182,28 +178,28 @@ export default function AdminDashboard() {
       {/* Pending Approvals from recent_users */}
       {pendingUsers.length > 0 && (
         <div className="bg-[#161B22] border border-[#30363D] rounded-xl overflow-hidden">
-          <div className="flex items-center justify-between px-5 py-4 border-b border-[#30363D]">
+          <div className="flex items-center justify-between px-4 md:px-5 py-3 md:py-4 border-b border-[#30363D]">
             <div className="flex items-center gap-2">
-              <h3 className="text-sm font-semibold text-[#F0F6FC]">Recent Pending Approvals</h3>
+              <h3 className="text-sm font-semibold text-[#F0F6FC]">Pending Approvals</h3>
               <span className="text-xs font-bold bg-[#F59E0B]/10 text-[#F59E0B] border border-[#F59E0B]/20 rounded-full px-2 py-0.5">
                 {stats.pending_approvals}
               </span>
             </div>
-            <a href="/admin/approvals" className="text-xs text-[#F5A623] hover:underline">View all</a>
+            <a href="/admin/approvals" className="text-xs text-[#F5A623] hover:underline">View all →</a>
           </div>
           <div className="divide-y divide-[#30363D]/50">
             {pendingUsers.map((user) => (
-              <div key={user.uuid} className="flex items-center justify-between px-5 py-4 hover:bg-[#1C2128]/40 transition-colors">
+              <div key={user.uuid} className="flex items-center justify-between px-4 md:px-5 py-3 hover:bg-[#1C2128]/40 transition-colors">
                 <div className="flex items-center gap-3">
-                  <div className="w-9 h-9 rounded-full bg-[#21262D] flex items-center justify-center text-[#8B949E] font-semibold text-sm">
+                  <div className="w-8 h-8 md:w-9 md:h-9 rounded-full bg-[#21262D] flex items-center justify-center text-[#8B949E] font-semibold text-sm shrink-0">
                     {user.name.charAt(0)}
                   </div>
-                  <div>
-                    <p className="text-sm font-medium text-[#F0F6FC]">{user.name}</p>
+                  <div className="min-w-0">
+                    <p className="text-sm font-medium text-[#F0F6FC] truncate">{user.name}</p>
                     <p className="text-xs text-[#8B949E]">{user.city}</p>
                   </div>
                 </div>
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-2 shrink-0">
                   <Badge variant={user.role === "vendor" ? "vendor" : "driver"}>{user.role === "vendor" ? "Trip Provider" : user.role}</Badge>
                   <span className="text-xs text-[#8B949E] hidden sm:flex items-center gap-1">
                     <Clock className="w-3 h-3" />

@@ -50,9 +50,10 @@ const navGroups = [
 interface SidebarProps {
   mobileOpen?: boolean;
   onMobileClose?: () => void;
+  onLogout?: () => void;
 }
 
-export default function Sidebar({ mobileOpen = false, onMobileClose }: SidebarProps) {
+export default function Sidebar({ mobileOpen = false, onMobileClose, onLogout }: SidebarProps) {
   const [collapsed, setCollapsed] = useState(false);
   const [pendingCount, setPendingCount] = useState<number | null>(null);
   const pathname = usePathname();
@@ -158,6 +159,7 @@ export default function Sidebar({ mobileOpen = false, onMobileClose }: SidebarPr
           </div>
         )}
         <button
+          onClick={onLogout}
           className={cn(
             "flex items-center gap-2 w-full px-3 py-2.5 rounded-xl text-sm text-[#94A3B8] hover:bg-[#EF4444]/10 hover:text-[#EF4444] transition-all duration-150",
             collapsed && "justify-center px-0"

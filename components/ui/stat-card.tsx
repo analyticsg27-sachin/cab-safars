@@ -26,16 +26,16 @@ export function StatCard({
   return (
     <div
       className={cn(
-        "bg-[#161B22] border border-[#30363D] rounded-xl p-5 flex flex-col gap-3",
-        "hover:border-[#30363D]/80 transition-colors",
+        "bg-[#161B22] border border-[#30363D] rounded-xl p-3 md:p-5 flex flex-col gap-2 md:gap-3",
+        "hover:border-[#374151] transition-colors",
         className
       )}
     >
       <div className="flex items-start justify-between">
-        <p className="text-sm text-[#8B949E] font-medium">{title}</p>
+        <p className="text-xs md:text-sm text-[#8B949E] font-medium leading-tight">{title}</p>
         <div
           className={cn(
-            "w-9 h-9 rounded-lg flex items-center justify-center bg-[#21262D]",
+            "w-7 h-7 md:w-9 md:h-9 rounded-lg flex items-center justify-center bg-[#21262D] shrink-0",
             iconColor
           )}
         >
@@ -43,7 +43,7 @@ export function StatCard({
         </div>
       </div>
       <div className="flex items-end gap-2">
-        <span className="text-2xl font-bold text-[#F0F6FC] leading-none">
+        <span className="text-xl md:text-2xl font-bold text-[#F0F6FC] leading-none">
           {prefix}
           {typeof value === "number" ? value.toLocaleString("en-IN") : value}
           {suffix}
