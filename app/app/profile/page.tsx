@@ -95,7 +95,7 @@ export default function ProfilePage() {
     try {
       const formData = new FormData();
       formData.append('image', file);
-      const token = typeof window !== 'undefined' ? localStorage.getItem('cs_access_token') : null;
+      const token = typeof window !== 'undefined' ? localStorage.getItem('access_token') : null;
       const apiUrl = process.env.NEXT_PUBLIC_API_URL ?? '';
       const res = await fetch(`${apiUrl}/upload/profile-image`, {
         method: 'POST',
