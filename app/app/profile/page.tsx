@@ -95,35 +95,54 @@ export default function ProfilePage() {
     try {
       const formData = new FormData();
       formData.append('image', file);
-      const token = typeof window !== 'undefined' ? localStorage.getItem('access_token') : null;
       const apiUrl = process.env.NEXT_PUBLIC_API_URL ?? '';
-      const res = await fetch(`${apiUrl}/upload/profile-image`, {
-        method: 'POST',
-        headers: token ? { Authorization: `Bearer ${token}` } : {},
-        body: formData,
-      });
+      const baseUrl = apiUrl.replace('/api/v1', '');
+
+      const doUpload = async (token: string | null) => {
+        return fetch(`${apiUrl}/upload/profile-image`, {
+          method: 'POST',
+          headers: token ? { Authorization: `Bearer ${token}` } : {},
+          body: formData,
+        });
+      };
+
+      let token = typeof window !== 'undefined' ? localStorage.getItem('access_token') : null;
+      let res = await doUpload(token);
+
+      // Auto-refresh token on 401
+      if (res.status === 401) {
+        const refreshToken = typeof window !== 'undefined' ? localStorage.getItem('refresh_token') : null;
+        if (refreshToken) {
+          const rRes = await fetch(`${apiUrl}/auth/refresh`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ refresh_token: refreshToken }),
+          });
+          if (rRes.ok) {
+            const rData = await rRes.json();
+            token = rData.data?.access_token ?? null;
+            if (token) {
+              localStorage.setItem('access_token', token);
+              res = await doUpload(token);
+            }
+          }
+        }
+      }
+
       if (res.ok) {
         const data = await res.json();
-        const fullUrl = `${apiUrl.replace('/api/v1', '')}/${data.data?.path}`;
+        const fullUrl = `${baseUrl}/${data.data?.path}`;
         setPhotoUrl(fullUrl);
         localStorage.setItem(`cs_photo_${currentUser.id}`, fullUrl);
       } else {
         // fallback: show locally only
         const reader = new FileReader();
-        reader.onload = (ev) => {
-          const url = ev.target?.result as string;
-          localStorage.setItem(`cs_photo_${currentUser.id}`, url);
-          setPhotoUrl(url);
-        };
+        reader.onload = (ev) => { const url = ev.target?.result as string; localStorage.setItem(`cs_photo_${currentUser.id}`, url); setPhotoUrl(url); };
         reader.readAsDataURL(file);
       }
     } catch {
       const reader = new FileReader();
-      reader.onload = (ev) => {
-        const url = ev.target?.result as string;
-        localStorage.setItem(`cs_photo_${currentUser.id}`, url);
-        setPhotoUrl(url);
-      };
+      reader.onload = (ev) => { const url = ev.target?.result as string; localStorage.setItem(`cs_photo_${currentUser.id}`, url); setPhotoUrl(url); };
       reader.readAsDataURL(file);
     } finally {
       setUploading(false);
