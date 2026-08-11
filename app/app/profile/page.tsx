@@ -177,35 +177,33 @@ export default function ProfilePage() {
               <img
                 src={photoUrl}
                 alt={user.name}
-                className="w-20 h-20 rounded-full object-cover"
-                style={{ border: user.isPremium ? '2px solid rgba(245,166,35,0.4)' : '2px solid #30363D' }}
+                className="w-28 h-28 rounded-full object-cover"
+                style={{ border: user.isPremium ? '3px solid rgba(245,166,35,0.6)' : '3px solid #30363D', boxShadow: user.isPremium ? '0 0 20px rgba(245,166,35,0.2)' : 'none' }}
               />
             ) : (
               <div
-                className="w-20 h-20 rounded-full flex items-center justify-center overflow-hidden"
+                className="w-28 h-28 rounded-full flex items-center justify-center overflow-hidden"
                 style={{
                   backgroundColor: user.isPremium ? 'rgba(245,166,35,0.15)' : '#1C2128',
-                  border: user.isPremium ? '2px solid rgba(245,166,35,0.4)' : '2px solid #30363D',
+                  border: user.isPremium ? '3px solid rgba(245,166,35,0.6)' : '3px solid #30363D',
+                  boxShadow: user.isPremium ? '0 0 20px rgba(245,166,35,0.2)' : 'none',
                 }}
               >
-                <svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  {/* background gradient */}
+                <svg width="112" height="112" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <circle cx="40" cy="40" r="40" fill={user.isPremium ? 'rgba(245,166,35,0.12)' : '#1C2128'} />
-                  {/* head */}
                   <circle cx="40" cy="30" r="13" fill={user.isPremium ? '#F5A623' : '#8B949E'} opacity="0.9" />
-                  {/* body / shoulders */}
                   <path d="M14 72 C14 55 66 55 66 72" fill={user.isPremium ? '#F5A623' : '#8B949E'} opacity="0.7" />
                 </svg>
               </div>
             )}
             <button
               onClick={() => !uploading && fileInputRef.current?.click()}
-              className="absolute bottom-0 right-0 w-7 h-7 rounded-full flex items-center justify-center transition-all active:scale-90"
+              className="absolute bottom-1 right-1 w-8 h-8 rounded-full flex items-center justify-center transition-all active:scale-90"
               style={{ backgroundColor: '#F5A623', border: '2px solid #0D1117', opacity: uploading ? 0.6 : 1 }}
             >
               {uploading
-                ? <div className="w-3 h-3 border border-black border-t-transparent rounded-full animate-spin" />
-                : <Camera size={13} style={{ color: '#000' }} />}
+                ? <div className="w-3.5 h-3.5 border-2 border-black border-t-transparent rounded-full animate-spin" />
+                : <Camera size={14} style={{ color: '#000' }} />}
             </button>
             <input
               ref={fileInputRef}
