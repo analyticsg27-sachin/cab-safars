@@ -223,7 +223,7 @@ export default function DocumentsPage() {
 
   const role = user.role;
   const approvedCount  = docs.filter(d => d.status === 'approved').length;
-  const submittedCount = docs.filter(d => d.status !== 'rejected').length; // pending + approved
+  const submittedCount = docs.length; // all uploaded docs (pending + approved + rejected)
   const rejectedDocs   = docs.filter(d => d.status === 'rejected');
   const allRequired    = role === 'driver' ? 7 : 4;
   // Types already submitted (pending or approved) — shown disabled in upload sheet
@@ -287,7 +287,7 @@ export default function DocumentsPage() {
           <div className="flex items-center justify-between mb-2">
             <p className="text-xs font-semibold" style={{ color: '#8B949E' }}>Document Verification Progress</p>
             <span className="text-xs font-bold" style={{ color: approvedCount === allRequired ? '#22C55E' : '#F5A623' }}>
-              {approvedCount}/{allRequired} approved
+              {submittedCount}/{allRequired} submitted
             </span>
           </div>
           {/* Two-layer progress: submitted (faint) + approved (solid) */}
@@ -301,8 +301,8 @@ export default function DocumentsPage() {
             <p className="text-[10px]" style={{ color: '#374151' }}>
               Required: {role === 'driver' ? 'Licence, Aadhar, PAN, RC, Insurance, Permit, Fitness' : 'Aadhar, PAN, Gumasta, GST'}
             </p>
-            {submittedCount > 0 && (
-              <p className="text-[10px]" style={{ color: '#8B949E' }}>{submittedCount} submitted</p>
+            {approvedCount > 0 && (
+              <p className="text-[10px]" style={{ color: '#22C55E' }}>{approvedCount} approved</p>
             )}
           </div>
         </div>
