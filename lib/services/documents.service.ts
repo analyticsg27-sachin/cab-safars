@@ -20,7 +20,7 @@ const DocumentsService = {
 
   async uploadDocument(file: File, documentType: string): Promise<UserDoc> {
     const formData = new FormData();
-    formData.append('file', file);
+    formData.append('document', file);
     formData.append('document_type', documentType);
 
     const token = typeof window !== 'undefined' ? localStorage.getItem('access_token') : null;
@@ -28,7 +28,7 @@ const DocumentsService = {
     if (token) headers['Authorization'] = `Bearer ${token}`;
 
     const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost/cab-safars/backend/api';
-    const res = await fetch(`${BASE_URL}/user/documents`, {
+    const res = await fetch(`${BASE_URL}/upload/document`, {
       method: 'POST',
       headers,
       body: formData,
