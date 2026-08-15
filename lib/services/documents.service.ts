@@ -38,6 +38,18 @@ const DocumentsService = {
     if (!res.ok) throw new Error(json.message || 'Upload failed');
     return json.data as UserDoc;
   },
+
+  async deleteDocument(uuid: string): Promise<void> {
+    const token = typeof window !== 'undefined' ? localStorage.getItem('access_token') : null;
+    const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+    if (token) headers['Authorization'] = `Bearer ${token}`;
+
+    const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost/cab-safars/backend/api';
+    const res = await fetch(`${BASE_URL}/documents/${uuid}`, { method: 'DELETE', headers });
+
+    const json = await res.json();
+    if (!res.ok) throw new Error(json.message || 'Delete failed');
+  },
 };
 
 export default DocumentsService;

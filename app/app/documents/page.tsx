@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import {
-  FileText, CheckCircle, Clock, Upload, Eye, X, AlertCircle, MessageSquare, RefreshCw, RotateCcw,
+  FileText, CheckCircle, Clock, Upload, Eye, X, AlertCircle, MessageSquare, RefreshCw, RotateCcw, Trash2,
 } from 'lucide-react';
 import AppShell from '@/components/app/AppShell';
 import AppHeader from '@/components/app/AppHeader';
@@ -43,14 +43,19 @@ const DEMO_DOCS: UserDoc[] = [
 interface UploadSheetProps {
   role: 'vendor' | 'driver';
   preselectedType?: string;
+  uploadedTypes?: string[];
   onClose: () => void;
   onUploaded: (name: string) => void;
 }
 
-function UploadSheet({ role, preselectedType, onClose, onUploaded }: UploadSheetProps) {
+function UploadSheet({ role, preselectedType, uploadedTypes = [], onClose, onUploaded }: UploadSheetProps) {
   const { t } = useTranslation();
-  const docTypes = role === 'driver' ? DRIVER_DOC_TYPES : VENDOR_DOC_TYPES;
-  const [docType, setDocType] = useState(preselectedType ?? docTypes[0]);
+  const allDocTypes = role === 'driver' ? DRIVER_DOC_TYPES : VENDOR_DOC_TYPES;
+  // Filter out types that are already pending or approved (only show unsubmitted or rejected)
+  const docTypes = preselectedType
+    ? allDocTypes
+    : allDocTypes.filter(dt => !uploadedTypes.includes(dt));
+  const [docType, setDocType] = useState(preselectedType ?? docTypes[0] ?? allDocTypes[0]);
   const [file, setFile] = useState<File | null>(null);
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState('');
@@ -92,22 +97,30 @@ function UploadSheet({ role, preselectedType, onClose, onUploaded }: UploadSheet
 
           {/* Doc type selector — hidden when re-uploading a specific type */}
           {!preselectedType && (
-            <div>
-              <p className="text-xs font-semibold mb-2" style={{ color: '#8B949E' }}>{t('document_type_label')}</p>
-              <div className="flex flex-col gap-1">
-                {docTypes.map(dtype => (
-                  <button key={dtype}
-                    onClick={() => setDocType(dtype)}
-                    className="flex items-center gap-2 px-3 py-2.5 rounded-xl text-sm text-left transition-all"
-                    style={docType === dtype
-                      ? { background: 'rgba(245,166,35,0.12)', border: '1px solid rgba(245,166,35,0.3)', color: '#F5A623' }
-                      : { background: 'transparent', border: '1px solid #30363D', color: '#8B949E' }}>
-                    {docType === dtype && <CheckCircle size={13} style={{ color: '#F5A623', flexShrink: 0 }} />}
-                    {dtype}
-                  </button>
-                ))}
+            docTypes.length === 0 ? (
+              <div className="flex flex-col items-center gap-2 py-6 text-center">
+                <CheckCircle size={28} style={{ color: '#22C55E' }} />
+                <p className="text-sm font-semibold" style={{ color: '#F0F6FC' }}>All documents submitted!</p>
+                <p className="text-xs" style={{ color: '#8B949E' }}>All required document types have already been uploaded.</p>
               </div>
-            </div>
+            ) : (
+              <div>
+                <p className="text-xs font-semibold mb-2" style={{ color: '#8B949E' }}>{t('document_type_label')}</p>
+                <div className="flex flex-col gap-1">
+                  {docTypes.map(dtype => (
+                    <button key={dtype}
+                      onClick={() => setDocType(dtype)}
+                      className="flex items-center gap-2 px-3 py-2.5 rounded-xl text-sm text-left transition-all"
+                      style={docType === dtype
+                        ? { background: 'rgba(245,166,35,0.12)', border: '1px solid rgba(245,166,35,0.3)', color: '#F5A623' }
+                        : { background: 'transparent', border: '1px solid #30363D', color: '#8B949E' }}>
+                      {docType === dtype && <CheckCircle size={13} style={{ color: '#F5A623', flexShrink: 0 }} />}
+                      {dtype}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )
           )}
 
           {/* File picker */}
@@ -186,6 +199,7 @@ export default function DocumentsPage() {
   const [uploadSheet, setUploadSheet] = useState<{ open: boolean; reuploadType?: string }>({ open: false });
   const [successMsg, setSuccessMsg] = useState('');
   const [viewUrl, setViewUrl] = useState<string | null>(null);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
 
   useEffect(() => {
     if (!user) return;
@@ -206,6 +220,25 @@ export default function DocumentsPage() {
   const approvedCount = docs.filter(d => d.status === 'approved').length;
   const rejectedDocs  = docs.filter(d => d.status === 'rejected');
   const allRequired   = role === 'driver' ? 7 : 4;
+  // Types already submitted (pending or approved) — excluded from upload sheet
+  const uploadedTypes = docs
+    .filter(d => d.status === 'pending' || d.status === 'approved')
+    .map(d => d.document_type);
+
+  async function handleDelete(doc: UserDoc) {
+    if (!confirm(`Delete "${doc.document_type}"? This cannot be undone.`)) return;
+    setDeletingId(doc.id);
+    try {
+      if (isApiMode()) {
+        await DocumentsService.deleteDocument(doc.id);
+      }
+      setDocs(prev => prev.filter(d => d.id !== doc.id));
+    } catch (e: unknown) {
+      alert(e instanceof Error ? e.message : 'Delete failed');
+    } finally {
+      setDeletingId(null);
+    }
+  }
 
   function handleUploaded(name: string) {
     setUploadSheet({ open: false });
@@ -234,6 +267,7 @@ export default function DocumentsPage() {
         <UploadSheet
           role={role}
           preselectedType={uploadSheet.reuploadType}
+          uploadedTypes={uploadedTypes}
           onClose={() => setUploadSheet({ open: false })}
           onUploaded={handleUploaded}
         />
@@ -344,6 +378,17 @@ export default function DocumentsPage() {
                       className="ml-1 w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
                       style={{ backgroundColor: 'rgba(45,107,228,0.12)', border: '1px solid rgba(45,107,228,0.25)' }}>
                       <Eye size={14} style={{ color: '#2D6BE4' }} />
+                    </button>
+                  )}
+                  {doc.status === 'pending' && (
+                    <button
+                      onClick={() => handleDelete(doc)}
+                      disabled={deletingId === doc.id}
+                      className="ml-1 w-8 h-8 rounded-lg flex items-center justify-center shrink-0 disabled:opacity-40"
+                      style={{ backgroundColor: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.25)' }}>
+                      {deletingId === doc.id
+                        ? <span className="w-3 h-3 border border-[#EF4444] border-t-transparent rounded-full animate-spin" />
+                        : <Trash2 size={13} style={{ color: '#EF4444' }} />}
                     </button>
                   )}
                 </div>
