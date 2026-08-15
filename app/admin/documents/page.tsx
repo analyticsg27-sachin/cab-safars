@@ -305,7 +305,7 @@ export default function DocumentsPage() {
     setLoading(true);
     setError("");
     try {
-      const res = await AdminService.getUsers({ status: "active" });
+      const res = await AdminService.getUsers({});
       setUsers((res.data as unknown as PendingRegistration[]) ?? []);
     } catch (e: unknown) {
       setError(e instanceof Error ? e.message : "Failed to load users");
@@ -336,7 +336,10 @@ export default function DocumentsPage() {
     }));
   }
 
-  const filtered = users.filter(u => {
+  // Only show users who have uploaded at least 1 document
+  const usersWithDocs = users.filter(u => (u as unknown as { doc_count: number }).doc_count > 0);
+
+  const filtered = usersWithDocs.filter(u => {
     const matchSearch = search.trim() === ""
       || u.name.toLowerCase().includes(search.toLowerCase())
       || u.phone.includes(search);

@@ -51,11 +51,10 @@ interface UploadSheetProps {
 function UploadSheet({ role, preselectedType, uploadedTypes = [], onClose, onUploaded }: UploadSheetProps) {
   const { t } = useTranslation();
   const allDocTypes = role === 'driver' ? DRIVER_DOC_TYPES : VENDOR_DOC_TYPES;
-  // Filter out types that are already pending or approved (only show unsubmitted or rejected)
-  const docTypes = preselectedType
-    ? allDocTypes
-    : allDocTypes.filter(dt => !uploadedTypes.includes(dt));
-  const [docType, setDocType] = useState(preselectedType ?? docTypes[0] ?? allDocTypes[0]);
+  const docTypes = allDocTypes;
+  const [docType, setDocType] = useState(
+    preselectedType ?? allDocTypes.find(dt => !uploadedTypes.includes(dt)) ?? allDocTypes[0]
+  );
   const [file, setFile] = useState<File | null>(null);
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState('');
@@ -97,30 +96,37 @@ function UploadSheet({ role, preselectedType, uploadedTypes = [], onClose, onUpl
 
           {/* Doc type selector — hidden when re-uploading a specific type */}
           {!preselectedType && (
-            docTypes.length === 0 ? (
-              <div className="flex flex-col items-center gap-2 py-6 text-center">
-                <CheckCircle size={28} style={{ color: '#22C55E' }} />
-                <p className="text-sm font-semibold" style={{ color: '#F0F6FC' }}>All documents submitted!</p>
-                <p className="text-xs" style={{ color: '#8B949E' }}>All required document types have already been uploaded.</p>
-              </div>
-            ) : (
-              <div>
-                <p className="text-xs font-semibold mb-2" style={{ color: '#8B949E' }}>{t('document_type_label')}</p>
-                <div className="flex flex-col gap-1">
-                  {docTypes.map(dtype => (
+            <div>
+              <p className="text-xs font-semibold mb-2" style={{ color: '#8B949E' }}>{t('document_type_label')}</p>
+              <div className="flex flex-col gap-1">
+                {docTypes.map(dtype => {
+                  const alreadyUploaded = uploadedTypes.includes(dtype);
+                  const isSelected = docType === dtype;
+                  return (
                     <button key={dtype}
-                      onClick={() => setDocType(dtype)}
-                      className="flex items-center gap-2 px-3 py-2.5 rounded-xl text-sm text-left transition-all"
-                      style={docType === dtype
-                        ? { background: 'rgba(245,166,35,0.12)', border: '1px solid rgba(245,166,35,0.3)', color: '#F5A623' }
-                        : { background: 'transparent', border: '1px solid #30363D', color: '#8B949E' }}>
-                      {docType === dtype && <CheckCircle size={13} style={{ color: '#F5A623', flexShrink: 0 }} />}
-                      {dtype}
+                      onClick={() => !alreadyUploaded && setDocType(dtype)}
+                      disabled={alreadyUploaded}
+                      className="flex items-center justify-between gap-2 px-3 py-2.5 rounded-xl text-sm text-left transition-all"
+                      style={alreadyUploaded
+                        ? { background: 'rgba(255,255,255,0.03)', border: '1px solid #21262D', color: '#374151', cursor: 'not-allowed' }
+                        : isSelected
+                          ? { background: 'rgba(245,166,35,0.12)', border: '1px solid rgba(245,166,35,0.3)', color: '#F5A623' }
+                          : { background: 'transparent', border: '1px solid #30363D', color: '#8B949E' }}>
+                      <span className="flex items-center gap-2">
+                        {isSelected && !alreadyUploaded && <CheckCircle size={13} style={{ color: '#F5A623', flexShrink: 0 }} />}
+                        {dtype}
+                      </span>
+                      {alreadyUploaded && (
+                        <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded-full shrink-0"
+                          style={{ background: 'rgba(245,166,35,0.1)', color: '#F5A623' }}>
+                          Submitted
+                        </span>
+                      )}
                     </button>
-                  ))}
-                </div>
+                  );
+                })}
               </div>
-            )
+            </div>
           )}
 
           {/* File picker */}
@@ -198,7 +204,6 @@ export default function DocumentsPage() {
   const [loading, setLoading] = useState(false);
   const [uploadSheet, setUploadSheet] = useState<{ open: boolean; reuploadType?: string }>({ open: false });
   const [successMsg, setSuccessMsg] = useState('');
-  const [viewUrl, setViewUrl] = useState<string | null>(null);
   const [deletingId, setDeletingId] = useState<string | null>(null);
 
   useEffect(() => {
@@ -217,10 +222,11 @@ export default function DocumentsPage() {
   if (!user) { router.replace('/app/'); return null; }
 
   const role = user.role;
-  const approvedCount = docs.filter(d => d.status === 'approved').length;
-  const rejectedDocs  = docs.filter(d => d.status === 'rejected');
-  const allRequired   = role === 'driver' ? 7 : 4;
-  // Types already submitted (pending or approved) — excluded from upload sheet
+  const approvedCount  = docs.filter(d => d.status === 'approved').length;
+  const submittedCount = docs.filter(d => d.status !== 'rejected').length; // pending + approved
+  const rejectedDocs   = docs.filter(d => d.status === 'rejected');
+  const allRequired    = role === 'driver' ? 7 : 4;
+  // Types already submitted (pending or approved) — shown disabled in upload sheet
   const uploadedTypes = docs
     .filter(d => d.status === 'pending' || d.status === 'approved')
     .map(d => d.document_type);
@@ -272,20 +278,6 @@ export default function DocumentsPage() {
           onUploaded={handleUploaded}
         />
       )}
-      {viewUrl && (
-        <div className="absolute inset-0 z-50 flex items-end justify-center bg-black/75">
-          <div className="w-full rounded-t-3xl overflow-hidden" style={{ backgroundColor: '#161B22', maxHeight: '90vh' }}>
-            <div className="flex items-center justify-between px-5 py-4" style={{ borderBottom: '1px solid #30363D' }}>
-              <p className="text-sm font-bold text-[#F0F6FC]">{t('document_preview')}</p>
-              <button onClick={() => setViewUrl(null)} className="w-8 h-8 rounded-full flex items-center justify-center" style={{ backgroundColor: '#21262D' }}>
-                <X size={14} style={{ color: '#8B949E' }} />
-              </button>
-            </div>
-            <iframe src={viewUrl} className="w-full" style={{ height: '70vh', border: 'none' }} />
-          </div>
-        </div>
-      )}
-
       <AppHeader title={t('documents')} showBack onBack={() => router.back()} />
       <main className="flex-1 overflow-y-auto px-4 pb-10 pt-4">
 
@@ -298,18 +290,21 @@ export default function DocumentsPage() {
               {approvedCount}/{allRequired} approved
             </span>
           </div>
-          <div className="w-full h-1.5 rounded-full" style={{ backgroundColor: '#21262D' }}>
-            <div
-              className="h-full rounded-full transition-all"
-              style={{
-                width: `${Math.min(100, Math.round((approvedCount / allRequired) * 100))}%`,
-                backgroundColor: approvedCount === allRequired ? '#22C55E' : '#F5A623',
-              }}
-            />
+          {/* Two-layer progress: submitted (faint) + approved (solid) */}
+          <div className="w-full h-1.5 rounded-full relative" style={{ backgroundColor: '#21262D' }}>
+            <div className="absolute inset-y-0 left-0 rounded-full"
+              style={{ width: `${Math.min(100, Math.round((submittedCount / allRequired) * 100))}%`, backgroundColor: 'rgba(245,166,35,0.25)' }} />
+            <div className="absolute inset-y-0 left-0 rounded-full transition-all"
+              style={{ width: `${Math.min(100, Math.round((approvedCount / allRequired) * 100))}%`, backgroundColor: approvedCount === allRequired ? '#22C55E' : '#F5A623' }} />
           </div>
-          <p className="text-[10px] mt-1.5" style={{ color: '#374151' }}>
-            Required: {role === 'driver' ? 'Licence, Aadhar, PAN, RC, Insurance, Permit, Fitness' : 'Aadhar, PAN, Gumasta, GST'}
-          </p>
+          <div className="flex items-center justify-between mt-1.5">
+            <p className="text-[10px]" style={{ color: '#374151' }}>
+              Required: {role === 'driver' ? 'Licence, Aadhar, PAN, RC, Insurance, Permit, Fitness' : 'Aadhar, PAN, Gumasta, GST'}
+            </p>
+            {submittedCount > 0 && (
+              <p className="text-[10px]" style={{ color: '#8B949E' }}>{submittedCount} submitted</p>
+            )}
+          </div>
         </div>
 
         {/* Rejection notice */}
