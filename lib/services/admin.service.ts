@@ -119,8 +119,9 @@ const AdminService = {
 
   async getPendingCount(): Promise<number> {
     try {
-      const res = await adminApiClient.get<{ pagination?: { total?: number } }>('/admin/users?status=pending&page=1&per_page=1');
-      return res.data?.pagination?.total ?? 0;
+      const res = await adminApiClient.get<{ pagination?: { total?: number }; items?: unknown[] }>('/admin/users?doc_status=approved&page=1&per_page=100');
+      const items = (res.data?.items ?? []) as Array<{ status?: string }>;
+      return items.filter(u => u.status !== 'active').length;
     } catch {
       return 0;
     }
