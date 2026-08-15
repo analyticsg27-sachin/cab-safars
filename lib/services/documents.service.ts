@@ -14,7 +14,7 @@ export interface UserDoc {
 
 const DocumentsService = {
   async getMyDocuments(): Promise<UserDoc[]> {
-    const res = await apiClient.get<UserDoc[]>('/user/documents');
+    const res = await apiClient.get<UserDoc[]>('/documents');
     return res.data ?? [];
   },
 
