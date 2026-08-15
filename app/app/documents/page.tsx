@@ -223,7 +223,7 @@ export default function DocumentsPage() {
 
   const role = user.role;
   const approvedCount  = docs.filter(d => d.status === 'approved').length;
-  const submittedCount = docs.length; // all uploaded docs (pending + approved + rejected)
+  const submittedCount = docs.filter(d => d.status === 'pending' || d.status === 'approved').length;
   const rejectedDocs   = docs.filter(d => d.status === 'rejected');
   const allRequired    = role === 'driver' ? 7 : 4;
   // Types already submitted (pending or approved) — shown disabled in upload sheet
