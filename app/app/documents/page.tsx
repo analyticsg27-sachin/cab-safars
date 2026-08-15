@@ -373,12 +373,14 @@ export default function DocumentsPage() {
                   </div>
                   <StatusBadge status={doc.status} />
                   {doc.file_url && (
-                    <button
-                      onClick={() => setViewUrl(doc.file_url!)}
+                    <a
+                      href={doc.file_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
                       className="ml-1 w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
                       style={{ backgroundColor: 'rgba(45,107,228,0.12)', border: '1px solid rgba(45,107,228,0.25)' }}>
                       <Eye size={14} style={{ color: '#2D6BE4' }} />
-                    </button>
+                    </a>
                   )}
                   {doc.status === 'pending' && (
                     <button
