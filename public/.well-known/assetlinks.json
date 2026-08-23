@@ -1,0 +1,14 @@
+[
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.cabsafar.app",
+      "sha256_cert_fingerprints": [
+        "FB:6A:5F:A1:D3:AF:67:CE:A7:B3:EE:DA:1E:09:FD:9E:BA:23:CD:61:28:3F:15:7F:D3:0D:EF:25:7B:46:1F:07"
+      ]
+    }
+  }
+]
