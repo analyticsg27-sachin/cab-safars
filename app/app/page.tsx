@@ -7,6 +7,7 @@ import { asset } from '@/lib/basepath';
 import { demoUsers, vendorFreeTrips, vendorPremiumTrips, availableTripsForDriver, demoNotifications } from '@/lib/demo-users';
 import AppShell from '@/components/app/AppShell';
 import SplashScreen from '@/components/app/SplashScreen';
+import { IS_API_MODE } from '@/lib/services';
 
 // â”€â”€ Transport Illustration (Car/Sedan) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function TransportIllustration() {
@@ -240,7 +241,7 @@ export default function WelcomePage() {
           </div>
 
           {/* Demo section */}
-          <div
+          {!IS_API_MODE && <div
             className="rounded-2xl p-4"
             style={{
               background: 'linear-gradient(145deg, rgba(245,166,35,0.05), rgba(15,23,42,0.8))',
@@ -293,12 +294,12 @@ export default function WelcomePage() {
                 onClick={() => loginAs('driverPremium')}
               />
             </div>
-          </div>
+          </div>}
 
           {/* Testing note */}
-          <p className="text-center mt-4 text-[10px]" style={{ color: '#374151' }}>
+          {!IS_API_MODE && <p className="text-center mt-4 text-[10px]" style={{ color: '#374151' }}>
             Testing Mode — Data is simulated
-          </p>
+          </p>}
         </div>
       </div>
     </AppShell>
