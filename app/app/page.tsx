@@ -240,66 +240,6 @@ export default function WelcomePage() {
             </button>
           </div>
 
-          {/* Demo section */}
-          {!IS_API_MODE && <div
-            className="rounded-2xl p-4"
-            style={{
-              background: 'linear-gradient(145deg, rgba(245,166,35,0.05), rgba(15,23,42,0.8))',
-              border: '1px solid rgba(245,166,35,0.18)',
-              boxShadow: '0 0 24px rgba(245,166,35,0.06)',
-            }}
-          >
-            <div className="flex items-center justify-center gap-2 mb-3">
-              <span
-                className="text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-full"
-                style={{
-                  color: '#F5A623',
-                  background: 'rgba(245,166,35,0.1)',
-                  border: '1px solid rgba(245,166,35,0.2)',
-                  letterSpacing: '0.12em',
-                }}
-              >
-                Try Demo
-              </span>
-            </div>
-            <div className="flex gap-2 flex-wrap justify-center">
-              <DemoButton
-                label="Trip Provider"
-                sublabel="Free"
-                color="#F5A623"
-                onClick={() => loginAs('vendorFree')}
-              />
-              <DemoButton
-                label="Trip Provider"
-                sublabel="Premium ★"
-                color="#F5A623"
-                onClick={() => loginAs('vendorPremium')}
-              />
-              <DemoButton
-                label="Trip Provider"
-                sublabel="Docs Pending"
-                color="#F5A623"
-                onClick={() => loginAs('vendorPending')}
-              />
-              <DemoButton
-                label="Driver"
-                sublabel="Free"
-                color="#2D6BE4"
-                onClick={() => loginAs('driverFree')}
-              />
-              <DemoButton
-                label="Driver"
-                sublabel="Premium ★"
-                color="#2D6BE4"
-                onClick={() => loginAs('driverPremium')}
-              />
-            </div>
-          </div>}
-
-          {/* Testing note */}
-          {!IS_API_MODE && <p className="text-center mt-4 text-[10px]" style={{ color: '#374151' }}>
-            Testing Mode — Data is simulated
-          </p>}
         </div>
       </div>
     </AppShell>
