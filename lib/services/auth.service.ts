@@ -82,6 +82,16 @@ const AuthService = {
     });
     clearTokens();
   },
+
+  async deactivateAccount(): Promise<void> {
+    await apiClient.post('/auth/deactivate', {});
+    clearTokens();
+  },
+
+  async deleteAccount(password: string): Promise<void> {
+    await apiClient.post('/auth/delete-account', { password });
+    clearTokens();
+  },
 };
 
 export default AuthService;

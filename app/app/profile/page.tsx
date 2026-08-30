@@ -5,12 +5,14 @@ import { useRouter } from 'next/navigation';
 import {
   Crown, User, MapPin, ChevronRight, FileText, Lock, HelpCircle,
   Phone, Star, LogOut, Truck, Package, Calendar, CreditCard, Camera,
+  PauseCircle, Trash2,
 } from 'lucide-react';
 import AppShell from '@/components/app/AppShell';
 import AppHeader from '@/components/app/AppHeader';
 import { useAppState } from '@/lib/app-state';
 import { isFullyActive } from '@/components/app/AccountStatusBanner';
 import { useTranslation } from '@/lib/useTranslation';
+import AuthService from '@/lib/services/auth.service';
 
 const DEMO_PAYMENTS = [
   { date: 'Jun 20, 2026', amount: 'â‚¹199.00', txnId: 'CS74628193' },
@@ -77,8 +79,42 @@ export default function ProfilePage() {
   const currentUser = state.currentUser;
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [photoUrl, setPhotoUrl] = useState<string | null>(null);
-
   const [uploading, setUploading] = useState(false);
+  const [showDeactivateModal, setShowDeactivateModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [deletePassword, setDeletePassword] = useState('');
+  const [actionLoading, setActionLoading] = useState(false);
+  const [actionError, setActionError] = useState('');
+
+  async function handleDeactivate() {
+    setActionLoading(true);
+    setActionError('');
+    try {
+      await AuthService.deactivateAccount();
+      dispatch({ type: 'LOGOUT' });
+      router.replace('/app/');
+    } catch {
+      setActionError('Something went wrong. Please try again.');
+    } finally {
+      setActionLoading(false);
+    }
+  }
+
+  async function handleDelete() {
+    if (!deletePassword) { setActionError('Please enter your password.'); return; }
+    setActionLoading(true);
+    setActionError('');
+    try {
+      await AuthService.deleteAccount(deletePassword);
+      dispatch({ type: 'LOGOUT' });
+      router.replace('/app/');
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : 'Incorrect password or error. Try again.';
+      setActionError(msg);
+    } finally {
+      setActionLoading(false);
+    }
+  }
 
   useEffect(() => {
     if (currentUser?.id) {
@@ -305,8 +341,22 @@ export default function ProfilePage() {
             label={t('logout')}
             labelColor="#EF4444"
             iconColor="#EF4444"
-            isLast
             onClick={() => { dispatch({ type: 'LOGOUT' }); router.replace('/app/'); }}
+          />
+          <MenuRow
+            icon={PauseCircle}
+            label={t('deactivate_account')}
+            labelColor="#F59E0B"
+            iconColor="#F59E0B"
+            onClick={() => { setActionError(''); setShowDeactivateModal(true); }}
+          />
+          <MenuRow
+            icon={Trash2}
+            label={t('delete_account')}
+            labelColor="#EF4444"
+            iconColor="#EF4444"
+            isLast
+            onClick={() => { setActionError(''); setDeletePassword(''); setShowDeleteModal(true); }}
           />
         </MenuSection>
 
@@ -315,6 +365,62 @@ export default function ProfilePage() {
           {t('app_version')}
         </p>
       </main>
+
+      {/* Deactivate Modal */}
+      {showDeactivateModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ backgroundColor: 'rgba(0,0,0,0.7)' }}>
+          <div className="w-full max-w-sm rounded-2xl p-6" style={{ backgroundColor: '#161B22', border: '1px solid #30363D' }}>
+            <h3 className="text-lg font-bold mb-2" style={{ color: '#F0F6FC' }}>{t('deactivate_confirm_title')}</h3>
+            <p className="text-sm mb-5" style={{ color: '#8B949E' }}>{t('deactivate_confirm_desc')}</p>
+            {actionError && <p className="text-xs mb-3 text-red-400">{actionError}</p>}
+            <div className="flex gap-3">
+              <button
+                className="flex-1 py-2.5 rounded-xl text-sm font-semibold"
+                style={{ backgroundColor: '#21262D', color: '#F0F6FC' }}
+                onClick={() => setShowDeactivateModal(false)}
+              >{t('cancel')}</button>
+              <button
+                className="flex-1 py-2.5 rounded-xl text-sm font-semibold"
+                style={{ backgroundColor: '#F59E0B', color: '#000' }}
+                onClick={handleDeactivate}
+                disabled={actionLoading}
+              >{actionLoading ? t('deactivating') : t('deactivate_account')}</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Delete Modal */}
+      {showDeleteModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ backgroundColor: 'rgba(0,0,0,0.7)' }}>
+          <div className="w-full max-w-sm rounded-2xl p-6" style={{ backgroundColor: '#161B22', border: '1px solid #30363D' }}>
+            <h3 className="text-lg font-bold mb-2" style={{ color: '#EF4444' }}>{t('delete_confirm_title')}</h3>
+            <p className="text-sm mb-4" style={{ color: '#8B949E' }}>{t('delete_confirm_desc')}</p>
+            <input
+              type="password"
+              value={deletePassword}
+              onChange={e => setDeletePassword(e.target.value)}
+              placeholder={t('enter_password')}
+              className="w-full px-4 py-3 rounded-xl text-sm mb-3 outline-none"
+              style={{ backgroundColor: '#0D1117', border: '1px solid #30363D', color: '#F0F6FC' }}
+            />
+            {actionError && <p className="text-xs mb-3 text-red-400">{actionError}</p>}
+            <div className="flex gap-3">
+              <button
+                className="flex-1 py-2.5 rounded-xl text-sm font-semibold"
+                style={{ backgroundColor: '#21262D', color: '#F0F6FC' }}
+                onClick={() => setShowDeleteModal(false)}
+              >{t('cancel')}</button>
+              <button
+                className="flex-1 py-2.5 rounded-xl text-sm font-semibold"
+                style={{ backgroundColor: '#EF4444', color: '#fff' }}
+                onClick={handleDelete}
+                disabled={actionLoading}
+              >{actionLoading ? t('deleting') : t('confirm_delete')}</button>
+            </div>
+          </div>
+        </div>
+      )}
     </AppShell>
   );
 }

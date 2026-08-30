@@ -337,6 +337,19 @@ export const T = {
   doc_action_required:  { en: 'Document Action Required', hi: 'दस्तावेज़ क्रिया आवश्यक', gu: 'દસ્તાવેજ ક્રિયા જરૂરી' },
   doc_action_desc:      { en: 'Some documents need to be re-uploaded before you can access this feature.', hi: 'कुछ दस्तावेज़ फिर से अपलोड करने होंगे।', gu: 'કેટલાક દસ્તાવેજ ફરી અપલોડ કરવા જરૂરી છે.' },
   btn_fix_documents:    { en: 'Fix Documents',      hi: 'दस्तावेज़ ठीक करें', gu: 'દસ્તાવેજ ઠીક કરો' },
+
+  // Account actions
+  deactivate_account:   { en: 'Deactivate Account',  hi: 'खाता निष्क्रिय करें', gu: 'ખાતું નિષ્ક્રિય કરો' },
+  delete_account:       { en: 'Delete Account',       hi: 'खाता हटाएं',          gu: 'ખાતું ડિલીટ કરો' },
+  deactivate_confirm_title: { en: 'Deactivate Account?', hi: 'खाता निष्क्रिय करें?', gu: 'ખાતું નિષ્ક્રિય કરો?' },
+  deactivate_confirm_desc:  { en: 'Your account will be paused. Contact support anytime to reactivate it.', hi: 'आपका खाता रोका जाएगा। कभी भी सहायता से पुनः सक्रिय करें।', gu: 'તમારું ખાતું રોકવામાં આવશે. સહાય દ્વારા ગ.સ. ફ.સ.ક.' },
+  delete_confirm_title: { en: 'Delete Account?',     hi: 'खाता हटाएं?',          gu: 'ખાતું ડિલીટ કરો?' },
+  delete_confirm_desc:  { en: 'This will permanently delete your account and all data. This cannot be undone. Enter your password to confirm.', hi: 'यह आपका खाता और सारा डेटा हमेशा के लिए हटा देगा। इसे वापस नहीं किया जा सकता। पुष्टि के लिए पासवर्ड दर्ज करें।', gu: 'આ તમારું ખાતું અને બધો ડેટા કાયમ માટે ડિ.ક. કૃ.ક.ક. નાखী .' },
+  enter_password:       { en: 'Enter Password',      hi: 'पासवर्ड दर्ज करें',    gu: 'પાસવર્ડ નાખો' },
+  confirm_delete:       { en: 'Delete Permanently',  hi: 'स्थायी रूप से हटाएं',  gu: 'કાયમ માટે ડિ.ક.' },
+  cancel:               { en: 'Cancel',              hi: 'रद्द करें',            gu: 'રદ કરો' },
+  deactivating:         { en: 'Deactivating…',       hi: 'निष्क्रिय हो रहा है…', gu: 'નિ.ક. …' },
+  deleting:             { en: 'Deleting…',           hi: 'हटाया जा रहा है…',     gu: 'ડિ.ક. …' },
 } as const;
 
 export type TKey = keyof typeof T;
