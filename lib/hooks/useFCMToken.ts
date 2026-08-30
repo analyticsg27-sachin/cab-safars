@@ -5,7 +5,7 @@ import { getToken } from 'firebase/messaging';
 import { getFirebaseMessaging } from '../firebase';
 import { apiClient } from '../services/api-client';
 
-const VAPID_KEY = process.env.NEXT_PUBLIC_FIREBASE_VAPID_KEY!;
+const VAPID_KEY = 'BPDyhc2RTJ3iwmpfJ0L48Cwrei7cbltzZH65a0Jk2t36ZRPizWwfqFh4jELg5JvT8LOEowfqs_JliZ8MbXr1yxw';
 const STORED_KEY = 'fcm_token_registered';
 
 export function useFCMToken(isAuthenticated: boolean) {
@@ -22,12 +22,12 @@ export function useFCMToken(isAuthenticated: boolean) {
 
         // Send firebase config to the SW so it can initialise messaging
         const config = {
-          apiKey:            process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
-          authDomain:        process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
-          projectId:         process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
-          storageBucket:     process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
-          messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
-          appId:             process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
+          apiKey:            'AIzaSyDejRu9O4cReOL6WimmePW25svmyyLnhxQ',
+          authDomain:        'cab-safars.firebaseapp.com',
+          projectId:         'cab-safars',
+          storageBucket:     'cab-safars.firebasestorage.app',
+          messagingSenderId: '157397651545',
+          appId:             '1:157397651545:web:9afbf207a6a8526c53a148',
         };
 
         await navigator.serviceWorker.ready;

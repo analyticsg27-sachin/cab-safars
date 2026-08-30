@@ -1,13 +1,14 @@
 import { initializeApp, getApps } from 'firebase/app';
 import { getMessaging, type Messaging } from 'firebase/messaging';
 
+// Firebase web config — public keys, safe to commit (restricted by domain in Firebase console)
 const firebaseConfig = {
-  apiKey:            process.env.NEXT_PUBLIC_FIREBASE_API_KEY!,
-  authDomain:        process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN!,
-  projectId:         process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID!,
-  storageBucket:     process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET!,
-  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID!,
-  appId:             process.env.NEXT_PUBLIC_FIREBASE_APP_ID!,
+  apiKey:            'AIzaSyDejRu9O4cReOL6WimmePW25svmyyLnhxQ',
+  authDomain:        'cab-safars.firebaseapp.com',
+  projectId:         'cab-safars',
+  storageBucket:     'cab-safars.firebasestorage.app',
+  messagingSenderId: '157397651545',
+  appId:             '1:157397651545:web:9afbf207a6a8526c53a148',
 };
 
 export const firebaseApp = getApps().length
@@ -19,7 +20,6 @@ let messagingInstance: Messaging | null = null;
 export function getFirebaseMessaging(): Messaging | null {
   if (typeof window === 'undefined') return null;
   if (!('serviceWorker' in navigator)) return null;
-  if (!process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID) return null;
   if (!messagingInstance) {
     messagingInstance = getMessaging(firebaseApp);
   }
