@@ -347,7 +347,6 @@ export const T = {
   delete_confirm_desc:  { en: 'This will permanently delete your account and all data. This cannot be undone. Enter your password to confirm.', hi: 'यह आपका खाता और सारा डेटा हमेशा के लिए हटा देगा। इसे वापस नहीं किया जा सकता। पुष्टि के लिए पासवर्ड दर्ज करें।', gu: 'આ તમારું ખાતું અને બધો ડેટા કાયમ માટે ડિ.ક. કૃ.ક.ક. નાखী .' },
   enter_password:       { en: 'Enter Password',      hi: 'पासवर्ड दर्ज करें',    gu: 'પાસવર્ડ નાખો' },
   confirm_delete:       { en: 'Delete Permanently',  hi: 'स्थायी रूप से हटाएं',  gu: 'કાયમ માટે ડિ.ક.' },
-  cancel:               { en: 'Cancel',              hi: 'रद्द करें',            gu: 'રદ કરો' },
   deactivating:         { en: 'Deactivating…',       hi: 'निष्क्रिय हो रहा है…', gu: 'નિ.ક. …' },
   deleting:             { en: 'Deleting…',           hi: 'हटाया जा रहा है…',     gu: 'ડિ.ક. …' },
 } as const;
