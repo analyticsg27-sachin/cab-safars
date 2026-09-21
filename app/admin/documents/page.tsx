@@ -258,17 +258,7 @@ function DocumentsPanel({ user, onDocsLoaded, onDocsChange }: DocumentsPanelProp
                     </button>
                   </>
                 )}
-                {/* Re-review rejected doc */}
-                {doc.status === "rejected" && (
-                  <button
-                    onClick={() => handleApprove(doc.id)}
-                    disabled={approvingId === doc.id}
-                    className="w-7 h-7 flex items-center justify-center rounded-lg transition-all disabled:opacity-50"
-                    style={{ background: "rgba(34,197,94,0.12)", border: "1px solid rgba(34,197,94,0.3)" }}
-                    title="Approve now">
-                    <ThumbsUp className="w-3.5 h-3.5 text-[#22C55E]" />
-                  </button>
-                )}
+                {/* Rejected docs: no action buttons — user must re-upload */}
               </div>
             </div>
 
@@ -336,16 +326,40 @@ export default function DocumentsPage() {
     }));
   }
 
-  // Only show users who have uploaded at least 1 document
-  const usersWithDocs = users.filter(u => (u as unknown as { doc_count: number }).doc_count > 0);
+  function handleDocsChange(userId: string, docs: UserDocument[]) {
+    handleDocsLoaded(userId, docs);
+    // Recalculate doc_status client-side so filters update without full refresh
+    const pending  = docs.filter(d => d.status === "pending").length;
+    const rejected = docs.filter(d => d.status === "rejected").length;
+    const approved = docs.filter(d => d.status === "approved").length;
+    let newDocStatus = 'none';
+    if (docs.length > 0) {
+      if (rejected > 0) newDocStatus = 'rejected';
+      else if (pending > 0) newDocStatus = 'pending';
+      else if (approved === docs.length) newDocStatus = 'approved';
+    }
+    setUsers(prev => prev.map(u =>
+      u.id === userId
+        ? { ...u, ...(u as unknown as Record<string, unknown>), doc_status: newDocStatus } as typeof u
+        : u
+    ));
+    showToast("Document updated");
+  }
+
+  // Only show users who have uploaded ≥1 doc AND whose docs are not all approved yet
+  const usersWithDocs = users.filter(u => {
+    const ext = u as unknown as { doc_count: number; doc_status?: string };
+    return ext.doc_count > 0 && ext.doc_status !== 'approved';
+  });
 
   const filtered = usersWithDocs.filter(u => {
     const matchSearch = search.trim() === ""
       || u.name.toLowerCase().includes(search.toLowerCase())
       || u.phone.includes(search);
-    const counts = docCounts[u.id];
-    if (filter === "needs_review") return matchSearch && (!counts || counts.pending > 0);
-    if (filter === "has_issues")   return matchSearch && (counts?.rejected ?? 0) > 0;
+    // Use server-side doc_status so the filter is stable before and after expansion
+    const docStatus = (u as unknown as { doc_status?: string }).doc_status;
+    if (filter === "needs_review") return matchSearch && docStatus === 'pending';
+    if (filter === "has_issues")   return matchSearch && docStatus === 'rejected';
     return matchSearch;
   });
 
@@ -489,7 +503,7 @@ export default function DocumentsPage() {
                   <DocumentsPanel
                     user={user}
                     onDocsLoaded={handleDocsLoaded}
-                    onDocsChange={(userId, docs) => { handleDocsLoaded(userId, docs); showToast("Document updated"); }}
+                    onDocsChange={handleDocsChange}
                   />
                 </div>
               )}
