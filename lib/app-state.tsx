@@ -25,7 +25,7 @@ export type AppAction =
   | { type: 'ADD_NOTIFICATION'; payload: AppNotification }
   | { type: 'MARK_NOTIFICATIONS_READ' }
   | { type: 'UPGRADE_PREMIUM'; payload: { premiumExpiry: string } }
-  | { type: 'UPDATE_USER'; payload: Partial<Pick<AppUser, 'name' | 'phone' | 'city'>> };
+  | { type: 'UPDATE_USER'; payload: Partial<Pick<AppUser, 'name' | 'phone' | 'city' | 'docStatus' | 'docApprovedCount' | 'docTotalCount' | 'isPremium' | 'premiumExpiry'>> };
 
 const initialState: AppState = {
   currentUser: null,

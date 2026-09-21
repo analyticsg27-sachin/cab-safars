@@ -139,8 +139,10 @@ export default function ApprovalsPage() {
     setLoading(true);
     setError("");
     try {
-      const res = await AdminService.getUsers({ status: "pending" });
-      setApprovals((res.data as unknown as PendingRegistration[]) ?? []);
+      // Show users whose docs are approved but account not yet approved by admin
+      const res = await AdminService.getUsers({ doc_status: "approved" } as Parameters<typeof AdminService.getUsers>[0]);
+      const all = (res.data as unknown as PendingRegistration[]) ?? [];
+      setApprovals(all.filter(u => u.status !== "approved"));
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : "Failed to load approvals");
     } finally {
@@ -177,7 +179,7 @@ export default function ApprovalsPage() {
     try {
       await AdminService.approveUser(user.id);
       setApprovals(prev => prev.filter(a => a.id !== user.id));
-      showToast(`${user.name} approved — they will be notified to upload documents`);
+      showToast(`${user.name} account activated — full access granted`);
     } catch (e: unknown) {
       showToast(e instanceof Error ? e.message : "Action failed");
     } finally {
@@ -239,17 +241,17 @@ export default function ApprovalsPage() {
                 <CheckCircle className="w-5 h-5 text-[#22C55E]" />
               </div>
               <div>
-                <h3 className="text-sm font-semibold text-[#F0F6FC]">Approve Registration</h3>
+                <h3 className="text-sm font-semibold text-[#F0F6FC]">Activate Account</h3>
                 <p className="text-xs text-[#8B949E]">{approveTarget.name}</p>
               </div>
             </div>
             <p className="text-sm text-[#8B949E] mb-6">
-              The user will be notified and asked to upload their verification documents.
+              All documents are verified. Activating the account grants this user full app access.
             </p>
             <div className="flex gap-2">
               <Button variant="success" size="sm" className="flex-1"
                 onClick={() => handleApprove(approveTarget)} disabled={actionLoading}>
-                {actionLoading ? "Approving…" : "Yes, Approve"}
+                {actionLoading ? "Activating…" : "Yes, Activate"}
               </Button>
               <Button variant="secondary" size="sm" className="flex-1"
                 onClick={() => setApproveTarget(null)} disabled={actionLoading}>
@@ -271,15 +273,15 @@ export default function ApprovalsPage() {
       {/* Header */}
       <div className="flex items-start justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-[#F0F6FC]">Pending Approvals</h1>
+          <h1 className="text-2xl font-bold text-[#F0F6FC]">Ready for Activation</h1>
           <p className="text-sm text-[#8B949E] mt-0.5">
-            Review new registrations and approve or reject them
+            Users whose documents are all verified — activate their account to grant full access
           </p>
         </div>
         <div className="flex items-center gap-2">
           {!loading && (
             <span className="text-sm font-semibold bg-[#F59E0B]/10 text-[#F59E0B] border border-[#F59E0B]/20 rounded-full px-3 py-1">
-              {approvals.length} pending
+              {approvals.length} ready
             </span>
           )}
           <button onClick={fetchApprovals}
@@ -309,8 +311,8 @@ export default function ApprovalsPage() {
           <div className="w-14 h-14 rounded-2xl bg-[#22C55E]/10 flex items-center justify-center mx-auto mb-4">
             <CheckCircle className="w-7 h-7 text-[#22C55E]" />
           </div>
-          <h3 className="text-base font-semibold text-[#F0F6FC] mb-1">All caught up!</h3>
-          <p className="text-sm text-[#8B949E]">No pending registrations at this time.</p>
+          <h3 className="text-base font-semibold text-[#F0F6FC] mb-1">No users ready yet</h3>
+          <p className="text-sm text-[#8B949E]">Users will appear here once all their documents are approved.</p>
         </div>
       ) : (
         <div className="flex flex-col gap-4">
@@ -380,7 +382,7 @@ export default function ApprovalsPage() {
                   <div className="flex gap-2 sm:flex-col shrink-0">
                     <Button variant="success" size="sm" className="flex-1 sm:flex-none"
                       onClick={() => setApproveTarget(user)}>
-                      <CheckCircle className="w-4 h-4" /> Approve
+                      <CheckCircle className="w-4 h-4" /> Activate
                     </Button>
                     <Button variant="danger" size="sm" className="flex-1 sm:flex-none"
                       onClick={() => setRejectTarget(user)}>
@@ -408,7 +410,7 @@ export default function ApprovalsPage() {
               <div className="px-5 py-3 flex items-center justify-between"
                 style={{ borderTop: "1px solid #30363D", background: "rgba(13,17,23,0.4)" }}>
                 <p className="text-xs text-[#374151]">
-                  Documents reviewed separately after approval
+                  All documents verified — ready for account activation
                 </p>
                 <Link href="/admin/documents"
                   className="flex items-center gap-1.5 text-xs font-semibold"

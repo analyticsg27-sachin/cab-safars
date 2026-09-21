@@ -92,6 +92,15 @@ const AuthService = {
     await apiClient.post('/auth/delete-account', { password });
     clearTokens();
   },
+
+  async forgotPassword(phone: string): Promise<{ message: string; debug_otp?: string }> {
+    const res = await apiClient.post<{ message: string; debug_otp?: string }>('/auth/forgot-password', { phone });
+    return res.data!;
+  },
+
+  async resetPassword(phone: string, otp: string, password: string): Promise<void> {
+    await apiClient.post('/auth/reset-password', { phone, otp, password });
+  },
 };
 
 export default AuthService;

@@ -291,6 +291,16 @@ function LoginPage() {
                 'Sign In'
               )}
             </button>
+
+            {/* Forgot password */}
+            <button
+              type="button"
+              onClick={() => router.push('/app/forgot-password')}
+              className="w-full text-center text-sm mt-1 transition-colors"
+              style={{ color: '#F5A623' }}
+            >
+              Forgot password?
+            </button>
           </form>
         </div>
 

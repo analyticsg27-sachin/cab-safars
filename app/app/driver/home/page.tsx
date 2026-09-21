@@ -11,10 +11,11 @@ import TripAlertBanner from '@/components/app/TripAlertBanner';
 import AccountStatusBanner, { isFullyActive, LockedFeature } from '@/components/app/AccountStatusBanner';
 import { useTranslation } from '@/lib/useTranslation';
 import TripsService, { type Trip } from '@/lib/services/trips.service';
+import AuthService from '@/lib/services/auth.service';
 import { isApiMode } from '@/lib/services';
 
 export default function DriverHomePage() {
-  const { state } = useAppState();
+  const { state, dispatch } = useAppState();
   const router = useRouter();
   const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState('home');
@@ -27,6 +28,19 @@ export default function DriverHomePage() {
 
   useEffect(() => {
     if (!state.isAuthenticated || !isApiMode()) return;
+    // Refresh user state from server to pick up any status/docStatus changes since login
+    AuthService.me().then((fresh) => {
+      dispatch({
+        type: 'UPDATE_USER',
+        payload: {
+          docStatus: fresh.doc_status ?? 'none',
+          docApprovedCount: fresh.doc_approved_count ?? 0,
+          docTotalCount: fresh.doc_total_count ?? 0,
+          isPremium: fresh.is_premium,
+          premiumExpiry: fresh.premium_expires_at ?? undefined,
+        },
+      });
+    }).catch(() => {});
     TripsService.getFeed({ page: 1, per_page: 5 })
       .then((r) => setApiTrips(r.data ?? []))
       .catch(() => {});

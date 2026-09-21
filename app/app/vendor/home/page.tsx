@@ -10,6 +10,7 @@ import BottomNav from '@/components/app/BottomNav';
 import AppHeader from '@/components/app/AppHeader';
 import TripsService from '@/lib/services/trips.service';
 import type { Trip } from '@/lib/services/trips.service';
+import AuthService from '@/lib/services/auth.service';
 import { IS_API_MODE, isApiMode } from '@/lib/services';
 import AccountStatusBanner, { isFullyActive, LockedFeature } from '@/components/app/AccountStatusBanner';
 
@@ -23,7 +24,7 @@ function StatCard({ label, value, color }: { label: string; value: string | numb
 }
 
 export default function TripProviderHomePage() {
-  const { state } = useAppState();
+  const { state, dispatch } = useAppState();
   const router = useRouter();
   const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState('home');
@@ -39,6 +40,19 @@ export default function TripProviderHomePage() {
   useEffect(() => {
     if (!IS_API_MODE || !state.isAuthenticated) return;
     if (!isApiMode()) return; // demo user — no real token, skip API
+    // Refresh user state from server to pick up any status/docStatus changes since login
+    AuthService.me().then((fresh) => {
+      dispatch({
+        type: 'UPDATE_USER',
+        payload: {
+          docStatus: fresh.doc_status ?? 'none',
+          docApprovedCount: fresh.doc_approved_count ?? 0,
+          docTotalCount: fresh.doc_total_count ?? 0,
+          isPremium: fresh.is_premium,
+          premiumExpiry: fresh.premium_expires_at ?? undefined,
+        },
+      });
+    }).catch(() => {});
     setLoading(true);
     TripsService.getMyTrips(1)
       .then((r) => setApiTrips(r.data ?? []))
