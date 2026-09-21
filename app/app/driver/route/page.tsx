@@ -304,7 +304,7 @@ export default function SmartRoutePage() {
                       reasonColor={reasonColors[i % reasonColors.length]}
                       reasonBg={reasonBgs[i % reasonBgs.length]}
                       isPremium={isPremium}
-                      onView={() => router.push(`/app/driver/trip/${trip.id}`)}
+                      onView={() => router.push(`/app/driver/trip?id=${trip.id}`)}
                     />
                   ))
                 )}
@@ -367,7 +367,7 @@ export default function SmartRoutePage() {
                     key={trip.id}
                     className="rounded-2xl border p-4 mb-3 cursor-pointer active:scale-[0.99] transition-transform"
                     style={{ backgroundColor: '#161B22', borderColor: '#30363D' }}
-                    onClick={() => router.push(`/app/driver/trip/${trip.id}`)}
+                    onClick={() => router.push(`/app/driver/trip?id=${trip.id}`)}
                   >
                     <div className="flex items-center justify-between mb-1">
                       <span className="text-xs font-semibold px-2 py-0.5 rounded-full" style={{ background: 'rgba(45,107,228,0.15)', color: '#2D6BE4' }}>

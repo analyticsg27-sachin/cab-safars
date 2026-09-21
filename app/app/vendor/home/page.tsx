@@ -177,7 +177,7 @@ export default function TripProviderHomePage() {
               ) : (
                 <div className="flex flex-col gap-3">
                   {recentApiTrips.map((trip) => (
-                    <button key={trip.id} onClick={() => router.push(`/app/vendor/trip/${trip.id}`)}
+                    <button key={trip.id} onClick={() => router.push(`/app/vendor/trip?id=${trip.id}`)}
                       className="w-full text-left p-4 rounded-xl transition-all active:scale-95"
                       style={{ backgroundColor: '#161B22', border: '1px solid #30363D' }}>
                       <div className="flex items-center justify-between mb-2">
@@ -207,7 +207,7 @@ export default function TripProviderHomePage() {
               ) : (
                 <div className="flex flex-col gap-3">
                   {recentLocalTrips.map((trip) => (
-                    <button key={trip.id} onClick={() => router.push(`/app/vendor/trip/${trip.id}`)}
+                    <button key={trip.id} onClick={() => router.push(`/app/vendor/trip?id=${trip.id}`)}
                       className="w-full text-left p-4 rounded-xl transition-all active:scale-95"
                       style={{ backgroundColor: '#161B22', border: '1px solid #30363D' }}>
                       <div className="flex items-center justify-between mb-2">

@@ -163,7 +163,7 @@ export default function DriverHomePage() {
                 return (
                 <button
                   key={trip.id}
-                  onClick={() => router.push(`/app/driver/trip/${trip.id}`)}
+                  onClick={() => router.push(`/app/driver/trip?id=${trip.id}`)}
                   className="w-full text-left p-4 rounded-xl transition-all active:scale-95"
                   style={{
                     backgroundColor: '#161B22',

@@ -75,7 +75,7 @@ function TripCard({ trip, isUserPremium, t }: { trip: Trip; isUserPremium: boole
     <div
       className="rounded-2xl border p-4 mb-3 active:scale-[0.99] transition-transform cursor-pointer"
       style={{ backgroundColor: '#161B22', borderColor: '#30363D' }}
-      onClick={() => router.push(`/app/driver/trip/${trip.id}`)}
+      onClick={() => router.push(`/app/driver/trip?id=${trip.id}`)}
     >
       <div className="flex items-center justify-between mb-2">
         <div className="flex items-center gap-2">
@@ -121,7 +121,7 @@ function TripCard({ trip, isUserPremium, t }: { trip: Trip; isUserPremium: boole
         <button
           className="flex items-center gap-1 text-xs font-semibold px-3 py-2 rounded-xl"
           style={{ backgroundColor: '#F5A623', color: '#0D1117' }}
-          onClick={(e) => { e.stopPropagation(); router.push(`/app/driver/trip/${trip.id}`); }}
+          onClick={(e) => { e.stopPropagation(); router.push(`/app/driver/trip?id=${trip.id}`); }}
         >
           {t('view_btn')} <ChevronRight size={12} />
         </button>

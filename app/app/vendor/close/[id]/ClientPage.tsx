@@ -179,7 +179,7 @@ export default function VendorCloseTripPage() {
           <h2 className="text-lg font-bold text-[#F0F6FC]">Trip Already Closed</h2>
           <p className="text-sm text-[#8B949E] mt-1">This trip has already been marked as closed.</p>
         </div>
-        <button onClick={() => router.push(`/app/vendor/trip/${tripId}`)}
+        <button onClick={() => router.push(`/app/vendor/trip?id=${tripId}`)}
           className="px-5 py-3 rounded-xl font-semibold text-sm"
           style={{ background: '#F5A623', color: '#0D1117' }}>
           View Trip

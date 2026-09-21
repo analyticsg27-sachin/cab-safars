@@ -75,7 +75,7 @@ function ApiTripCard({ trip, onRepost }: { trip: Trip; onRepost: (id: string) =>
 
         <div className="flex gap-2 ml-10">
           <button
-            onClick={() => router.push(`/app/vendor/trip/${trip.id}`)}
+            onClick={() => router.push(`/app/vendor/trip?id=${trip.id}`)}
             className="flex items-center gap-1 text-xs font-semibold px-3 py-1.5 rounded-lg"
             style={{ background: '#21262D', color: '#F0F6FC', border: '1px solid #30363D' }}>
             {t('view_btn')} <ChevronRight size={11} />
@@ -274,7 +274,7 @@ export default function VendorTripsPage() {
           ) : (
             <div className="flex flex-col gap-3">
               {displayLocalTrips.map(t => (
-                <LocalTripCard key={t.id} trip={t} onClick={() => router.push(`/app/vendor/trip/${t.id}`)} />
+                <LocalTripCard key={t.id} trip={t} onClick={() => router.push(`/app/vendor/trip?id=${t.id}`)} />
               ))}
             </div>
           )

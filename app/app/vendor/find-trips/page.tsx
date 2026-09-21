@@ -178,7 +178,7 @@ export default function FindTripsPage() {
   }
 
   function viewTrip(tripId: string) {
-    router.push(`/app/driver/trip/${tripId}`);
+    router.push(`/app/driver/trip?id=${tripId}`);
   }
 
   const sameCityWarning = !isApiMode() && fromLoc.city && toLoc.city &&

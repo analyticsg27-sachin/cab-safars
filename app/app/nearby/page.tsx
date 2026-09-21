@@ -83,7 +83,7 @@ export default function NearbyPage() {
   }, [coords, radius]);
 
   function viewTrip(id: string) {
-    router.push(`/app/driver/trip/${id}`);
+    router.push(`/app/driver/trip?id=${id}`);
   }
 
   return (
