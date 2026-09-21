@@ -38,7 +38,8 @@ function InfoRow({ icon, label, value }: { icon: React.ReactNode; label: string;
   );
 }
 
-function initials(name: string) {
+function initials(name: string | undefined | null) {
+  if (!name) return '?';
   return name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
 }
 

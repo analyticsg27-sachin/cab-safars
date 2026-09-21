@@ -32,25 +32,29 @@ const DEMO_CONTACTS: Record<string, ContactedDriver[]> = {
 function formatDate(d: string) {
   return new Date(d).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
 }
-function formatTime(t: string) {
+function formatTime(t: string | undefined | null) {
+  if (!t) return '—';
   const [h, m] = t.split(':');
   const hour = parseInt(h);
   const ampm = hour >= 12 ? 'PM' : 'AM';
   const h12 = hour % 12 || 12;
-  return `${h12}:${m} ${ampm}`;
+  return `${h12}:${m ?? '00'} ${ampm}`;
 }
-function timeAgo(iso: string) {
+function timeAgo(iso: string | undefined | null) {
+  if (!iso) return 'recently';
   const diff = (Date.now() - new Date(iso).getTime()) / 1000;
   if (diff < 60) return 'Just now';
   if (diff < 3600) return `${Math.floor(diff / 60)}m ago`;
   if (diff < 86400) return `${Math.floor(diff / 3600)}h ago`;
   return `${Math.floor(diff / 86400)}d ago`;
 }
-function initials(name: string) {
+function initials(name: string | undefined | null) {
+  if (!name) return '?';
   return name.split(' ').map(n => n[0]).slice(0, 2).join('').toUpperCase();
 }
-function avatarBg(name: string) {
+function avatarBg(name: string | undefined | null) {
   const colors = ['#F5A623', '#22C55E', '#3B82F6', '#A855F7', '#EF4444', '#14B8A6'];
+  if (!name) return colors[0];
   let h = 0;
   for (let i = 0; i < name.length; i++) h = (h * 31 + name.charCodeAt(i)) % colors.length;
   return colors[h];
@@ -287,8 +291,8 @@ export default function VendorTripDetailPage() {
           </div>
 
           {(() => {
-            const contacts: ContactedDriver[] = trip.contactedDrivers.length
-              ? trip.contactedDrivers
+            const contacts: ContactedDriver[] = (trip.contactedDrivers ?? []).length
+              ? (trip.contactedDrivers ?? [])
               : (DEMO_CONTACTS[tripId] ?? []);
 
             if (trip.contactsCount === 0) {

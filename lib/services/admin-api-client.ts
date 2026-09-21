@@ -59,6 +59,7 @@ async function adminRequest<T>(
     method,
     headers,
     body: body ? JSON.stringify(body) : undefined,
+    cache: 'no-store',
   });
 
   if (res.status === 401 && !retried) {
