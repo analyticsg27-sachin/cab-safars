@@ -16,10 +16,11 @@ import type { TripDetail } from '@/lib/services/trips.service';
 import { isApiMode } from '@/lib/services';
 
 function timeAgo(dateStr: string) {
-  const diff = Date.now() - new Date(dateStr).getTime();
+  // API returns "2026-09-21 12:40:43" — replace space with T for valid ISO parse
+  const diff = Date.now() - new Date(dateStr.replace(' ', 'T')).getTime();
   const h = Math.floor(diff / 3600000);
   const d = Math.floor(diff / 86400000);
-  if (h < 1) return 'just now';
+  if (isNaN(diff) || h < 1) return 'just now';
   if (h < 24) return `${h} hour${h !== 1 ? 's' : ''} ago`;
   return `${d} day${d !== 1 ? 's' : ''} ago`;
 }
