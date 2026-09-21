@@ -267,7 +267,7 @@ function VendorTripDetailInner() {
                       style={{ background: 'rgba(45,107,228,0.12)', border: '1px solid rgba(45,107,228,0.3)' }}>
                       <Phone size={15} color="#2D6BE4" />
                     </a>
-                    <a href={`https://wa.me/${d.driver_phone.replace(/\D/g,'')}`} target="_blank" rel="noopener noreferrer"
+                    <a href={`https://wa.me/${(d.driver_phone ?? '').replace(/\D/g,'')}`} target="_blank" rel="noopener noreferrer"
                       className="w-9 h-9 rounded-xl flex items-center justify-center"
                       style={{ background: 'rgba(37,211,102,0.08)', border: '1px solid rgba(37,211,102,0.25)' }}>
                       <MessageCircle size={15} color="#25D366" />

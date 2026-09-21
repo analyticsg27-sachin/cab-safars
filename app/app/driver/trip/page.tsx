@@ -26,7 +26,8 @@ function timeAgo(dateStr: string | undefined | null) {
   return `${d} day${d !== 1 ? 's' : ''} ago`;
 }
 
-function formatPhone(phone: string) {
+function formatPhone(phone: string | undefined | null) {
+  if (!phone) return '';
   return phone.replace(/\s+/g, '').replace('+', '');
 }
 
