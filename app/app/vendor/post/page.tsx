@@ -65,7 +65,9 @@ export default function VendorPostPage() {
   function validate() {
     const e: Record<string, string> = {};
     if (!fromLoc.city.trim()) e.fromCity = 'Pickup location is required';
+    else if (fromLoc.city.trim().length < 3) e.fromCity = 'Enter a valid city name (min 3 characters)';
     if (!toLoc.city.trim()) e.toCity = 'Destination is required';
+    else if (toLoc.city.trim().length < 3) e.toCity = 'Enter a valid city name (min 3 characters)';
     if (!form.tripDate) e.tripDate = 'Trip date is required';
     if (fromLoc.city.trim().toLowerCase() === toLoc.city.trim().toLowerCase() && fromLoc.city) {
       e.toCity = 'Destination must be different from pickup';
