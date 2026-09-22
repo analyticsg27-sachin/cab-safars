@@ -24,8 +24,13 @@ export default function ForgotPasswordPage() {
       // Store phone for reset page, show OTP for testing
       sessionStorage.setItem('fp_phone', phone.trim());
       if (res.debug_otp) {
+        // Dev mode: OTP returned in response — show it on screen
         setDebugOtp(res.debug_otp);
+      } else if (res.message && res.message.includes('If this number is registered')) {
+        // Number not found in DB — show clear error instead of silently redirecting
+        setError('This mobile number is not registered. Please check the number or register first.');
       } else {
+        // Production: OTP sent via SMS
         router.push('/app/reset-password');
       }
     } catch (err: unknown) {
