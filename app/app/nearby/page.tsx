@@ -64,10 +64,17 @@ export default function NearbyPage() {
         setLocating(false);
         setCoords({ lat: pos.coords.latitude, lng: pos.coords.longitude });
       },
-      () => {
+      (err) => {
         setLocating(false);
-        setLocationError('Could not get your location. Please enable location access.');
-      }
+        if (err.code === 1) {
+          setLocationError('Location permission denied. Please allow location access in your browser settings.');
+        } else if (err.code === 3) {
+          setLocationError('Location timed out. Please try again or check your GPS signal.');
+        } else {
+          setLocationError('Could not get your location. Please try again.');
+        }
+      },
+      { timeout: 10000, maximumAge: 300000, enableHighAccuracy: false }
     );
   }
 
