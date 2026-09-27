@@ -13,6 +13,8 @@ import { useAppState } from '@/lib/app-state';
 import { isFullyActive } from '@/components/app/AccountStatusBanner';
 import { useTranslation } from '@/lib/useTranslation';
 import AuthService from '@/lib/services/auth.service';
+import TripsService from '@/lib/services/trips.service';
+import { isApiMode } from '@/lib/services';
 
 const DEMO_PAYMENTS = [
   { date: 'Jun 20, 2026', amount: 'â‚¹199.00', txnId: 'CS74628193' },
@@ -82,6 +84,8 @@ export default function ProfilePage() {
   const [uploading, setUploading] = useState(false);
   const [showDeactivateModal, setShowDeactivateModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [tripsPostedCount, setTripsPostedCount] = useState<number | null>(null);
+  const [contactsCount, setContactsCount] = useState<number | null>(null);
   const [deletePassword, setDeletePassword] = useState('');
   const [actionLoading, setActionLoading] = useState(false);
   const [actionError, setActionError] = useState('');
@@ -122,6 +126,16 @@ export default function ProfilePage() {
       if (saved) setPhotoUrl(saved);
     }
   }, [currentUser?.id]);
+
+  useEffect(() => {
+    if (!isApiMode() || currentUser?.role !== 'vendor') return;
+    TripsService.getMyTrips(1).then((res) => {
+      const total = res.pagination?.total ?? res.data.length;
+      setTripsPostedCount(total);
+      const contacts = res.data.reduce((s, t) => s + (t.contacts_count ?? 0), 0);
+      setContactsCount(contacts);
+    }).catch(() => {});
+  }, [currentUser?.role]);
 
   async function handlePhotoChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
@@ -195,8 +209,8 @@ export default function ProfilePage() {
     premiumExpiry: currentUser?.premiumExpiry ?? '',
     tripsApplied: state.trips.filter(t => t.status === 'open').length,
     tripsCompleted: state.trips.filter(t => t.status === 'closed').length,
-    tripsPosted: state.trips.length,
-    totalContacts: state.trips.reduce((s, t) => s + t.contactsCount, 0),
+    tripsPosted: tripsPostedCount ?? state.trips.length,
+    totalContacts: contactsCount ?? state.trips.reduce((s, t) => s + t.contactsCount, 0),
   };
   const isDriver = user.role === 'driver';
   const fullyActive = currentUser ? isFullyActive(currentUser) : false;
