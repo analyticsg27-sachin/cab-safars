@@ -86,6 +86,7 @@ export default function LocationAutocomplete({ value, onChange, placeholder, pin
   const [suggestions, setSuggestions] = useState<LocationValue[]>([]);
   const [recents, setRecents] = useState<LocationValue[]>([]);
   const [locating, setLocating] = useState(false);
+  const [locError, setLocError] = useState('');
   const inputRef = useRef<HTMLInputElement>(null);
   const wrapRef  = useRef<HTMLDivElement>(null);
   // Track whether a suggestion was selected so onBlur doesn't overwrite it
@@ -130,12 +131,27 @@ export default function LocationAutocomplete({ value, onChange, placeholder, pin
   }
 
   function useCurrentLocation() {
-    if (!navigator.geolocation) return;
+    if (!navigator.geolocation) {
+      setLocError('Location not supported on this device.');
+      return;
+    }
     setLocating(true);
-    navigator.geolocation.getCurrentPosition(
+    setLocError('');
+
+    // watchPosition is more reliable than getCurrentPosition on Android PWA.
+    // We cancel it after the first fix or after 12s manual timeout.
+    let watchId: number;
+    const timer = setTimeout(() => {
+      navigator.geolocation.clearWatch(watchId);
+      setLocating(false);
+      setLocError('Location timed out. Search manually or check GPS permissions.');
+    }, 12000);
+
+    watchId = navigator.geolocation.watchPosition(
       (pos) => {
+        clearTimeout(timer);
+        navigator.geolocation.clearWatch(watchId);
         setLocating(false);
-        // Try to reverse-match to a known city by closest coordinates
         const lat = pos.coords.latitude;
         const lng = pos.coords.longitude;
         let best: LocationValue | null = null;
@@ -146,19 +162,24 @@ export default function LocationAutocomplete({ value, onChange, placeholder, pin
           if (d < bestDist) { bestDist = d; best = c; }
         }
         const loc: LocationValue = best && bestDist < 2 ? best : {
-          name: 'Current Location',
-          city: 'Current Location',
-          state: '',
-          lat,
-          lng,
+          name: 'Current Location', city: 'Current Location', state: '', lat, lng,
         };
         selectedRef.current = true;
         setQuery(loc.city);
         setOpen(false);
         onChange(loc);
       },
-      () => { setLocating(false); },
-      { timeout: 10000, maximumAge: 300000, enableHighAccuracy: false }
+      (err) => {
+        clearTimeout(timer);
+        navigator.geolocation.clearWatch(watchId);
+        setLocating(false);
+        if (err.code === 1) {
+          setLocError('Location permission denied. Enable it in browser settings.');
+        } else {
+          setLocError('Could not get location. Search manually.');
+        }
+      },
+      { enableHighAccuracy: false, maximumAge: 300000 }
     );
   }
 
@@ -227,10 +248,12 @@ export default function LocationAutocomplete({ value, onChange, placeholder, pin
             disabled={locating}
             onClick={useCurrentLocation}
             className="w-full flex items-center gap-3 px-4 py-3 text-sm text-left hover:bg-[#21262D] transition-colors"
-            style={{ color: '#2D6BE4' }}
+            style={{ color: locError ? '#EF4444' : '#2D6BE4' }}
           >
             <Navigation size={15} className={locating ? 'animate-pulse' : ''} />
-            <span className="font-medium">{locating ? 'Locating…' : 'Use Current Location'}</span>
+            <span className="font-medium">
+              {locating ? 'Locating…' : locError ? locError : 'Use Current Location'}
+            </span>
           </button>
 
           <div style={{ height: 1, background: '#30363D' }} />

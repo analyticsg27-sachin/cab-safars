@@ -64,8 +64,10 @@ async function _doRefresh(): Promise<string | null> {
       body: JSON.stringify({ refresh_token: refreshToken }),
     });
 
+    // Only clear tokens when server explicitly rejects them (401/403).
+    // A 5xx or network blip is temporary — don't log the user out for it.
     if (!res.ok) {
-      clearTokens();
+      if (res.status === 401 || res.status === 403) clearTokens();
       return null;
     }
 
@@ -74,13 +76,12 @@ async function _doRefresh(): Promise<string | null> {
       setTokens(data.data.access_token, data.data.refresh_token);
       return data.data.access_token;
     }
+    // Unexpected response shape — don't clear, treat as temporary failure
+    return null;
   } catch {
-    // network error — don't clear tokens, let user retry
+    // Network error — don't clear tokens, let user retry
     return null;
   }
-
-  clearTokens();
-  return null;
 }
 
 async function request<T>(
