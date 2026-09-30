@@ -224,14 +224,19 @@ export default function DocumentsPage() {
   const role = user.role;
   const approvedCount  = docs.filter(d => d.status === 'approved').length;
   const submittedCount = docs.filter(d => d.status === 'pending' || d.status === 'approved').length;
-  const rejectedDocs   = docs.filter(d => d.status === 'rejected');
   const allRequired    = role === 'driver' ? 7 : 4;
   // Types already submitted (pending or approved) — shown disabled in upload sheet
   const uploadedTypes = docs
     .filter(d => d.status === 'pending' || d.status === 'approved')
     .map(d => d.document_type);
   const allDocTypes = role === 'driver' ? DRIVER_DOC_TYPES : VENDOR_DOC_TYPES;
-  const allTypesDone = allDocTypes.every(dt => uploadedTypes.includes(dt));
+  // Types with at least one approved doc (supersede old rejected ones)
+  const approvedTypes = docs.filter(d => d.status === 'approved').map(d => d.document_type);
+  // Only count rejected docs where the same type has no approved version
+  const rejectedDocs = docs.filter(d => d.status === 'rejected' && !approvedTypes.includes(d.document_type));
+  // Only check required types (exclude optional 'Other') for allTypesDone
+  const requiredDocTypes = allDocTypes.filter(dt => dt !== 'Other');
+  const allTypesDone = requiredDocTypes.every(dt => uploadedTypes.includes(dt));
 
   async function handleDelete(doc: UserDoc) {
     if (!confirm(`Delete "${doc.document_type}"? This cannot be undone.`)) return;
@@ -392,8 +397,8 @@ export default function DocumentsPage() {
                   )}
                 </div>
 
-                {/* Rejection reason + re-upload */}
-                {doc.status === 'rejected' && (
+                {/* Rejection reason + re-upload (hide if an approved version already exists) */}
+                {doc.status === 'rejected' && !approvedTypes.includes(doc.document_type) && (
                   <div className="px-4 pb-3 flex flex-col gap-2">
                     {doc.rejection_reason && (
                       <div className="flex items-start gap-2 px-3 py-2 rounded-lg"
