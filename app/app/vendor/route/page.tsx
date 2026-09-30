@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import {
   Navigation, MapPin, Calendar, Clock, Sliders, ChevronRight,
@@ -12,6 +12,7 @@ import BottomNav from '@/components/app/BottomNav';
 import LocationAutocomplete, { LocationValue } from '@/components/app/LocationAutocomplete';
 import { useAppState } from '@/lib/app-state';
 import { isFullyActive, LockedFeature } from '@/components/app/AccountStatusBanner';
+import { apiClient } from '@/lib/services/api-client';
 
 const EXPIRY_OPTIONS = ['Today only', 'Next 24 hours', 'Next 3 days', 'Next 7 days'];
 
@@ -112,6 +113,36 @@ export default function VendorRoutePage() {
 
   const [nearbyCity, setNearbyCity] = useState('');
   const [nearbyRadius, setNearbyRadius] = useState(50);
+  const [nearbyMatches, setNearbyMatches] = useState<any[]>([]);
+  const [nearbyLoading, setNearbyLoading] = useState(false);
+
+  const CITY_COORDS: Record<string, [number, number]> = {
+    ahmedabad: [23.0225, 72.5714], surat: [21.1702, 72.8311], vadodara: [22.3072, 73.1812],
+    rajkot: [22.3039, 70.8022], gandhinagar: [23.2156, 72.6369], bhavnagar: [21.7645, 72.1519],
+    jamnagar: [22.4707, 70.0577], anand: [22.5645, 72.9289], navsari: [20.9467, 72.9520],
+    morbi: [22.8173, 70.8370], mehsana: [23.5880, 72.3693], mumbai: [19.0760, 72.8777],
+    pune: [18.5204, 73.8567], delhi: [28.6139, 77.2090], jaipur: [26.9124, 75.7873],
+    bengaluru: [12.9716, 77.5946], bangalore: [12.9716, 77.5946], hyderabad: [17.3850, 78.4867],
+    chennai: [13.0827, 80.2707], indore: [22.7196, 75.8577], kolkata: [22.5726, 88.3639],
+    lucknow: [26.8467, 80.9462], nagpur: [21.1458, 79.0882], bhopal: [23.2599, 77.4126],
+  };
+
+  const fetchNearby = useCallback(async (city: string, radius: number) => {
+    const key = city.toLowerCase().trim();
+    const coords = CITY_COORDS[key];
+    if (!coords) { setNearbyMatches([]); return; }
+    setNearbyLoading(true);
+    try {
+      const res = await apiClient.get<{ trips: any[] }>(`/trips/nearby?lat=${coords[0]}&lng=${coords[1]}&radius=${radius}`);
+      setNearbyMatches(res.data?.trips ?? []);
+    } catch { setNearbyMatches([]); }
+    finally { setNearbyLoading(false); }
+  }, []);
+
+  useEffect(() => {
+    if (nearbyCity) fetchNearby(nearbyCity, nearbyRadius);
+    else setNearbyMatches([]);
+  }, [nearbyCity, nearbyRadius, fetchNearby]);
 
   function handleActivate() {
     const e: Record<string, string> = {};
@@ -141,11 +172,6 @@ export default function VendorRoutePage() {
     'rgba(168,85,247,0.12)', 'rgba(6,182,212,0.12)', 'rgba(139,148,158,0.12)',
   ];
 
-  const nearbyMatches = nearbyCity
-    ? allTrips.filter((t) =>
-        t.fromCity.toLowerCase().includes(nearbyCity.toLowerCase())
-      ).slice(0, 8)
-    : [];
 
   function handleNav(t: string) {
     const paths: Record<string, string> = {
@@ -367,6 +393,10 @@ export default function VendorRoutePage() {
                 <p className="font-semibold mb-1" style={{ color: '#F0F6FC' }}>Enter your city</p>
                 <p className="text-sm" style={{ color: '#8B949E' }}>Type your current city above to find trips departing nearby</p>
               </div>
+            ) : nearbyLoading ? (
+              <div className="text-center py-10">
+                <p className="text-sm" style={{ color: '#8B949E' }}>Searching trips near {nearbyCity}…</p>
+              </div>
             ) : nearbyMatches.length === 0 ? (
               <div className="text-center py-10">
                 <p className="font-semibold mb-1" style={{ color: '#F0F6FC' }}>No trips found near {nearbyCity}</p>
@@ -386,23 +416,23 @@ export default function VendorRoutePage() {
                       <span className="text-xs font-semibold px-2 py-0.5 rounded-full" style={{ background: 'rgba(45,107,228,0.15)', color: '#2D6BE4' }}>
                         Nearby
                       </span>
-                      <span className="text-xs" style={{ color: '#8B949E' }}>{trip.vehicleType}</span>
+                      <span className="text-xs" style={{ color: '#8B949E' }}>{trip.vehicle_type ?? trip.vehicleType}</span>
                     </div>
                     <div className="flex items-center gap-2 my-2">
                       <MapPin size={14} style={{ color: '#F5A623' }} />
                       <span className="text-base font-bold" style={{ color: '#F0F6FC' }}>
-                        {trip.fromCity} &rarr; {trip.toCity}
+                        {trip.from_city ?? trip.fromCity} &rarr; {trip.to_city ?? trip.toCity}
                       </span>
                     </div>
                     <div className="flex items-center justify-between">
                       <span className="text-xs" style={{ color: '#8B949E' }}>
-                        <Calendar size={10} className="inline mr-1" />{trip.tripDate}
+                        <Calendar size={10} className="inline mr-1" />{trip.trip_date ?? trip.tripDate}
                       </span>
-                      {trip.expectedFare != null
-                        ? <span className="text-sm font-bold" style={{ color: '#F5A623' }}>{'₹'}{trip.expectedFare.toLocaleString('en-IN')}</span>
+                      {(trip.expected_fare ?? trip.expectedFare) != null
+                        ? <span className="text-sm font-bold" style={{ color: '#F5A623' }}>{'₹'}{Number(trip.expected_fare ?? trip.expectedFare).toLocaleString('en-IN')}</span>
                         : <span className="text-xs" style={{ color: '#8B949E' }}>Negotiable</span>}
                     </div>
-                    <p className="text-xs mt-1" style={{ color: '#8B949E' }}>by {trip.vendorName}</p>
+                    <p className="text-xs mt-1" style={{ color: '#8B949E' }}>by {trip.vendor_name ?? trip.vendorName}</p>
                   </div>
                 ))}
               </>
