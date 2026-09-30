@@ -88,6 +88,8 @@ export default function LocationAutocomplete({ value, onChange, placeholder, pin
   const [locating, setLocating] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const wrapRef  = useRef<HTMLDivElement>(null);
+  // Track whether a suggestion was selected so onBlur doesn't overwrite it
+  const selectedRef = useRef(false);
 
   // Sync external value
   useEffect(() => { setQuery(value); }, [value]);
@@ -120,6 +122,7 @@ export default function LocationAutocomplete({ value, onChange, placeholder, pin
   }, []);
 
   function select(loc: LocationValue) {
+    selectedRef.current = true;
     setQuery(loc.city);
     setOpen(false);
     saveRecent(loc);
@@ -132,18 +135,30 @@ export default function LocationAutocomplete({ value, onChange, placeholder, pin
     navigator.geolocation.getCurrentPosition(
       (pos) => {
         setLocating(false);
-        const loc: LocationValue = {
+        // Try to reverse-match to a known city by closest coordinates
+        const lat = pos.coords.latitude;
+        const lng = pos.coords.longitude;
+        let best: LocationValue | null = null;
+        let bestDist = Infinity;
+        for (const c of CITIES) {
+          if (c.lat == null || c.lng == null) continue;
+          const d = Math.sqrt((c.lat - lat) ** 2 + (c.lng - lng) ** 2);
+          if (d < bestDist) { bestDist = d; best = c; }
+        }
+        const loc: LocationValue = best && bestDist < 2 ? best : {
           name: 'Current Location',
           city: 'Current Location',
           state: '',
-          lat: pos.coords.latitude,
-          lng: pos.coords.longitude,
+          lat,
+          lng,
         };
-        setQuery('Current Location');
+        selectedRef.current = true;
+        setQuery(loc.city);
         setOpen(false);
         onChange(loc);
       },
-      () => { setLocating(false); }
+      () => { setLocating(false); },
+      { timeout: 10000, maximumAge: 300000, enableHighAccuracy: false }
     );
   }
 
@@ -175,6 +190,8 @@ export default function LocationAutocomplete({ value, onChange, placeholder, pin
           onFocus={() => setOpen(true)}
           onBlur={() => {
             setTimeout(() => {
+              // If user tapped a suggestion, select() already ran — don't overwrite
+              if (selectedRef.current) { selectedRef.current = false; return; }
               setOpen(false);
               if (query.trim()) {
                 const exact = CITIES.find(c => c.city.toLowerCase() === query.trim().toLowerCase());
