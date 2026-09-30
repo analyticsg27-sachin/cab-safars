@@ -20,7 +20,15 @@ function getAdminRefreshToken(): string | null {
   return localStorage.getItem('admin_refresh_token');
 }
 
+let _adminRefreshPromise: Promise<string | null> | null = null;
+
 async function refreshAdminAccessToken(): Promise<string | null> {
+  if (_adminRefreshPromise) return _adminRefreshPromise;
+  _adminRefreshPromise = _doAdminRefresh().finally(() => { _adminRefreshPromise = null; });
+  return _adminRefreshPromise;
+}
+
+async function _doAdminRefresh(): Promise<string | null> {
   const refreshToken = getAdminRefreshToken();
   if (!refreshToken) return null;
 
@@ -30,16 +38,20 @@ async function refreshAdminAccessToken(): Promise<string | null> {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ refresh_token: refreshToken }),
     });
-    if (!res.ok) { clearAdminTokens(); return null; }
+    // Only clear tokens when server explicitly rejects them — not on 5xx/network errors
+    if (!res.ok) {
+      if (res.status === 401 || res.status === 403) clearAdminTokens();
+      return null;
+    }
     const data = await res.json();
     if (data.success && data.data?.access_token) {
       setAdminTokens(data.data.access_token, data.data.refresh_token);
       return data.data.access_token;
     }
-  } catch { /* ignore */ }
-
-  clearAdminTokens();
-  return null;
+    return null;
+  } catch {
+    return null; // network error — don't clear tokens
+  }
 }
 
 async function adminRequest<T>(
@@ -63,10 +75,11 @@ async function adminRequest<T>(
   });
 
   if (res.status === 401 && !retried) {
+    const hadToken = !!getAdminRefreshToken();
     const newToken = await refreshAdminAccessToken();
     if (newToken) return adminRequest<T>(method, path, body, true);
-    clearAdminTokens();
-    if (typeof window !== 'undefined') {
+    // Redirect only when refresh truly failed (had token but server rejected it)
+    if (hadToken && typeof window !== 'undefined' && !getAdminRefreshToken()) {
       window.location.href = '/cabsafars/admin/login';
     }
     throw new Error('Unauthorized');
