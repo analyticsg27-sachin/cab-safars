@@ -131,13 +131,18 @@ export default function WelcomePage() {
   const router = useRouter();
   const [splashDone, setSplashDone] = useState(false);
 
-  // Only redirect to onboarding on first-ever launch — welcome page always shows after that
+  // After splash: if already authenticated go straight to home, else check onboarding
   useEffect(() => {
     if (!splashDone) return;
+    if (state.isAuthenticated && state.currentUser) {
+      const home = state.currentUser.role === 'vendor' ? '/app/vendor/home' : '/app/driver/home';
+      router.replace(home);
+      return;
+    }
     if (!localStorage.getItem('cs_onboarding_done')) {
       router.replace('/app/onboarding');
     }
-  }, [router, splashDone]);
+  }, [router, splashDone, state.isAuthenticated, state.currentUser]);
 
   function loginAs(key: keyof typeof demoUsers) {
     const user = demoUsers[key];
