@@ -186,12 +186,13 @@ export default function VendorsPage() {
 
   useEffect(() => { fetchVendors(); }, [fetchVendors]);
 
-  async function handleAction(id: string, action: 'approve' | 'reject' | 'suspend') {
+  async function handleAction(id: string, action: 'approve' | 'reject' | 'suspend' | 'unsuspend') {
     try {
       if (action === 'approve') await AdminService.approveUser(id);
       else if (action === 'reject') await AdminService.rejectUser(id, 'Rejected by admin');
+      else if (action === 'unsuspend') await AdminService.unsuspendUser(id);
       else await AdminService.suspendUser(id);
-      showToast(`User ${action}d`);
+      showToast(`User ${action === 'unsuspend' ? 'activated' : action + 'd'}`);
       fetchVendors();
     } catch (e: unknown) {
       showToast(e instanceof Error ? e.message : 'Action failed');
@@ -249,27 +250,74 @@ export default function VendorsPage() {
         </div>
       ) : (
         <div className="bg-[#161B22] border border-[#30363D] rounded-xl overflow-hidden">
-          <div className="overflow-x-auto">
+          {/* Mobile cards */}
+          <div className="md:hidden divide-y divide-[#30363D]/50">
+            {vendors.map((v) => (
+              <div key={v.id} className="p-4 flex flex-col gap-3">
+                <div className="flex items-center justify-between gap-2">
+                  <div className="flex items-center gap-2.5 min-w-0">
+                    <UserAvatar name={v.name} src={v.profile_image} />
+                    <div className="min-w-0">
+                      <p className="text-sm font-semibold text-[#F0F6FC] truncate">{v.name}</p>
+                      <p className="text-xs text-[#8B949E]">{v.phone}</p>
+                    </div>
+                  </div>
+                  <Badge variant={v.status as 'pending' | 'approved' | 'rejected' | 'suspended'} dot>{v.status}</Badge>
+                </div>
+                <div className="flex items-center gap-3 text-xs text-[#8B949E] flex-wrap">
+                  <span>{v.city}</span>
+                  {v.company_name && <span>· {v.company_name}</span>}
+                  <span>· {formatDate(v.created_at)}</span>
+                  {v.is_premium && <span className="text-[#F5A623] font-semibold">★ Premium</span>}
+                </div>
+                <div className="flex gap-2">
+                  <Button variant="secondary" size="xs" onClick={() => setDocsUser(v)}>
+                    <FileText className="w-3 h-3" /> Docs
+                  </Button>
+                  {v.status === 'approved' && (
+                    <Button variant="secondary" size="xs" onClick={() => handleAction(v.id, 'suspend')}>
+                      <Ban className="w-3 h-3" /> Suspend
+                    </Button>
+                  )}
+                  {v.status === 'suspended' && (
+                    <Button variant="success" size="xs" onClick={() => handleAction(v.id, 'unsuspend')}>
+                      <CheckCircle className="w-3 h-3" /> Activate
+                    </Button>
+                  )}
+                  {v.status === 'pending' && (
+                    <>
+                      <Button variant="success" size="xs" onClick={() => handleAction(v.id, 'approve')}><CheckCircle className="w-3 h-3" /> Approve</Button>
+                      <Button variant="danger" size="xs" onClick={() => handleAction(v.id, 'reject')}><XCircle className="w-3 h-3" /> Reject</Button>
+                    </>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Desktop table */}
+          <div className="hidden md:block overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
-                <tr className="border-b border-[#30363D]">
+                <tr style={{ backgroundColor: '#0D1117', borderBottom: '1px solid #30363D' }}>
                   {["Name", "Phone", "City", "Company", "Status", "Premium", "Registered", "Actions"].map((h) => (
-                    <th key={h} className="px-4 py-3 text-left text-xs text-[#8B949E] font-medium whitespace-nowrap">{h}</th>
+                    <th key={h} className="px-4 py-3 text-left text-xs text-[#6B7280] font-semibold uppercase tracking-wider whitespace-nowrap">{h}</th>
                   ))}
                 </tr>
               </thead>
               <tbody>
-                {vendors.map((v) => (
-                  <tr key={v.id} className="border-b border-[#30363D]/50 hover:bg-[#1C2128]/50">
+                {vendors.map((v, i) => (
+                  <tr key={v.id} className="border-b border-[#30363D]/40 hover:bg-[#1C2128]/60 transition-colors"
+                    style={{ backgroundColor: i % 2 === 0 ? 'transparent' : 'rgba(255,255,255,0.01)' }}>
                     <td className="px-4 py-3 whitespace-nowrap">
-                      <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-2.5">
                         <UserAvatar name={v.name} src={v.profile_image} />
-                        <span className="text-xs font-medium text-[#F0F6FC]">{v.name}</span>
+                        <span className="text-sm font-medium text-[#F0F6FC]">{v.name}</span>
                       </div>
                     </td>
                     <td className="px-4 py-3 text-xs text-[#8B949E] whitespace-nowrap">{v.phone}</td>
                     <td className="px-4 py-3 text-xs text-[#8B949E] whitespace-nowrap">{v.city}</td>
-                    <td className="px-4 py-3 text-xs text-[#8B949E]">{v.company_name || '—'}</td>
+                    <td className="px-4 py-3 text-xs text-[#8B949E] max-w-[150px] truncate">{v.company_name || '—'}</td>
                     <td className="px-4 py-3">
                       <Badge variant={v.status as 'pending' | 'approved' | 'rejected' | 'suspended'} dot>{v.status}</Badge>
                     </td>
@@ -280,7 +328,7 @@ export default function VendorsPage() {
                     </td>
                     <td className="px-4 py-3 text-xs text-[#8B949E] whitespace-nowrap">{formatDate(v.created_at)}</td>
                     <td className="px-4 py-3">
-                      <div className="flex gap-1">
+                      <div className="flex gap-1.5">
                         <Button variant="secondary" size="xs" onClick={() => setDocsUser(v)} title="View Documents">
                           <FileText className="w-3 h-3" />
                         </Button>
@@ -293,6 +341,9 @@ export default function VendorsPage() {
                         {v.status === 'approved' && (
                           <Button variant="secondary" size="xs" onClick={() => handleAction(v.id, 'suspend')}><Ban className="w-3 h-3" /> Suspend</Button>
                         )}
+                        {v.status === 'suspended' && (
+                          <Button variant="success" size="xs" onClick={() => handleAction(v.id, 'unsuspend')}><CheckCircle className="w-3 h-3" /> Activate</Button>
+                        )}
                       </div>
                     </td>
                   </tr>
@@ -300,6 +351,7 @@ export default function VendorsPage() {
               </tbody>
             </table>
           </div>
+
           {totalPages > 1 && (
             <div className="flex items-center justify-between px-4 py-3 border-t border-[#30363D]">
               <span className="text-xs text-[#8B949E]">Page {page} of {totalPages}</span>

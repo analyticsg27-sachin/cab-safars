@@ -121,7 +121,16 @@ const AdminService = {
     try {
       const res = await adminApiClient.get<{ pagination?: { total?: number }; items?: unknown[] }>('/admin/users?doc_status=approved&page=1&per_page=100');
       const items = (res.data?.items ?? []) as Array<{ status?: string }>;
-      return items.filter(u => u.status !== 'active').length;
+      return items.filter(u => u.status !== 'approved').length;
+    } catch {
+      return 0;
+    }
+  },
+
+  async getPendingDocsCount(): Promise<number> {
+    try {
+      const res = await adminApiClient.get<{ items?: unknown[] }>('/admin/users?doc_status=pending&page=1&per_page=100');
+      return (res.data?.items ?? []).length;
     } catch {
       return 0;
     }
@@ -140,6 +149,10 @@ const AdminService = {
 
   async cancelTrip(uuid: string) {
     return adminApiClient.delete(`/admin/trips/${uuid}`);
+  },
+
+  async closeTrip(uuid: string) {
+    return adminApiClient.post(`/admin/trips/${uuid}/close`);
   },
 
   async getPayments(params?: { status?: string; page?: number }) {

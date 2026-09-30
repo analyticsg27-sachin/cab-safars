@@ -56,13 +56,16 @@ interface SidebarProps {
 export default function Sidebar({ mobileOpen = false, onMobileClose, onLogout }: SidebarProps) {
   const [collapsed, setCollapsed] = useState(false);
   const [pendingCount, setPendingCount] = useState<number | null>(null);
+  const [pendingDocsCount, setPendingDocsCount] = useState<number | null>(null);
   const pathname = usePathname();
 
   useEffect(() => {
-    AdminService.getPendingCount().then(setPendingCount).catch(() => {});
-    const interval = setInterval(() => {
+    const refresh = () => {
       AdminService.getPendingCount().then(setPendingCount).catch(() => {});
-    }, 60_000);
+      AdminService.getPendingDocsCount().then(setPendingDocsCount).catch(() => {});
+    };
+    refresh();
+    const interval = setInterval(refresh, 60_000);
     return () => clearInterval(interval);
   }, []);
 
@@ -111,7 +114,9 @@ export default function Sidebar({ mobileOpen = false, onMobileClose, onLogout }:
                 const active =
                   pathname === href ||
                   (href !== "/admin" && pathname.startsWith(href));
-                const dynamicBadge = href === "/admin/approvals" ? pendingCount : null;
+                const dynamicBadge = href === "/admin/approvals" ? pendingCount
+                  : href === "/admin/documents" ? pendingDocsCount
+                  : null;
                 return (
                   <Link
                     key={href}

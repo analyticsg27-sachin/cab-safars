@@ -24,7 +24,9 @@ interface ApiUser {
 function UserAvatar({ name, src }: { name: string; src?: string }) {
   const initials = name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2);
   if (src) {
-    return <img src={src} alt={name} className="w-8 h-8 rounded-full object-cover flex-shrink-0" style={{ border: '1px solid #30363D' }} />;
+    return <img src={src} alt={name} className="w-8 h-8 rounded-full object-cover flex-shrink-0"
+      style={{ border: '1px solid #30363D' }}
+      onError={(e) => { (e.target as HTMLImageElement).style.display='none'; }} />;
   }
   return (
     <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 text-xs font-bold"
@@ -192,12 +194,13 @@ export default function DriversPage() {
 
   useEffect(() => { fetchDrivers(); }, [fetchDrivers]);
 
-  async function handleAction(id: string, action: 'approve' | 'reject' | 'suspend') {
+  async function handleAction(id: string, action: 'approve' | 'reject' | 'suspend' | 'unsuspend') {
     try {
       if (action === 'approve') await AdminService.approveUser(id);
       else if (action === 'reject') await AdminService.rejectUser(id, 'Rejected by admin');
+      else if (action === 'unsuspend') await AdminService.unsuspendUser(id);
       else await AdminService.suspendUser(id);
-      showToast(`Driver ${action}d`);
+      showToast(`Driver ${action === 'unsuspend' ? 'activated' : action + 'd'}`);
       fetchDrivers();
     } catch (e: unknown) {
       showToast(e instanceof Error ? e.message : 'Action failed');
@@ -256,22 +259,69 @@ export default function DriversPage() {
         </div>
       ) : (
         <div className="bg-[#161B22] border border-[#30363D] rounded-xl overflow-hidden">
-          <div className="overflow-x-auto">
+          {/* Mobile cards */}
+          <div className="md:hidden divide-y divide-[#30363D]/50">
+            {drivers.map((d) => (
+              <div key={d.id} className="p-4 flex flex-col gap-3">
+                <div className="flex items-center justify-between gap-2">
+                  <div className="flex items-center gap-2.5 min-w-0">
+                    <UserAvatar name={d.name} src={d.profile_image} />
+                    <div className="min-w-0">
+                      <p className="text-sm font-semibold text-[#F0F6FC] truncate">{d.name}</p>
+                      <p className="text-xs text-[#8B949E]">{d.phone}</p>
+                    </div>
+                  </div>
+                  <Badge variant={d.status as 'pending' | 'approved' | 'rejected' | 'suspended'} dot>{d.status}</Badge>
+                </div>
+                <div className="flex items-center gap-3 text-xs text-[#8B949E] flex-wrap">
+                  <span>{d.city}</span>
+                  {d.vehicle_type && <span>· {d.vehicle_type}</span>}
+                  <span>· {formatDate(d.created_at)}</span>
+                  {d.is_premium && <span className="text-[#F5A623] font-semibold">★ Premium</span>}
+                </div>
+                <div className="flex gap-2">
+                  <Button variant="secondary" size="xs" onClick={() => setDocsUser(d)}>
+                    <FileText className="w-3 h-3" /> Docs
+                  </Button>
+                  {d.status === 'approved' && (
+                    <Button variant="secondary" size="xs" onClick={() => handleAction(d.id, 'suspend')}>
+                      <Ban className="w-3 h-3" /> Suspend
+                    </Button>
+                  )}
+                  {d.status === 'suspended' && (
+                    <Button variant="success" size="xs" onClick={() => handleAction(d.id, 'unsuspend')}>
+                      <CheckCircle className="w-3 h-3" /> Activate
+                    </Button>
+                  )}
+                  {d.status === 'pending' && (
+                    <>
+                      <Button variant="success" size="xs" onClick={() => handleAction(d.id, 'approve')}><CheckCircle className="w-3 h-3" /> Approve</Button>
+                      <Button variant="danger" size="xs" onClick={() => handleAction(d.id, 'reject')}><XCircle className="w-3 h-3" /> Reject</Button>
+                    </>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Desktop table */}
+          <div className="hidden md:block overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
-                <tr className="border-b border-[#30363D]">
+                <tr style={{ backgroundColor: '#0D1117', borderBottom: '1px solid #30363D' }}>
                   {["Name", "Phone", "City", "Vehicle", "Status", "Premium", "Registered", "Actions"].map((h) => (
-                    <th key={h} className="px-4 py-3 text-left text-xs text-[#8B949E] font-medium whitespace-nowrap">{h}</th>
+                    <th key={h} className="px-4 py-3 text-left text-xs text-[#6B7280] font-semibold uppercase tracking-wider whitespace-nowrap">{h}</th>
                   ))}
                 </tr>
               </thead>
               <tbody>
-                {drivers.map((d) => (
-                  <tr key={d.id} className="border-b border-[#30363D]/50 hover:bg-[#1C2128]/50">
+                {drivers.map((d, i) => (
+                  <tr key={d.id} className="border-b border-[#30363D]/40 hover:bg-[#1C2128]/60 transition-colors"
+                    style={{ backgroundColor: i % 2 === 0 ? 'transparent' : 'rgba(255,255,255,0.01)' }}>
                     <td className="px-4 py-3 whitespace-nowrap">
-                      <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-2.5">
                         <UserAvatar name={d.name} src={d.profile_image} />
-                        <span className="text-xs font-medium text-[#F0F6FC]">{d.name}</span>
+                        <span className="text-sm font-medium text-[#F0F6FC]">{d.name}</span>
                       </div>
                     </td>
                     <td className="px-4 py-3 text-xs text-[#8B949E]">{d.phone}</td>
@@ -287,7 +337,7 @@ export default function DriversPage() {
                     </td>
                     <td className="px-4 py-3 text-xs text-[#8B949E] whitespace-nowrap">{formatDate(d.created_at)}</td>
                     <td className="px-4 py-3">
-                      <div className="flex gap-1">
+                      <div className="flex gap-1.5">
                         <Button variant="secondary" size="xs" onClick={() => setDocsUser(d)} title="View Documents">
                           <FileText className="w-3 h-3" />
                         </Button>
@@ -300,6 +350,9 @@ export default function DriversPage() {
                         {d.status === 'approved' && (
                           <Button variant="secondary" size="xs" onClick={() => handleAction(d.id, 'suspend')}><Ban className="w-3 h-3" /> Suspend</Button>
                         )}
+                        {d.status === 'suspended' && (
+                          <Button variant="success" size="xs" onClick={() => handleAction(d.id, 'unsuspend')}><CheckCircle className="w-3 h-3" /> Activate</Button>
+                        )}
                       </div>
                     </td>
                   </tr>
@@ -307,6 +360,7 @@ export default function DriversPage() {
               </tbody>
             </table>
           </div>
+
           {totalPages > 1 && (
             <div className="flex items-center justify-between px-4 py-3 border-t border-[#30363D]">
               <span className="text-xs text-[#8B949E]">Page {page} of {totalPages}</span>
