@@ -155,7 +155,7 @@ function UploadSheet({ role, preselectedType, uploadedTypes = [], onClose, onUpl
 
           <button
             onClick={handleUpload}
-            disabled={!file || uploading}
+            disabled={!file || uploading || (!preselectedType && uploadedTypes.includes(docType))}
             className="w-full py-4 rounded-2xl text-sm font-semibold flex items-center justify-center gap-2 transition-all disabled:opacity-50"
             style={{ backgroundColor: '#F5A623', color: '#0D1117' }}>
             {uploading
@@ -230,6 +230,8 @@ export default function DocumentsPage() {
   const uploadedTypes = docs
     .filter(d => d.status === 'pending' || d.status === 'approved')
     .map(d => d.document_type);
+  const allDocTypes = role === 'driver' ? DRIVER_DOC_TYPES : VENDOR_DOC_TYPES;
+  const allTypesDone = allDocTypes.every(dt => uploadedTypes.includes(dt));
 
   async function handleDelete(doc: UserDoc) {
     if (!confirm(`Delete "${doc.document_type}"? This cannot be undone.`)) return;
@@ -425,12 +427,19 @@ export default function DocumentsPage() {
           </div>
         )}
 
-        <button
-          onClick={() => setUploadSheet({ open: true })}
-          className="w-full flex items-center justify-center gap-2 py-4 rounded-2xl text-sm font-semibold"
-          style={{ backgroundColor: '#F5A623', color: '#0D1117' }}>
-          <Upload size={16} /> {t('upload_new_doc')}
-        </button>
+        {allTypesDone ? (
+          <div className="w-full flex items-center justify-center gap-2 py-4 rounded-2xl text-sm font-semibold"
+            style={{ backgroundColor: '#21262D', color: '#8B949E', border: '1px solid #30363D' }}>
+            <CheckCircle size={16} /> All documents submitted
+          </div>
+        ) : (
+          <button
+            onClick={() => setUploadSheet({ open: true })}
+            className="w-full flex items-center justify-center gap-2 py-4 rounded-2xl text-sm font-semibold"
+            style={{ backgroundColor: '#F5A623', color: '#0D1117' }}>
+            <Upload size={16} /> {t('upload_new_doc')}
+          </button>
+        )}
       </main>
     </AppShell>
   );

@@ -44,7 +44,16 @@ export function getRefreshToken(): string | null {
   return localStorage.getItem('refresh_token');
 }
 
+// Mutex: only one refresh in flight at a time; concurrent 401s wait for the same promise.
+let _refreshPromise: Promise<string | null> | null = null;
+
 async function refreshAccessToken(): Promise<string | null> {
+  if (_refreshPromise) return _refreshPromise;
+  _refreshPromise = _doRefresh().finally(() => { _refreshPromise = null; });
+  return _refreshPromise;
+}
+
+async function _doRefresh(): Promise<string | null> {
   const refreshToken = getRefreshToken();
   if (!refreshToken) return null;
 
@@ -66,7 +75,8 @@ async function refreshAccessToken(): Promise<string | null> {
       return data.data.access_token;
     }
   } catch {
-    // ignore
+    // network error — don't clear tokens, let user retry
+    return null;
   }
 
   clearTokens();
@@ -97,12 +107,13 @@ async function request<T>(
 
   // Auto-refresh on 401
   if (res.status === 401 && !retried) {
+    const hadToken = !!getRefreshToken(); // check before refresh clears it
     const newToken = await refreshAccessToken();
     if (newToken) {
       return request<T>(method, path, body, true);
     }
-    // Only redirect to login if there was a real token (not a demo session)
-    if (typeof window !== 'undefined' && localStorage.getItem('access_token')) {
+    // Redirect to login only when refresh truly failed (had a token but server rejected it)
+    if (hadToken && typeof window !== 'undefined' && !getRefreshToken()) {
       window.location.href = '/app/login';
     }
   }
