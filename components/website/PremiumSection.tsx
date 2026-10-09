@@ -2,25 +2,9 @@ import { Check, Star, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { APP_URL } from "@/lib/basepath";
 
-const vendorFeatures = [
-  "Post unlimited trips",
-  "Priority listing in search results",
-  "See all driver contacts instantly",
-  "Advanced trip analytics",
-  "Verified Premium badge",
-  "Email & SMS notifications",
-  "Dedicated customer support",
-];
+const vendorFeatures = ["Vendor account options", "Trip listing tools", "Trip information access"];
 
-const driverFeatures = [
-  "Contact vendors directly",
-  "Browse all open trips",
-  "Smart return route matching",
-  "Priority trip notifications",
-  "Verified Driver badge",
-  "Trip history & earnings report",
-  "24/7 priority support",
-];
+const driverFeatures = ["Driver account options", "Trip listing access", "Available contact options"];
 
 export default function PremiumSection() {
   return (
@@ -37,10 +21,10 @@ export default function PremiumSection() {
             Premium
           </span>
           <h2 className="text-3xl sm:text-4xl font-bold text-[#F0F6FC] mb-4">
-            Unlock Your Full Potential
+            Account options
           </h2>
           <p className="text-[#8B949E] text-lg max-w-xl mx-auto">
-            One simple plan. Maximum value. Cancel anytime.
+            See the membership and account options available to you in the app.
           </p>
         </div>
 
@@ -55,17 +39,16 @@ export default function PremiumSection() {
               <div className="flex flex-col sm:flex-row sm:items-end gap-4 mb-8">
                 <div>
                   <div className="flex items-baseline gap-1">
-                    <span className="text-5xl font-extrabold text-[#F0F6FC]">₹199</span>
-                    <span className="text-[#8B949E] text-lg">/month</span>
+                    <span className="text-3xl font-extrabold text-[#F0F6FC]">Membership</span>
                   </div>
                   <p className="text-[#8B949E] text-sm mt-1">Per account. Vendors and Drivers.</p>
                 </div>
                 <div className="flex flex-wrap gap-2">
                   <span className="px-3 py-1 rounded-full bg-[#22C55E]/10 border border-[#22C55E]/20 text-[#22C55E] text-xs font-medium">
-                    Most Popular
+                    Account access varies
                   </span>
                   <span className="px-3 py-1 rounded-full bg-[#F5A623]/10 border border-[#F5A623]/20 text-[#F5A623] text-xs font-medium">
-                    Cancel Anytime
+                    Details in app
                   </span>
                 </div>
               </div>
@@ -117,20 +100,16 @@ export default function PremiumSection() {
               <div className="flex flex-col sm:flex-row items-center gap-4">
                 <a href={`${APP_URL}/app/`}>
                   <Button variant="primary" size="xl" className="w-full sm:w-auto px-12">
-                    Get Started — ₹199/month
+                    View account options
                   </Button>
                 </a>
                 <p className="text-xs text-[#8B949E] text-center">
-                  Secure payment via Razorpay / PhonePe / GPay
+                  Options shown in the app depend on account status and availability.
                 </p>
               </div>
             </div>
           </div>
 
-          {/* Free plan note */}
-          <p className="text-center text-sm text-[#8B949E] mt-6">
-            Free plan available with limited features. Upgrade anytime.
-          </p>
         </div>
       </div>
     </section>

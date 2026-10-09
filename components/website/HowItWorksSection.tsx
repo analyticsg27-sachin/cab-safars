@@ -6,21 +6,21 @@ const vendorSteps = [
     step: "01",
     title: "Register as Vendor",
     description:
-      "Create your account and verify your business. Get approved within 24 hours.",
+      "Create an account and provide the requested business information.",
   },
   {
     icon: ClipboardList,
     step: "02",
     title: "Post Your Trip",
     description:
-      "Add trip details — route, date, vehicle type, and fare. Your listing goes live instantly.",
+      "Add trip details — route, date, vehicle type, and fare. Listing access depends on your account and service availability.",
   },
   {
     icon: Phone,
     step: "03",
-    title: "Drivers Contact You",
+    title: "Review Trip Information",
     description:
-      "Interested drivers reach out directly. Premium vendors get priority visibility and more contacts.",
+      "Review the information available for your trip listings.",
   },
 ];
 
@@ -30,21 +30,21 @@ const driverSteps = [
     step: "01",
     title: "Register as Driver",
     description:
-      "Sign up with your vehicle details and license. Quick verification process.",
+      "Create an account and provide the requested driver and vehicle information.",
   },
   {
     icon: Search,
     step: "02",
-    title: "Browse Matching Trips",
+    title: "Browse Trip Listings",
     description:
-      "See trips that match your current location and preferred routes. Smart matching saves time.",
+      "Browse available listings and review their route and trip details.",
   },
   {
     icon: Route,
     step: "03",
-    title: "Contact & Confirm",
+    title: "Review Contact Options",
     description:
-      "Premium drivers unlock direct vendor contact. Confirm trips and maximize every journey.",
+      "Check the contact options available for a trip in your account.",
   },
 ];
 

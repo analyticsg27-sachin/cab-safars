@@ -1,0 +1,13 @@
+{
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "cab-safars",
+          "appId": "1:157397651545:android:749861066870891353a148",
+          "fileOutput": "android/app/google-services.json"
+        }
+      }
+    }
+  }
+}

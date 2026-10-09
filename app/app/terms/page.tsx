@@ -7,14 +7,11 @@ import AppHeader from '@/components/app/AppHeader';
 const SECTIONS = [
   {
     title: '1. About CAB SAFARS',
-    body: `CAB SAFARS is a transport marketplace platform that connects Trip Providers (who post trips) with Drivers (who fulfill trips). We provide the platform only — we are not a transport operator, travel agent, or party to any trip agreement.`,
+    body: `CAB SAFARS provides tools for Trip Providers to create listings and for Drivers to browse listings available to their accounts.`,
   },
   {
     title: '2. User Roles',
-    body: `Free Driver: Can browse available trips. Cannot contact Trip Providers.
-Premium Driver: Can directly contact Trip Providers via Call and WhatsApp to discuss and confirm trips.
-Free Trip Provider: Can post trips for drivers to see.
-Premium Trip Provider: Can post trips AND directly contact/discover available drivers.`,
+    body: `The app displays account types, available listing actions, and contact options according to current account status and service availability.`,
   },
   {
     title: '3. Trip Settlement & Pricing',
@@ -26,11 +23,11 @@ Premium Trip Provider: Can post trips AND directly contact/discover available dr
   },
   {
     title: '5. Subscription & Payments',
-    body: `Premium subscription is ₹199 per month. Payment is processed securely via Razorpay. Subscription activates immediately upon successful payment and is valid for 30 days from the date of purchase.`,
+    body: `Review the current membership price, payment method, duration, and renewal terms shown in the app before purchasing.`,
   },
   {
     title: '6. No Refund Policy',
-    body: `All subscription payments are non-refundable. Once a Premium subscription is activated, no refund will be issued — whether partial or full — regardless of usage. This policy applies without exception. By purchasing a subscription, you agree to this no-refund policy.`,
+    body: `Review the refund terms shown with any purchase option before completing a transaction.`,
   },
   {
     title: '7. No Cancellation Policy',
@@ -38,11 +35,11 @@ Premium Trip Provider: Can post trips AND directly contact/discover available dr
   },
   {
     title: '8. Document Verification',
-    body: `Users are required to submit valid identity and vehicle documents for verification. Approval is done manually by our admin team within 24–48 hours. Submitting false or forged documents will result in permanent account suspension and may be reported to authorities.`,
+    body: `The app may request information or documents based on account type and service requirements. Follow the status and instructions shown in your account.`,
   },
   {
     title: '9. Premium Contact Unlock',
-    body: `Premium members unlock direct contact (Call and WhatsApp) to the other party. CAB SAFARS does not monitor or record these communications. Users are responsible for their own conduct during all communications made through the platform.`,
+    body: `Contact options, where available, are displayed in the app according to account status and service availability.`,
   },
   {
     title: '10. Prohibited Activities',
@@ -50,7 +47,7 @@ Premium Trip Provider: Can post trips AND directly contact/discover available dr
   },
   {
     title: '11. Privacy',
-    body: `We collect your name, phone number, city, and documents for verification and platform functionality. Your contact details are never shared with non-Premium users. We do not sell or share your data with third parties. Data is stored securely and used only for platform operation.`,
+    body: `See the Privacy Policy for information about personal data collected and how it is used.`,
   },
   {
     title: '12. Limitation of Liability',

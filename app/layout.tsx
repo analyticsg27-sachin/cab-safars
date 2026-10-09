@@ -12,18 +12,18 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: "CAB SAFARS — Vendor & Driver Transport Marketplace",
   description:
-    "Connect verified vendors and drivers. Post trips, find reliable drivers, discover smart route matches. India's premium transport network.",
+    "Cab Safar helps trip providers and drivers in India create, manage, and browse trip listings.",
   keywords: ["cab safars", "transport", "driver", "vendor", "marketplace", "trip matching", "India logistics"],
   openGraph: {
     title: "CAB SAFARS — Transport Marketplace",
-    description: "Connect vendors and drivers. Post trips. Earn more.",
+    description: "Create, manage, and browse trip listings in India.",
     type: "website",
     siteName: "Cab Safars",
   },
   twitter: {
     card: "summary_large_image",
     title: "CAB SAFARS",
-    description: "India's premium vendor-driver transport marketplace",
+    description: "Trip listings for providers and drivers in India",
   },
   manifest: `${process.env.NEXT_PUBLIC_BASE_PATH ?? ''}/manifest.json`,
   appleWebApp: {

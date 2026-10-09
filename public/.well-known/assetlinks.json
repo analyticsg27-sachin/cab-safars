@@ -3,7 +3,7 @@
     "relation": ["delegate_permission/common.handle_all_urls"],
     "target": {
       "namespace": "android_app",
-      "package_name": "com.cabsafar.app",
+      "package_name": "com.cabsafar",
       "sha256_cert_fingerprints": [
         "A8:59:E0:72:3C:F1:5B:10:48:FA:A8:0B:B7:6B:49:7C:D0:DD:7C:B4:A9:D4:58:E6:99:C3:2A:10:E0:67:A6:75",
         "9D:02:78:F1:AD:F9:DA:31:1E:DB:57:77:CC:CC:E4:D5:B3:A6:9F:D2:40:A6:42:89:CB:60:8A:36:19:06:D0:66",

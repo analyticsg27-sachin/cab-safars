@@ -25,8 +25,7 @@ export default function DownloadSection() {
                 </span>
               </h2>
               <p className="text-[#8B949E] text-lg leading-relaxed mb-8">
-                All the power of the platform in your pocket. Manage trips, get instant
-                notifications, and contact partners on the go. Launching soon on Android.
+                Use the app to manage trip listings and review trip details. Available features depend on account access.
               </p>
 
               <div className="flex flex-wrap gap-4 mb-8">

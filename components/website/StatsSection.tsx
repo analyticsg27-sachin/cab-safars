@@ -1,8 +1,7 @@
-const stats = [
-  { number: "50,000+", label: "Loads Moved" },
-  { number: "12,000+", label: "Registered Users" },
-  { number: "500+", label: "Cities Covered" },
-  { number: "₹50 Cr+", label: "Revenue Generated" },
+const steps = [
+  "Add route and vehicle details",
+  "Browse available trip listings",
+  "Review account and trip information",
 ];
 
 export default function StatsSection() {
@@ -11,45 +10,22 @@ export default function StatsSection() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
           <h2 className="text-2xl sm:text-3xl font-bold mb-3" style={{ color: "#F0F6FC" }}>
-            Trusted by Indian transport professionals
+            A place to manage trip listings
           </h2>
           <p style={{ color: "#94A3B8" }}>
-            Numbers that reflect the scale of India&apos;s growing transport network.
+            Trip providers can add trip details, and drivers can browse available listings.
           </p>
         </div>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {stats.map(({ number, label }) => (
+        <div className="grid sm:grid-cols-1 lg:grid-cols-3 gap-6">
+          {steps.map((label, index) => (
             <div
               key={label}
               className="relative rounded-2xl p-8 text-center overflow-hidden"
-              style={{
-                background: "rgba(255,255,255,0.03)",
-                border: "1px solid #243042",
-                backdropFilter: "blur(12px)",
-                WebkitBackdropFilter: "blur(12px)",
-              }}
+              style={{ background: "rgba(255,255,255,0.03)", border: "1px solid #243042" }}
             >
-              {/* Glow behind number */}
-              <div
-                className="absolute inset-0 pointer-events-none"
-                style={{
-                  background:
-                    "radial-gradient(ellipse 60% 40% at 50% 20%, rgba(245,166,35,0.12), transparent 70%)",
-                }}
-              />
-
-              <p
-                className="relative text-4xl sm:text-5xl font-extrabold mb-3 tracking-tight"
-                style={{
-                  background: "linear-gradient(135deg, #F5A623 0%, #FFD97D 60%, #F5A623 100%)",
-                  WebkitBackgroundClip: "text",
-                  WebkitTextFillColor: "transparent",
-                  backgroundClip: "text",
-                  filter: "drop-shadow(0 0 12px rgba(245,166,35,0.35))",
-                }}
-              >
-                {number}
+              <p className="relative text-4xl sm:text-5xl font-extrabold mb-3 tracking-tight" style={{ color: "#F5A623" }}>
+                {index + 1}
               </p>
               <p className="relative text-sm font-medium" style={{ color: "#94A3B8" }}>
                 {label}

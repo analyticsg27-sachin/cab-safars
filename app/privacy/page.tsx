@@ -16,7 +16,7 @@ const sections = [
 â€¢ Profile information (city, vehicle details for drivers, company name for vendors)
 â€¢ Documents required for account verification
 â€¢ Trip posting details (pickup/destination locations, dates, vehicle requirements)
-â€¢ Payment information processed securely through our payment gateway (Razorpay)
+â€¢ Payment information, if applicable to your account, is handled as described in the payment flow
 â€¢ Device information and usage data to improve our services`,
   },
   {
@@ -42,9 +42,7 @@ const sections = [
   },
   {
     title: "4. Premium Subscription & Payments",
-    content: `Premium subscriptions are processed through Razorpay, a PCI-DSS compliant payment gateway. Cab Safars does not store your full card details.
-
-Your subscription auto-renews monthly at â‚¹199 unless you cancel. You will receive an expiry reminder before renewal. You may cancel your subscription at any time through the app or by contacting support.`,
+    content: `If a payment option is available to your account, review the payment method, price, duration, and applicable terms shown in the app before purchasing.`,
   },
   {
     title: "5. Data Security",

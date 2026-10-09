@@ -7,35 +7,31 @@ import { cn } from "@/lib/utils";
 const faqs = [
   {
     q: "How do I register as a vendor or driver?",
-    a: "Registration is completely free. Click 'Join Free' on the homepage, choose your role (Vendor or Driver), fill in your details, and submit for verification. Our team reviews applications within 24 hours.",
+    a: "Choose a role, enter the requested information, and follow the account setup steps in the app. Access can depend on account status.",
   },
   {
     q: "What is the difference between a free and premium account?",
-    a: "Free accounts can post trips (vendors) or browse trips (drivers) with limited contact access. Premium accounts unlock direct contact with drivers/vendors, priority search listing, smart route matching for drivers, and detailed analytics — all for ₹199/month.",
+    a: "Available features and contact options depend on your account type, status, and current service availability. See the account area for options available to you.",
   },
   {
-    q: "How does smart route matching work for drivers?",
-    a: "When you search for trips, our engine detects your location and the destination. It then suggests open trips near your destination, so you can book a return-trip fare and earn more on every journey instead of returning empty.",
+    q: "How can I find trip listings?",
+    a: "Sign in with a driver account and browse the listings available to your account.",
   },
   {
-    q: "Is my payment information secure?",
-    a: "Yes. All payments are processed through Razorpay, India's leading payment gateway. We never store card or banking details. Transactions are 256-bit SSL encrypted.",
+    q: "Where can I see account options?",
+    a: "Open the account area in the app to review the options currently available to your account.",
   },
   {
-    q: "Can I cancel my premium subscription anytime?",
-    a: "Absolutely. You can cancel your subscription at any point from your account settings. Your premium benefits continue until the end of the current billing period, after which it reverts to the free plan.",
+    q: "What trip details can I include?",
+    a: "Available fields are shown in the trip form. They can include route, date, vehicle, capacity, and fare information.",
   },
   {
-    q: "What types of vehicles can be registered?",
-    a: "We support all commercial vehicle types — sedans, hatchbacks, SUVs, MUVs, mini-trucks, tempo travellers, and buses. Select the appropriate category during driver registration.",
+    q: "What information may be requested during account setup?",
+    a: "The app may request information relevant to your selected account type. Follow the prompts shown during registration.",
   },
   {
-    q: "How are vendors and drivers verified?",
-    a: "Vendors submit business details and contact information. Drivers submit their driving license and vehicle registration certificate (RC). Our team manually reviews and approves all accounts before they go live.",
-  },
-  {
-    q: "Is CAB SAFARS available across India?",
-    a: "We launched with a focus on Gujarat and Maharashtra and are actively expanding across India. Vendors and drivers from all states are welcome to register.",
+    q: "Where is CAB SAFARS intended to be used?",
+    a: "Cab Safar is intended for users in India. Available listings and service access depend on location and account status.",
   },
 ];
 

@@ -212,9 +212,9 @@ export default function WelcomePage() {
 
           {/* Feature pills */}
           <div className="flex flex-wrap justify-center gap-2 mb-7">
-            <FeaturePill text="Post Trips Instantly" />
-            <FeaturePill text="Smart Route Matching" />
-            <FeaturePill text="Premium Network" />
+            <FeaturePill text="Create Trip Listings" />
+            <FeaturePill text="Browse Trip Details" />
+            <FeaturePill text="Account Options" />
           </div>
 
           {/* CTA Buttons */}
@@ -251,4 +251,3 @@ export default function WelcomePage() {
     </>
   );
 }
-

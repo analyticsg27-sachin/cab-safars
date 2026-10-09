@@ -1,0 +1,47 @@
+Post cab & travel trips, find drivers and browse trips across India in one app
+=====
+CAB SAFARS is a trip marketplace for travel operators and cab drivers. Trip Providers post trips they need a driver or vehicle for. Drivers browse those trips and find work on routes that suit them.
+
+FOR TRIP PROVIDERS
+• Post a trip in under a minute
+• Pick the pickup and destination city with city suggestions
+• Set the trip date and time
+• Choose a vehicle type: Sedan, SUV, Hatchback, Innova, Innova Crysta, Tempo Travel, Mini Bus, Bus, Luxury Car and more
+• Choose a trip type: City to City, Airport Transfer, Corporate Transfer, Outstation, Group Outstation, Wedding / Event, Pilgrimage Tour, Parcel Package and more
+• Add an expected fare, or leave it open to negotiate
+• Add notes for drivers, such as passenger count, luggage or stay details
+• Choose who sees the trip: Free Trip (all drivers) or Premium Trip (Premium drivers only)
+• Manage all your trips in one place, with Active and Closed tabs
+• View full trip details at any time
+• Close a trip when it is filled, by a driver from the app or by your own driver
+• See your active trips, closed trips and contacts on your dashboard
+
+FOR DRIVERS
+• Browse available trips posted by Trip Providers
+• Search trips by pickup city and destination city
+• Use filters to narrow your search
+• Find trips near a city with the Nearby option
+• See the route, date, time, vehicle type, trip type and expected fare for every trip
+• See which Trip Provider posted each trip, and their city
+
+VERIFIED ACCOUNTS
+Every account is checked before it can post or browse trips. After you register, upload your documents, such as Aadhaar card, PAN card, driving licence, RC book, insurance or GST certificate. Our team reviews them. You can check the status of each document in the app.
+
+LANGUAGES
+Use the app in English, Hindi (हिंदी) or Gujarati (ગુજરાતી).
+
+YOUR ACCOUNT, YOUR CONTROL
+• Edit your details and profile photo
+• Help & FAQ and Contact Support inside the app
+• Deactivate or permanently delete your account at any time from your profile
+
+HOW IT WORKS
+1. Register as a Trip Provider or a Driver
+2. Upload your documents for verification
+3. Trip Providers post trips; drivers browse and search them
+4. Trip Provider and driver agree the trip details directly
+
+IMPORTANT
+CAB SAFARS is a listing platform only. We are not a transport operator, travel agent or booking service, and we do not take part in any trip agreement. Fares, timings and all trip terms are agreed directly between the Trip Provider and the driver.
+
+Questions or feedback? Use Contact Support in the app.

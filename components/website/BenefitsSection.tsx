@@ -5,26 +5,26 @@ import {
 const vendorBenefits = [
   {
     icon: Zap,
-    title: "Post Trips Instantly",
-    desc: "Create a trip listing in under 60 seconds. Set route, date, vehicle type, and fare.",
+    title: "Create Trip Listings",
+    desc: "Add route, date, vehicle type, and fare information to a trip listing.",
     color: "#F5A623",
   },
   {
     icon: Eye,
-    title: "See Interested Drivers",
-    desc: "Watch in real-time as drivers express interest in your posted trips.",
+    title: "Manage Your Listings",
+    desc: "Review trip information from your provider account.",
     color: "#2D6BE4",
   },
   {
     icon: Award,
-    title: "Premium Priority Listing",
-    desc: "Premium vendors appear at the top of driver search results for maximum visibility.",
+    title: "Account Options",
+    desc: "Available tools and access can depend on your account status.",
     color: "#F5A623",
   },
   {
     icon: BarChart3,
-    title: "Complete Trip History",
-    desc: "Track every trip, contact, and payout with detailed analytics and reports.",
+    title: "Trip Information",
+    desc: "Review the details associated with your trip listings.",
     color: "#22C55E",
   },
 ];
@@ -33,25 +33,25 @@ const driverBenefits = [
   {
     icon: Map,
     title: "Browse Available Trips",
-    desc: "Access verified trip listings from vendors across your preferred routes.",
+    desc: "View trip listings and their available route and vehicle details.",
     color: "#F5A623",
   },
   {
     icon: Zap,
-    title: "Smart Route Matching",
-    desc: "Get matched with trips on your route AND return trips near your destination.",
+    title: "Search Trip Details",
+    desc: "Browse trip information and review available listings.",
     color: "#2D6BE4",
   },
   {
     icon: Phone,
-    title: "Contact Vendors Directly",
-    desc: "Premium drivers get direct vendor contact details — no middlemen, no delays.",
+    title: "Contact Options",
+    desc: "Review the contact options available for a trip in your account.",
     color: "#22C55E",
   },
   {
     icon: TrendingUp,
-    title: "Maximize Return Trips",
-    desc: "Fill your cab both ways. Smart return matching helps you reduce empty runs.",
+    title: "Manage Trip Details",
+    desc: "Use the trip information available in your driver account.",
     color: "#F5A623",
   },
 ];

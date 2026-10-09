@@ -348,7 +348,7 @@ export default function VendorPostPage() {
         </button>
 
         <p className="text-center text-xs text-[#8B949E]">
-          Drivers matching your route will be notified instantly
+          Your trip details will be submitted for posting.
         </p>
       </form>
     </AppShell>

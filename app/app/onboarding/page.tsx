@@ -4,32 +4,30 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { asset } from '@/lib/basepath';
 
-// Slide 1 — Trip card mockup (real demo data, no toy car)
+// Slide 1 — neutral trip listing illustration
 function Slide1Icon() {
   return (
     <div className="w-full max-w-[300px] mx-auto flex flex-col gap-2.5">
-      {/* Trip card 1 */}
       <div className="rounded-2xl px-4 py-3" style={{ backgroundColor: '#161B22', border: '1px solid rgba(245,166,35,0.35)' }}>
         <div className="flex items-center justify-between mb-1.5">
-          <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full" style={{ backgroundColor: 'rgba(245,166,35,0.12)', color: '#F5A623' }}>★ Priority</span>
-          <span className="text-[10px]" style={{ color: '#8B949E' }}>Innova Crysta</span>
+          <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full" style={{ backgroundColor: 'rgba(245,166,35,0.12)', color: '#F5A623' }}>Trip listing</span>
+          <span className="text-[10px]" style={{ color: '#8B949E' }}>Vehicle details</span>
         </div>
-        <p className="text-base font-bold mb-1" style={{ color: '#F0F6FC' }}>Ahmedabad → Mumbai</p>
+        <p className="text-base font-bold mb-1" style={{ color: '#F0F6FC' }}>Route details</p>
         <div className="flex items-center justify-between">
-          <span className="text-xs" style={{ color: '#8B949E' }}>25 Jul · 4 seats</span>
-          <span className="text-base font-bold" style={{ color: '#F5A623' }}>₹14,000</span>
+          <span className="text-xs" style={{ color: '#8B949E' }}>Date · availability</span>
+          <span className="text-base font-bold" style={{ color: '#F5A623' }}>Fare</span>
         </div>
       </div>
-      {/* Trip card 2 */}
       <div className="rounded-2xl px-4 py-3" style={{ backgroundColor: '#161B22', border: '1px solid #30363D' }}>
         <div className="flex items-center justify-between mb-1.5">
-          <span className="text-[10px]" style={{ color: '#8B949E' }}>Tempo Travel</span>
-          <span className="text-[10px] px-2 py-0.5 rounded-full" style={{ backgroundColor: 'rgba(34,197,94,0.12)', color: '#22C55E' }}>Open</span>
+          <span className="text-[10px]" style={{ color: '#8B949E' }}>Trip information</span>
+          <span className="text-[10px] px-2 py-0.5 rounded-full" style={{ backgroundColor: 'rgba(34,197,94,0.12)', color: '#22C55E' }}>Details</span>
         </div>
-        <p className="text-base font-bold mb-1" style={{ color: '#F0F6FC' }}>Surat → Rajkot</p>
+        <p className="text-base font-bold mb-1" style={{ color: '#F0F6FC' }}>Pickup → Destination</p>
         <div className="flex items-center justify-between">
-          <span className="text-xs" style={{ color: '#8B949E' }}>28 Jul · 12 seats</span>
-          <span className="text-base font-bold" style={{ color: '#F5A623' }}>₹8,500</span>
+          <span className="text-xs" style={{ color: '#8B949E' }}>Vehicle · date</span>
+          <span className="text-base font-bold" style={{ color: '#F5A623' }}>Fare</span>
         </div>
       </div>
     </div>
@@ -44,18 +42,18 @@ function Slide2Icon() {
       <div className="flex flex-col gap-2">
         <div className="rounded-xl px-3 py-2.5 flex items-center gap-2" style={{ backgroundColor: '#0D1117', border: '1px solid #30363D' }}>
           <span className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: '#22C55E' }} />
-          <span className="text-xs" style={{ color: '#F0F6FC' }}>From: Ahmedabad</span>
+          <span className="text-xs" style={{ color: '#F0F6FC' }}>Pickup location</span>
         </div>
         <div className="rounded-xl px-3 py-2.5 flex items-center gap-2" style={{ backgroundColor: '#0D1117', border: '1px solid #30363D' }}>
           <span className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: '#EF4444' }} />
-          <span className="text-xs" style={{ color: '#F0F6FC' }}>To: Delhi</span>
+          <span className="text-xs" style={{ color: '#F0F6FC' }}>Destination</span>
         </div>
         <div className="flex gap-2">
           <div className="flex-1 rounded-xl px-3 py-2.5" style={{ backgroundColor: '#0D1117', border: '1px solid #30363D' }}>
-            <span className="text-xs" style={{ color: '#F0F6FC' }}>SUV · 4 seats</span>
+            <span className="text-xs" style={{ color: '#F0F6FC' }}>Vehicle · capacity</span>
           </div>
           <div className="flex-1 rounded-xl px-3 py-2.5" style={{ backgroundColor: '#0D1117', border: '1px solid #30363D' }}>
-            <span className="text-xs" style={{ color: '#F0F6FC' }}>₹12,000</span>
+            <span className="text-xs" style={{ color: '#F0F6FC' }}>Fare</span>
           </div>
         </div>
         <div className="rounded-xl py-2.5 flex items-center justify-center mt-1" style={{ backgroundColor: '#F5A623' }}>
@@ -66,67 +64,48 @@ function Slide2Icon() {
   );
 }
 
-// Slide 3 — Driver contact card (real demo data)
+// Slide 3 — account options illustration without sample user data
 function Slide3Icon() {
   return (
     <div className="w-full max-w-[300px] mx-auto flex flex-col gap-2.5">
       <div className="rounded-2xl p-4" style={{ backgroundColor: '#161B22', border: '1px solid rgba(245,166,35,0.3)' }}>
         <div className="flex items-center gap-3 mb-3">
           <div className="w-12 h-12 rounded-full flex items-center justify-center shrink-0" style={{ backgroundColor: '#21262D', border: '2px solid rgba(245,166,35,0.4)' }}>
-            <span className="text-xl font-bold" style={{ color: '#F5A623' }}>H</span>
+            <span className="text-xl font-bold" style={{ color: '#F5A623' }}>CS</span>
           </div>
           <div>
             <div className="flex items-center gap-1.5 mb-0.5">
-              <p className="text-sm font-bold" style={{ color: '#F0F6FC' }}>Harshad Bhatt</p>
-              <span className="text-[9px] font-semibold px-1.5 py-0.5 rounded-full" style={{ backgroundColor: 'rgba(245,166,35,0.12)', color: '#F5A623' }}>★ Premium</span>
+              <p className="text-sm font-bold" style={{ color: '#F0F6FC' }}>Account profile</p>
             </div>
-            <p className="text-xs" style={{ color: '#8B949E' }}>Innova Crysta · Ahmedabad</p>
-            <p className="text-xs" style={{ color: '#8B949E' }}>⭐ 4.8 · 34 trips</p>
+            <p className="text-xs" style={{ color: '#8B949E' }}>Profile and membership details</p>
           </div>
         </div>
         <div className="flex gap-2">
           <div className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-xl" style={{ backgroundColor: 'rgba(34,197,94,0.12)', border: '1px solid rgba(34,197,94,0.3)' }}>
-            <span className="text-xs font-semibold" style={{ color: '#22C55E' }}>📞 Call</span>
+            <span className="text-xs font-semibold" style={{ color: '#22C55E' }}>📞 Contact options</span>
           </div>
           <div className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-xl" style={{ backgroundColor: 'rgba(37,211,102,0.12)', border: '1px solid rgba(37,211,102,0.3)' }}>
-            <span className="text-xs font-semibold" style={{ color: '#25D366' }}>💬 WhatsApp</span>
+            <span className="text-xs font-semibold" style={{ color: '#25D366' }}>💬 Trip details</span>
           </div>
         </div>
       </div>
       <div className="rounded-xl px-3 py-2 flex items-center justify-center gap-1.5" style={{ backgroundColor: 'rgba(245,166,35,0.08)', border: '1px solid rgba(245,166,35,0.2)' }}>
-        <span className="text-[11px] font-medium" style={{ color: '#F5A623' }}>★ Premium unlocks direct contact with drivers</span>
+        <span className="text-[11px] font-medium" style={{ color: '#F5A623' }}>Available options depend on your account</span>
       </div>
     </div>
   );
 }
 
-// Slide 4 — Stats / trust badges
+// Slide 4 — basic app steps
 function Slide4Icon() {
   return (
     <div className="w-full max-w-[300px] mx-auto flex flex-col gap-2.5">
-      <div className="flex gap-2.5">
-        <div className="flex-1 rounded-2xl p-3 flex flex-col items-center gap-1" style={{ backgroundColor: '#161B22', border: '1px solid #30363D' }}>
-          <span className="text-2xl font-black" style={{ color: '#F5A623' }}>500+</span>
-          <span className="text-[10px] text-center" style={{ color: '#8B949E' }}>Trips Posted</span>
+      {['Create an account', 'Browse trip listings', 'Manage trip details'].map((step, index) => (
+        <div key={step} className="rounded-2xl p-4 flex items-center gap-3" style={{ backgroundColor: '#161B22', border: '1px solid #30363D' }}>
+          <span className="w-8 h-8 rounded-full flex items-center justify-center font-bold" style={{ color: '#0D1117', backgroundColor: index === 1 ? '#22C55E' : '#F5A623' }}>{index + 1}</span>
+          <span className="text-sm font-medium" style={{ color: '#F0F6FC' }}>{step}</span>
         </div>
-        <div className="flex-1 rounded-2xl p-3 flex flex-col items-center gap-1" style={{ backgroundColor: '#161B22', border: '1px solid #30363D' }}>
-          <span className="text-2xl font-black" style={{ color: '#22C55E' }}>200+</span>
-          <span className="text-[10px] text-center" style={{ color: '#8B949E' }}>Verified Drivers</span>
-        </div>
-      </div>
-      <div className="flex gap-2.5">
-        <div className="flex-1 rounded-2xl p-3 flex flex-col items-center gap-1" style={{ backgroundColor: '#161B22', border: '1px solid #30363D' }}>
-          <span className="text-2xl font-black" style={{ color: '#2D6BE4' }}>50+</span>
-          <span className="text-[10px] text-center" style={{ color: '#8B949E' }}>Cities Covered</span>
-        </div>
-        <div className="flex-1 rounded-2xl p-3 flex flex-col items-center gap-1" style={{ backgroundColor: '#161B22', border: '1px solid rgba(245,166,35,0.3)' }}>
-          <span className="text-2xl font-black" style={{ color: '#F5A623' }}>4.8★</span>
-          <span className="text-[10px] text-center" style={{ color: '#8B949E' }}>Avg. Rating</span>
-        </div>
-      </div>
-      <div className="rounded-xl px-3 py-2 flex items-center justify-center gap-2" style={{ backgroundColor: 'rgba(34,197,94,0.08)', border: '1px solid rgba(34,197,94,0.2)' }}>
-        <span className="text-xs font-medium" style={{ color: '#22C55E' }}>✓ Verified users &amp; secure direct contact</span>
-      </div>
+      ))}
     </div>
   );
 }
@@ -140,20 +119,20 @@ const SLIDES = [
   },
   {
     icon: <Slide2Icon />,
-    title: 'Post a Trip Instantly',
-    desc: 'Trip Providers can post trips in seconds. Set your route, vehicle needed, date and fare — drivers will find you.',
+    title: 'Create a Trip Listing',
+    desc: 'Trip Providers can add route, vehicle, date and fare details to a listing.',
     color: '#2D6BE4',
   },
   {
     icon: <Slide3Icon />,
-    title: 'Go Premium, Get Connected',
-    desc: 'Premium members can directly Call or WhatsApp the other party. Settle your trip your way — no middleman.',
+    title: 'Review Trip Details',
+    desc: 'View the information and contact options available for a trip in your account.',
     color: '#22C55E',
   },
   {
     icon: <Slide4Icon />,
-    title: 'Safe Trips. Smart Journeys.',
-    desc: 'India\'s trusted transport marketplace — verified users, secure contacts, and trips that move on time.',
+    title: 'For Trips in India',
+    desc: 'Use Cab Safar to browse or manage trip listings, subject to account access and availability.',
     color: '#F5A623',
   },
 ];

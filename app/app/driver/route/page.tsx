@@ -12,6 +12,7 @@ import BottomNav from '@/components/app/BottomNav';
 import LocationAutocomplete, { LocationValue } from '@/components/app/LocationAutocomplete';
 import { useAppState } from '@/lib/app-state';
 import { apiClient } from '@/lib/services/api-client';
+import TripsService from '@/lib/services/trips.service';
 
 const EXPIRY_OPTIONS = ['Today only', 'Next 24 hours', 'Next 3 days', 'Next 7 days'];
 
@@ -95,6 +96,7 @@ export default function SmartRoutePage() {
 
   const [tab, setTab] = useState<'route' | 'nearby'>('route');
   const [activeRoute, setActiveRoute] = useState<ActiveRoute | null>(null);
+  const [apiTrips, setApiTrips] = useState<Awaited<ReturnType<typeof TripsService.getFeed>>['data']>([]);
   const [form, setForm] = useState({ fromCity: '', toCity: '', date: '', time: '', radius: 50, expiry: 'Next 24 hours' });
   const [errors, setErrors] = useState<Record<string, string>>({});
 
@@ -144,23 +146,27 @@ export default function SmartRoutePage() {
     if (Object.keys(e).length) { setErrors(e); return; }
     setErrors({});
     setActiveRoute({ ...form });
+    // ponytail: first 100 feed trips filtered client-side; move matching server-side if the feed grows
+    TripsService.getFeed({ per_page: 100 }).then((r) => setApiTrips(r.data)).catch(() => setApiTrips([]));
   }
 
-  // Use app state trips for matching (real IDs)
-  const allTrips = state.trips.filter((t) => t.status === 'open');
+  const REASONS = {
+    exact: { label: 'Exact Route', color: '#22C55E', bg: 'rgba(34,197,94,0.12)' },
+    from: { label: 'Same Pickup City', color: '#2D6BE4', bg: 'rgba(45,107,228,0.12)' },
+    to: { label: 'Same Destination', color: '#F5A623', bg: 'rgba(245,166,35,0.12)' },
+  };
   const matchedTrips = activeRoute
-    ? allTrips.filter((t) =>
-        t.fromCity.toLowerCase().includes(activeRoute.fromCity.toLowerCase()) ||
-        t.toCity.toLowerCase().includes(activeRoute.toCity.toLowerCase())
-      ).slice(0, 6)
+    ? apiTrips.flatMap((t) => {
+        const f = t.from_city.toLowerCase().includes(activeRoute.fromCity.trim().toLowerCase());
+        const to = t.to_city.toLowerCase().includes(activeRoute.toCity.trim().toLowerCase());
+        if (!f && !to) return [];
+        return [{
+          id: t.id, fromCity: t.from_city, toCity: t.to_city, tripDate: t.trip_date, tripTime: t.trip_time,
+          vehicleType: t.vehicle_type, expectedFare: t.expected_fare != null ? Number(t.expected_fare) : undefined,
+          isPremiumVendor: t.is_premium_vendor, reason: REASONS[f && to ? 'exact' : f ? 'from' : 'to'], rank: f && to ? 0 : 1,
+        }];
+      }).sort((a, b) => a.rank - b.rank).slice(0, 10)
     : [];
-
-  const reasons = ['At Destination', '12 km Nearby', 'Return Route', 'Popular Route', 'En Route', 'Nearby'];
-  const reasonColors = ['#22C55E', '#2D6BE4', '#F5A623', '#A855F7', '#06B6D4', '#8B949E'];
-  const reasonBgs = [
-    'rgba(34,197,94,0.12)', 'rgba(45,107,228,0.12)', 'rgba(245,166,35,0.12)',
-    'rgba(168,85,247,0.12)', 'rgba(6,182,212,0.12)', 'rgba(139,148,158,0.12)',
-  ];
 
 
   return (
@@ -321,13 +327,13 @@ export default function SmartRoutePage() {
                     <p className="text-sm" style={{ color: '#8B949E' }}>No trips found for this route. We&apos;ll notify you when new ones match.</p>
                   </div>
                 ) : (
-                  matchedTrips.map((trip, i) => (
+                  matchedTrips.map((trip) => (
                     <MatchedTripCard
                       key={trip.id}
-                      trip={{ id: trip.id, fromCity: trip.fromCity, toCity: trip.toCity, tripDate: trip.tripDate, tripTime: trip.tripTime, vehicleType: trip.vehicleType, expectedFare: trip.expectedFare, isPremiumVendor: trip.isPremiumVendor }}
-                      reason={reasons[i % reasons.length]}
-                      reasonColor={reasonColors[i % reasonColors.length]}
-                      reasonBg={reasonBgs[i % reasonBgs.length]}
+                      trip={trip}
+                      reason={trip.reason.label}
+                      reasonColor={trip.reason.color}
+                      reasonBg={trip.reason.bg}
                       isPremium={isPremium}
                       onView={() => router.push(`/app/driver/trip?id=${trip.id}`)}
                     />

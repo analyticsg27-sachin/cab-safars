@@ -16,15 +16,7 @@ Cab Safars is a transport marketplace that connects vendors who post trips with 
   },
   {
     title: "2. Eligibility & Registration",
-    content: `To use Cab Safars, you must:
-
-â€¢ Be at least 18 years of age
-â€¢ Provide accurate and complete registration information
-â€¢ Have a valid Indian mobile number
-â€¢ For drivers: possess a valid driving licence and vehicle registration
-â€¢ Agree to submit to our account verification process
-
-Your account is subject to approval by Cab Safars. We reserve the right to reject or suspend accounts at our discretion. You are responsible for maintaining the confidentiality of your login credentials.`,
+    content: `To use Cab Safars, follow the eligibility and account setup instructions shown in the app. You are responsible for providing accurate information and maintaining the confidentiality of your login credentials.`,
   },
   {
     title: "3. User Roles",
@@ -38,13 +30,7 @@ Neither vendors nor drivers are employees or agents of Cab Safars.`,
   },
   {
     title: "4. Premium Subscription",
-    content: `Cab Safars offers a Premium subscription at â‚¹199 per month.
-
-Premium Drivers: Can view vendor contact information and initiate Call or WhatsApp communication with vendors.
-
-Premium Vendors: Receive priority listing placement and a Premium badge on their trip posts.
-
-Subscriptions auto-renew monthly unless cancelled. No refund is provided for the remaining subscription period after a mid-cycle cancellation, except where required by applicable law. Failed payments result in loss of Premium features until payment is successful.`,
+    content: `Membership options, available features, pricing, payment methods, duration, and renewal terms are shown in the app when available. Review the current terms in the app before making a purchase.`,
   },
   {
     title: "5. Trip Posting & Matching",
@@ -70,9 +56,7 @@ Violations may result in immediate account suspension.`,
   },
   {
     title: "7. Payments",
-    content: `All payments on Cab Safars are processed through Razorpay, a third-party payment gateway. By making a payment, you agree to Razorpay's terms and conditions.
-
-Cab Safars is not responsible for payment processing failures caused by your bank or card issuer. In case of a payment dispute, contact us at billing@cabsafars.com.`,
+    content: `Payment options, if available, are presented in the app with the applicable provider information and terms. Review these details before completing a payment.`,
   },
   {
     title: "8. Limitation of Liability",

@@ -12,15 +12,15 @@ const FAQS = [
     items: [
       {
         q: 'What is CAB SAFARS?',
-        a: 'CAB SAFARS is a transport marketplace that connects Trip Providers (who need vehicles) with Drivers (who have vehicles). Trip Providers post trips, and Drivers contact them to offer their service. Premium members can directly call or WhatsApp each other.',
+          a: 'CAB SAFARS lets Trip Providers create trip listings and lets Drivers browse listings available to their accounts. Contact options depend on account status and service availability.',
       },
       {
         q: 'What is the difference between a Trip Provider and a Driver?',
-        a: 'A Trip Provider posts trips — they need a vehicle (Sedan, SUV, Bus, Tempo Travel, etc.) for a specific route and date. A Driver browses posted trips and contacts the Trip Provider to offer their vehicle. Both can register for free.',
+          a: 'A Trip Provider creates trip listings. A Driver can browse listings available to their account. The app shows the account setup options available to you.',
       },
       {
         q: 'How long does account approval take?',
-        a: 'After you submit your documents, our team verifies them within 24–48 hours. You will receive a notification once your account is approved.',
+          a: 'Follow the status and instructions shown in your account after submitting any requested information.',
       },
     ],
   },
@@ -29,19 +29,19 @@ const FAQS = [
     items: [
       {
         q: 'How do I post a trip as a Trip Provider?',
-        a: 'Go to Home → Post Trip. Enter the pickup city, destination, vehicle type required, trip date, number of seats/load, and expected fare. Your trip goes live instantly and is visible to all drivers.',
+        a: 'Go to Home → Post Trip. Enter the pickup city, destination, vehicle type required, trip date, number of seats/load, and expected fare. Listing visibility depends on your account status and service availability.',
       },
       {
         q: 'How do I find trips as a Driver?',
-        a: 'Go to Available Trips from your home screen. You can filter by city, vehicle type, and date. Premium drivers can directly Call or WhatsApp the Trip Provider from the trip details page.',
+          a: 'Open the trips area and browse listings available to your account. Available filters and contact options are shown in the app.',
       },
       {
         q: 'How do I close a trip after it is filled?',
-        a: 'Open the trip from My Trips → tap "Close Trip". Closed trips are hidden from drivers and moved to your history. CAB SAFARS does not charge anything for closing a trip.',
+          a: 'Open your trip and use the available trip management options shown on its details page.',
       },
       {
-        q: 'Can I see closed or filled trips?',
-        a: 'Drivers can see a "Trips You Missed" section showing recently closed trips. This helps you stay motivated and check activity in your area.',
+          q: 'Which listings can I see?',
+          a: 'Listings shown depend on your account and the information available in the service.',
       },
     ],
   },
@@ -49,20 +49,20 @@ const FAQS = [
     category: 'Premium Membership',
     items: [
       {
-        q: 'What does Premium membership include?',
-        a: 'Premium members get: (1) Direct Call & WhatsApp access to the other party, (2) Priority listing on trip/driver feeds, (3) Premium badge on your profile. Premium costs ₹199/month.',
+          q: 'What account options are available?',
+          a: 'Open Profile → Current Plan to see the options and details currently available to your account.',
       },
       {
         q: 'How do I upgrade to Premium?',
-        a: 'Go to Profile → Current Plan → Upgrade to Premium. You can pay via UPI, credit/debit card, or net banking. Your account upgrades instantly after payment.',
+          a: 'Open Profile → Current Plan and follow the options shown in the app.',
       },
       {
         q: 'Is my phone number visible to everyone?',
-        a: 'No. Your contact number is only unlocked for Premium members. Free users see a locked button and are prompted to upgrade before they can view your contact.',
+          a: 'Contact visibility and available actions depend on account status and are shown in the app.',
       },
       {
-        q: 'Can I cancel my Premium subscription?',
-        a: 'As per our policy, there is no cancellation or refund once a subscription is activated. Your Premium access continues until the end of the billing period.',
+          q: 'Where can I find membership terms?',
+          a: 'Review the current terms and account options shown in the app before making a purchase.',
       },
     ],
   },
@@ -71,15 +71,15 @@ const FAQS = [
     items: [
       {
         q: 'Does CAB SAFARS handle trip payments between users?',
-        a: 'No. CAB SAFARS is only a platform to connect Trip Providers and Drivers. All fare negotiations and payments happen directly between the two parties. We do not hold or process trip money.',
+          a: 'Cab Safars provides trip listing information. Confirm trip arrangements and any payment terms directly with the other party.',
       },
       {
-        q: 'What payment methods are accepted for subscriptions?',
-        a: 'We accept UPI (GPay, PhonePe, Paytm), credit/debit cards, and net banking via Razorpay.',
+          q: 'Where can I see payment options?',
+          a: 'If payment options are available to your account, the app will show them with the relevant terms.',
       },
       {
-        q: 'Is there a refund policy?',
-        a: 'CAB SAFARS does not offer refunds on subscription payments. Since we are a marketplace and not involved in trip execution, we also do not mediate fare disputes between users.',
+          q: 'How can I review applicable terms?',
+          a: 'Read the current terms shown in the app before using an account option or making a purchase.',
       },
     ],
   },
@@ -88,11 +88,11 @@ const FAQS = [
     items: [
       {
         q: 'Which documents do I need to upload?',
-        a: 'Trip Providers: Business Registration, GST Certificate, PAN Card, Bank Account Proof. Drivers: Driving Licence, Aadhar Card, Vehicle RC, Vehicle Insurance, PAN Card. All documents are verified within 24–48 hours.',
+          a: 'The app will show any information or documents requested for your selected account type.',
       },
       {
-        q: 'What file formats are accepted for document upload?',
-        a: 'We accept PDF, JPG, and PNG files. Maximum file size is 5 MB per document. Make sure the document is clearly readable and not blurry.',
+          q: 'How do I submit requested information?',
+          a: 'Follow the instructions and file requirements displayed in the app.',
       },
     ],
   },
