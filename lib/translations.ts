@@ -134,7 +134,7 @@ export const T = {
   contact_support:  { en: 'Contact Support',       hi: 'सहायता से संपर्क',     gu: 'સહાય સંપર્ક' },
   terms_privacy:    { en: 'Terms & Privacy Policy',hi: 'नियम और गोपनीयता',     gu: 'નિયમો અને ગોપનીયતા' },
   rate_app:         { en: 'Rate the App',          hi: 'ऐप को रेट करें',      gu: 'એપ રેટ કરો' },
-  app_version:      { en: 'Cab Safars v1.0.0 · Built with care', hi: 'Cab Safars v1.0.0 · प्यार से बनाया', gu: 'Cab Safars v1.0.0 · પ્રેમ સાથે' },
+  app_version:      { en: 'Cab Safars v1.0.2 · Built with care', hi: 'Cab Safars v1.0.2 · प्यार से बनाया', gu: 'Cab Safars v1.0.2 · પ્રેમ સાથે' },
 
   // My Details
   premium_plan_active:    { en: 'Premium Plan Active',  hi: 'प्रीमियम प्लान सक्रिय', gu: 'પ્રીમિયમ પ્લાન સક્રિય' },
