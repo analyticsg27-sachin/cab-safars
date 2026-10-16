@@ -214,7 +214,7 @@ export default function SubscriptionPage() {
         user_name: string; user_email: string; user_phone: string;
       }>('/payments/order', { plan_id: PREMIUM_PLAN_ID });
 
-      const { order_id, amount, key_id, user_name, user_email, user_phone } = res.data;
+      const { order_id, amount, key_id, user_name, user_email, user_phone } = res.data!;
 
       // 2. Load Razorpay checkout script
       await loadRazorpayScript();
