@@ -8,6 +8,20 @@ import AppHeader from '@/components/app/AppHeader';
 import { useAppState } from '@/lib/app-state';
 import { useTranslation } from '@/lib/useTranslation';
 import { isFullyActive, LockedFeature } from '@/components/app/AccountStatusBanner';
+import { apiClient } from '@/lib/services/api-client';
+
+const PREMIUM_PLAN_ID = 'sp000001-0000-0000-0000-000000000001';
+
+function loadRazorpayScript(): Promise<void> {
+  return new Promise((resolve, reject) => {
+    if (typeof window !== 'undefined' && (window as any).Razorpay) { resolve(); return; }
+    const s = document.createElement('script');
+    s.src = 'https://checkout.razorpay.com/v1/checkout.js';
+    s.onload = () => resolve();
+    s.onerror = () => reject(new Error('Razorpay script failed to load'));
+    document.head.appendChild(s);
+  });
+}
 
 type PaymentState = 'idle' | 'processing' | 'success' | 'failed';
 
@@ -190,22 +204,76 @@ export default function SubscriptionPage() {
   // Read real premium status from app state
   const isPremium = currentUser?.isPremium ?? false;
 
-  function handleSubscribe(simulateFail = false) {
+  async function handleSubscribe() {
     setPaymentState('processing');
-    setTimeout(() => {
-      if (simulateFail) {
-        setPaymentState('failed');
-      } else {
-        setTxnId(randomTxnId());
-        setPaymentState('success');
-      }
-    }, 2500);
+    try {
+      // 1. Create Razorpay order from backend
+      const res = await apiClient.post<{
+        order_id: string; amount: number; currency: string;
+        key_id: string; plan_name: string;
+        user_name: string; user_email: string; user_phone: string;
+      }>('/payments/order', { plan_id: PREMIUM_PLAN_ID });
+
+      const { order_id, amount, key_id, user_name, user_email, user_phone } = res.data;
+
+      // 2. Load Razorpay checkout script
+      await loadRazorpayScript();
+
+      // 3. Open Razorpay checkout (hide spinner while modal is open)
+      setPaymentState('idle');
+
+      const options = {
+        key: key_id,
+        amount,
+        currency: 'INR',
+        name: 'CAB SAFARS',
+        description: 'Premium Monthly Subscription',
+        image: '/logo-v2.png',
+        order_id,
+        handler: async (response: {
+          razorpay_payment_id: string;
+          razorpay_order_id: string;
+          razorpay_signature: string;
+        }) => {
+          setPaymentState('processing');
+          try {
+            await apiClient.post('/payments/verify', {
+              razorpay_order_id:   response.razorpay_order_id,
+              razorpay_payment_id: response.razorpay_payment_id,
+              razorpay_signature:  response.razorpay_signature,
+            });
+            setTxnId(response.razorpay_payment_id);
+            setPaymentState('success');
+          } catch {
+            setPaymentState('failed');
+          }
+        },
+        prefill: { name: user_name, email: user_email, contact: user_phone },
+        theme: { color: '#F5A623' },
+        modal: { ondismiss: () => setPaymentState('idle') },
+      };
+
+      const rzp = new (window as any).Razorpay(options);
+      rzp.on('payment.failed', () => setPaymentState('failed'));
+      rzp.open();
+    } catch {
+      setPaymentState('failed');
+    }
   }
 
-  function handleSuccess() {
-    const expiry = new Date();
-    expiry.setDate(expiry.getDate() + 30);
-    dispatch({ type: 'UPGRADE_PREMIUM', payload: { premiumExpiry: expiry.toISOString().split('T')[0] } });
+  async function handleSuccess() {
+    // Refresh user subscription status from the server
+    try {
+      const res = await apiClient.get<{ is_premium: boolean; premium_expires_at: string | null }>('/subscriptions/status');
+      if (res.data?.is_premium) {
+        dispatch({ type: 'UPGRADE_PREMIUM', payload: { premiumExpiry: res.data.premium_expires_at ?? '' } });
+      }
+    } catch {
+      // Even if refresh fails, local dispatch keeps UI consistent
+      const expiry = new Date();
+      expiry.setDate(expiry.getDate() + 30);
+      dispatch({ type: 'UPGRADE_PREMIUM', payload: { premiumExpiry: expiry.toISOString().split('T')[0] } });
+    }
     setPaymentState('idle');
     router.push(isDriver ? '/app/driver/home' : '/app/vendor/home');
   }
@@ -311,7 +379,7 @@ export default function SubscriptionPage() {
               <button
                 className="w-full h-14 rounded-xl font-semibold text-base mb-3"
                 style={{ backgroundColor: '#F5A623', color: '#0D1117' }}
-                onClick={() => handleSubscribe(false)}
+                onClick={() => handleSubscribe()}
               >
                 {t('subscribe_now')}
               </button>
@@ -326,16 +394,6 @@ export default function SubscriptionPage() {
               </p>
             </div>
 
-            {/* Test failure link */}
-            <div className="text-center">
-              <button
-                className="text-xs underline"
-                style={{ color: '#8B949E' }}
-                onClick={() => handleSubscribe(true)}
-              >
-                {t('test_payment_failure')}
-              </button>
-            </div>
           </>
         ) : (
           /* ── Active Premium State ── */
