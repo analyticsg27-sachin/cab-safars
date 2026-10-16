@@ -48,10 +48,6 @@ const DEMO_PAYMENT_HISTORY = [
   { date: 'Apr 20, 2026', amount: '₹199.00', txnId: 'CS50293847', status: 'PAID' },
 ];
 
-function randomTxnId() {
-  return 'CS' + Math.floor(10000000 + Math.random() * 90000000).toString();
-}
-
 function addDays(days: number) {
   const d = new Date();
   d.setDate(d.getDate() + days);
@@ -175,7 +171,7 @@ function PaymentFailed({ onRetry, onContact }: { onRetry: () => void; onContact:
         </button>
       </div>
       <p className="text-xs" style={{ color: '#8B949E' }}>
-        {t('test_payment_failure')}
+        {t('payment_not_charged')}
       </p>
     </div>
   );

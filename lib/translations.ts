@@ -242,7 +242,7 @@ export const T = {
   subscribe_now:         { en: 'Subscribe Now',    hi: 'अभी सब्सक्राइब करें', gu: 'અત્યારે સભ્ય બનો' },
   secure_razorpay:       { en: 'Review payment details before continuing', hi: 'आगे बढ़ने से पहले भुगतान विवरण देखें', gu: 'આગળ વધતા પહેલાં ચુકવણીની વિગતો જુઓ' },
   auto_renews:           { en: 'Review renewal terms before continuing.', hi: 'आगे बढ़ने से पहले नवीनीकरण की शर्तें देखें।', gu: 'આગળ વધતા પહેલાં નવીકરણની શરતો જુઓ.' },
-  test_payment_failure:  { en: 'Test Payment Failure (demo)', hi: 'भुगतान विफलता परीक्षण (डेमो)', gu: 'ચુકવણી નિષ્ફળ પ્રયોગ (ડેમો)' },
+  payment_not_charged:   { en: 'No amount has been deducted from your account.', hi: 'आपके खाते से कोई राशि नहीं काटी गई।', gu: 'તમારા ખાતામાંથી કોઈ રકમ કપાઈ નથી.' },
   active_status_badge:   { en: 'ACTIVE',           hi: 'सक्रिय',          gu: 'સક્રિય' },
   you_have_full_access:  { en: 'You have full access to all features', hi: 'आपके पास सभी सुविधाएं हैं', gu: 'તમારી પાસે બધી સુવિધાઓ ઉપલ્બ્ધ છે' },
   label_started_on:      { en: 'Started on',       hi: 'शुरू हुआ',        gu: 'શરૂ થઈ' },
